@@ -5,8 +5,12 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { Regional, RegionalSchema } from './schema/regional.schema';
 
 @Module({
-  imports: [MongooseModule.forFeature([{ name: Regional.name, schema: RegionalSchema }])],
+  imports: [
+    MongooseModule.forFeature([
+      { name: Regional.name, schema: RegionalSchema },
+    ]),
+  ],
   controllers: [RegionalController],
-  providers: [RegionalService]
+  providers: [RegionalService],
 })
 export class RegionalModule {}

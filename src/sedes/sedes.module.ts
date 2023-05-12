@@ -4,6 +4,6 @@ import { SedesService } from './sedes.service';
 
 @Module({
   controllers: [SedesController],
-  providers: [SedesService]
+  providers: [SedesService],
 })
 export class SedesModule {}

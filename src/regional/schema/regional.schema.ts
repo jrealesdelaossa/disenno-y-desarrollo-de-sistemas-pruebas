@@ -6,6 +6,9 @@ export type RegionalDocument = HydratedDocument<Regional>;
 @Schema()
 export class Regional {
   @Prop()
+  id: string;
+
+  @Prop()
   codigo: string;
 
   @Prop()
