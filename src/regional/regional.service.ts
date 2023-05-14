@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { Regional_Dto } from './dto/regional.dto';
@@ -9,41 +9,58 @@ export class RegionalService {
     @InjectModel(Regional.name) private regionalModel: Model<Regional>,
   ) {}
 
+  // obtener todas las regionales
+  async findAll(): Promise<NotFoundException | Regional[]> {
+    return await this.regionalModel.find().then((data) => {
+      if (data) {
+        return data;
+      } else {
+        return new NotFoundException(
+          'No se encontraron documentos en regionales',
+        );
+      }
+    });
+  }
+  // crear una regional
   async create_regional(regional_dto: Regional_Dto): Promise<Regional> {
     const regional = new this.regionalModel(regional_dto);
     return await regional.save();
   }
 
+  // eliminar una regional
   async delete_regional(id: string) {
     return await this.regionalModel.findByIdAndRemove(id).then((data) => {
       if (data) {
         return data;
       } else {
-        return 'No se encontro la regional';
+        return new NotFoundException(
+          `No se encontro el documento con id:${id} en regionales`,
+        );
       }
     });
   }
+  // actualizar una regional
+  // async update_regional(id: string, regional_dto: Regional_Dto) {
+  //   return await this.regionalModel
+  //     .findByIdAndUpdate(id, regional_dto)
+  //     .then((data) => {
+  //       if (data) {
+  //         return data;
+  //       } else {
+  //         return 'No se encontro la regional';
+  //       }
+  //     });
+  // }
 
-  async update_regional(id: string, regional_dto: Regional_Dto) {
-    return await this.regionalModel
-      .findByIdAndUpdate(id, regional_dto)
-      .then((data) => {
-        if (data) {
-          return data;
-        } else {
-          return 'No se encontro la regional';
-        }
-      });
-  }
-
-  async update_regional_body(regional_dto: Regional_Dto) {
+  // actualizar una regional
+  async update_regional(regional_dto: Regional_Dto) {
     return await this.regionalModel
       .findByIdAndUpdate(regional_dto._id, regional_dto)
       .then((data) => {
         if (data) {
-          return data;
+          return `Se actualizo la regional con id: ${regional_dto._id}`;
         } else {
-          return 'No se encontro la regional';
+          return `No se encontro la regional con id: ${regional_dto._id}`;
         }
       });
   }

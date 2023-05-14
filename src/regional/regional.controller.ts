@@ -13,8 +13,8 @@ import { RegionalService } from './regional.service';
 export class RegionalController {
   constructor(private readonly regional: RegionalService) {}
   @Get()
-  findAll(): string {
-    return 'retorna las regionales';
+  async findAll() {
+    return await this.regional.findAll();
   }
 
   @Post('/crear')
@@ -30,13 +30,13 @@ export class RegionalController {
   }
 
   // modificar
-  @Put('modificar/:id')
-  async updateRegional(@Param('id') id: string, @Body() payload: any) {
-    return await this.regional.update_regional(id, payload);
-  }
+  // @Put('modificar/:id')
+  // async updateRegional(@Param('id') id: string, @Body() payload: any) {
+  //   return await this.regional.update_regional(id, payload);
+  // }
 
   @Put('modificarDos')
-  async updateRegionalByBody(@Body() payload: any) {
-    return await this.regional.update_regional_body(payload);
+  async updateRegional(@Body() payload: any) {
+    return await this.regional.update_regional(payload);
   }
 }
