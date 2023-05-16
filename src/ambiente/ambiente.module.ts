@@ -5,12 +5,10 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { AmbienteSchema } from './schemas/ambiente.schema';
 
 @Module({
-    exports: [MongooseModule.forFeature(
-        [
-            { name: 'Ambiente', schema: AmbienteSchema }
-        ])
-    ],
-    controllers: [AmbienteController],
-    providers: [AmbienteService]
+  exports: [
+    MongooseModule.forFeature([{ name: 'Ambiente', schema: AmbienteSchema }]),
+  ],
+  controllers: [AmbienteController],
+  providers: [AmbienteService],
 })
-export class AmbienteModule { }
+export class AmbienteModule {}

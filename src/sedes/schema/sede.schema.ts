@@ -20,7 +20,6 @@ export class Sede {
 
   @Prop()
   municipio: string;
-
 }
 
 export const SedeSchema = SchemaFactory.createForClass(Sede);
