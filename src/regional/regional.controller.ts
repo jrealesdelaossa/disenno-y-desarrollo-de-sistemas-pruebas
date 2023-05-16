@@ -20,8 +20,9 @@ export class RegionalController {
   @Post('/crear')
   async create(@Body() regional: Regional_Dto) {
     const data = await this.regional.create_regional(regional);
-    console.log(data);
-    return 'Creando regional';
+    // console.log(data);
+    return `Regional creada con exito
+    ${data}`;
   }
 
   @Delete('/eliminar/:id')
