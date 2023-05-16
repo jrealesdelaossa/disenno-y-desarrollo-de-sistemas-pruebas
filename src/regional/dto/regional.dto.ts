@@ -1,7 +1,7 @@
 import { IsNotEmpty } from 'class-validator';
 export class Regional_Dto {
   @IsNotEmpty()
-  private id?: string;
+  private id: string;
   @IsNotEmpty()
   private codigo: string;
   @IsNotEmpty()
