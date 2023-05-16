@@ -4,7 +4,7 @@ import { AppService } from './app.service';
 import { SedesModule } from './sedes/sedes.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { RegionalModule } from './regional/regional.module';
-
+import { CentroModule } from './centro/centro.module';
 @Module({
   imports: [
     MongooseModule.forRoot(
@@ -12,6 +12,7 @@ import { RegionalModule } from './regional/regional.module';
     ),
     SedesModule,
     RegionalModule,
+    CentroModule,
   ],
   controllers: [AppController],
   providers: [AppService],
