@@ -1,14 +1,24 @@
-import { IsNotEmpty } from 'class-validator';
+import { IsNotEmpty, Length, IsOptional, IsString } from 'class-validator';
 export class Regional_Dto {
   @IsNotEmpty()
-  private id?: string;
+  @IsOptional()
+  private id: string;
+
   @IsNotEmpty()
+  @IsString()
+  @Length(1, 10)
   private codigo: string;
+
   @IsNotEmpty()
+  @IsString()
   private nombre: string;
+
   @IsNotEmpty()
+  @IsString()
   private departamento: string;
+
   @IsNotEmpty()
+  @IsString()
   private municipio: string;
 
   public get _id(): string {

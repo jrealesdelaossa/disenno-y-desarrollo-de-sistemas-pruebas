@@ -23,8 +23,10 @@ export class RegionalService {
   }
   // crear una regional
   async create_regional(regional_dto: Regional_Dto): Promise<Regional> {
-    const regional = new this.regionalModel(regional_dto);
-    return await regional.save();
+    // const regional = new this.regionalModel(regional_dto);
+    // return await regional.save();
+    const regional = this.regionalModel.create(regional_dto);
+    return regional;
   }
 
   // eliminar una regional

@@ -5,13 +5,13 @@ export type RegionalDocument = HydratedDocument<Regional>;
 
 @Schema()
 export class Regional {
-  @Prop()
+  @Prop({ unique: true })
   id: string;
 
-  @Prop()
+  @Prop({ required: true })
   codigo: string;
 
-  @Prop()
+  @Prop({ required: true })
   nombre: string;
 
   @Prop()
