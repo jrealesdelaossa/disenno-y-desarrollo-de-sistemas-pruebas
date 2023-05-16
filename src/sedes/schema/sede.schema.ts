@@ -1,24 +1,25 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { HydratedDocument } from 'mongoose';
+import { Centro } from 'src/centro/interfaces/centro.interfaces';
 
 export type SedeDocument = HydratedDocument<Sede>;
 
 @Schema()
 export class Sede {
   @Prop({ required: true })
-  name: string;
+  nombre: string;
 
   @Prop({ required: true, type: mongoose.Schema.Types.ObjectId, ref: 'Centro' })
-  centro: string; // Se necesita que este valor sea dete tipo centro
+  centro: Centro;
 
   @Prop()
-  place_operation: string;
+  lugar_funcionamiento: string;
 
   @Prop()
-  departament: string;
+  departamento: string;
 
   @Prop()
-  municipality: string;
+  municipio: string;
 
 }
 
