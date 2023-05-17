@@ -2,11 +2,15 @@ import { Module } from '@nestjs/common';
 import { AmbienteController } from './ambiente.controller';
 import { AmbienteService } from './ambiente.service';
 import { MongooseModule } from '@nestjs/mongoose';
-import { AmbienteSchema } from './schemas/ambiente.schema';
+import { Ambiente, AmbienteSchema } from './schemas/ambiente.schema';
+import { SedesModule } from 'src/sedes/sedes.module';
 
 @Module({
-  exports: [
-    MongooseModule.forFeature([{ name: 'Ambiente', schema: AmbienteSchema }]),
+  imports: [
+    MongooseModule.forFeature([
+      { name: Ambiente.name, schema: AmbienteSchema },
+    ]),
+    SedesModule,
   ],
   controllers: [AmbienteController],
   providers: [AmbienteService],

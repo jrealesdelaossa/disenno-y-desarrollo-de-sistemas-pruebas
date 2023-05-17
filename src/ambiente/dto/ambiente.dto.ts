@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsObject, IsOptional, IsString } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class CreatedAmbienteDTO {
   @IsNotEmpty()
@@ -14,23 +14,23 @@ export class CreatedAmbienteDTO {
   readonly tipo: string;
 
   @IsNotEmpty()
-  @IsObject()
-  readonly sede: object;
+  @IsString()
+  readonly sede: string;
 }
 
 export class UpdateAmbienteDTO {
   @IsNotEmpty()
   @IsString()
   @IsOptional()
-  readonly bloque?: string;
+  readonly bloque: string;
 
   @IsNotEmpty()
   @IsString()
   @IsOptional()
-  readonly tipo?: string;
+  readonly tipo: string;
 
   @IsNotEmpty()
-  @IsObject()
+  @IsString()
   @IsOptional()
-  readonly sede?: object;
+  readonly sede: string;
 }
