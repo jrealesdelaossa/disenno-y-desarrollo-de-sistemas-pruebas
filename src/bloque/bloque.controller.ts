@@ -1,5 +1,6 @@
-import { Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { BloqueService } from './bloque.service';
+import { Bloque_Dto } from './dto/bloque.dto';
 
 @Controller('bloque')
 export class BloqueController {
@@ -11,7 +12,7 @@ export class BloqueController {
   }
 
   @Post('crear')
-  async createBlock() {
-    return await this.bloqueService.createBlock();
+  async createBlock(@Body() bloque: Bloque_Dto) {
+    return await this.bloqueService.createBlock(bloque);
   }
 }
