@@ -3,7 +3,7 @@ import mongoose, { HydratedDocument } from 'mongoose';
 // import { Schema } from 'mongoose';
 import { Sede } from '../../sedes/schema/sede.schema';
 
-export type CentroDocument = HydratedDocument<Sede>;
+export type AmbienteDocument = HydratedDocument<Ambiente>;
 
 @Schema()
 export class Ambiente {
