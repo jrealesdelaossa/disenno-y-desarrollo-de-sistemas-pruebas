@@ -45,4 +45,17 @@ export class CentroService {
       }
     });
   }
+  async update_centro(
+    centro_dto: Centro_Dto,
+  ): Promise<NotFoundException | Centro> {
+    return await this.centroModel
+      .findByIdAndUpdate(centro_dto._id, centro_dto)
+      .then((data) =>
+        data
+          ? data
+          : new NotFoundException(
+              `No se pudo actualizar el centro con id: ${centro_dto._id}`,
+            ),
+      );
+  }
 }
