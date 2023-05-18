@@ -4,6 +4,7 @@ import { AmbienteService } from './ambiente.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Ambiente, AmbienteSchema } from './schemas/ambiente.schema';
 import { SedesModule } from 'src/sedes/sedes.module';
+import { BloqueModule } from 'src/bloque/bloque.module';
 
 @Module({
   imports: [
@@ -11,6 +12,7 @@ import { SedesModule } from 'src/sedes/sedes.module';
       { name: Ambiente.name, schema: AmbienteSchema },
     ]),
     SedesModule,
+    BloqueModule,
   ],
   controllers: [AmbienteController],
   providers: [AmbienteService],

@@ -9,10 +9,42 @@ export class BloqueService {
   constructor(@InjectModel(Bloque.name) private bloqueModel: Model<Bloque>) {}
 
   async findAllBlock() {
-    return 'This action returns all block';
+    return await this.bloqueModel.find().then((data) => {
+      return data
+        ? data
+        : new NotFoundException('No se encontraron documentos en bloque');
+    });
+  }
+
+  async findOneBlock(id: string) {
+    return await this.bloqueModel.findById(id).then((data) => {
+      return data
+        ? data
+        : new NotFoundException(`No se encontro el bloque con id:${id}`);
+    });
   }
 
   async createBlock(bloque: Bloque_Dto) {
     return await this.bloqueModel.create(bloque);
+  }
+
+  async updateBlock(payload: Bloque_Dto) {
+    return await this.bloqueModel
+      .findByIdAndUpdate(payload._id, payload)
+      .then((data) => {
+        return data
+          ? data
+          : new NotFoundException(
+              `No se encontro el bloque con id:${payload._id}`,
+            );
+      });
+  }
+
+  async deleteBlock(id: string) {
+    return await this.bloqueModel.findByIdAndDelete(id).then((data) => {
+      return data
+        ? data
+        : new NotFoundException(`No se encontro el bloque con id:${id}`);
+    });
   }
 }
