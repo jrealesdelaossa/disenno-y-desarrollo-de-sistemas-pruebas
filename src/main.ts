@@ -7,9 +7,9 @@ async function bootstrap() {
   app.useGlobalPipes(
     new ValidationPipe({
       //Para que valide bien los espacios vacíos o nulos
-      skipMissingProperties: false,
+      //skipMissingProperties: false,
       // elimina los campos que no esten definidos en el dto
-      whitelist: true,
+      //whitelist: true,
       // marca como error los campos que no esten definidos en el dto
       // forbidNonWhitelisted: true,
     }),

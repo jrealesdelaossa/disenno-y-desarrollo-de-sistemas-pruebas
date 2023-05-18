@@ -1,6 +1,6 @@
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import { SedesService } from './sedes.service';
-import { Sede_Dto } from './dto/sedes.dto';
+import { CreateSede_Dto, Sede_Dto } from './dto/sedes.dto';
 
 @Controller('sedes')
 export class SedesController {
@@ -16,7 +16,11 @@ export class SedesController {
     return 'Sede Creada';
   }
   @Delete(':id')
-  async deleteCentro(@Param('id') id: string) {
+  async delete(@Param('id') id: string) {
     return await this.sede.borrar_sede(id);
+  }
+  @Put('actualizar')
+  async updateBlock(@Body() sede: CreateSede_Dto) {
+    return await this.sede.updateSede(sede);
   }
 }
