@@ -33,4 +33,11 @@ export class UpdateAmbienteDTO {
   @IsString()
   @IsOptional()
   readonly sede: string;
+
+  @IsString()
+  readonly id: string;
+
+  public get _id(){
+    return this._id;
+  }
 }

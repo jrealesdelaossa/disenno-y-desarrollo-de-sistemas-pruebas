@@ -7,6 +7,7 @@ import { Centro_Dto } from './dto/centro.dto';
 @Injectable()
 export class CentroService {
   constructor(@InjectModel(Centro.name) private centroModel: Model<Centro>) {}
+  
   async findAll(): Promise<NotFoundException | Centro[]> {
     return await this.centroModel
       .find()

@@ -27,18 +27,17 @@ export class AmbienteController {
 
   @Post('crear')
   async createdAmbiente(@Body() ambienteCreatedDTO: CreatedAmbienteDTO) {
-    const newAmbiente =
-      this.ambienteService.createdAmbiente(ambienteCreatedDTO);
+    const newAmbiente = this.ambienteService.createdAmbiente(ambienteCreatedDTO);
     return newAmbiente;
   }
 
-  @Patch('editar/:id')
+  @Patch('editar')
   async updateAmbiente(
     @Body() updateAmbiente: UpdateAmbienteDTO,
-    @Param('id') idAmbiente: string,
+   // @Param('id') idAmbiente: string,
   ) {
     const updAmbiente = await this.ambienteService.updateAmbiente(
-      idAmbiente,
+   //   idAmbiente,
       updateAmbiente,
     );
     return updAmbiente;

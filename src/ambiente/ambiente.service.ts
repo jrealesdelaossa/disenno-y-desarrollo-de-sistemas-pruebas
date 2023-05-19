@@ -34,18 +34,18 @@ export class AmbienteService {
     return newAmbiente;
   }
 
-  async updateAmbiente(
-    idAmbiente: string,
+  async updateAmbiente( //idAmbiente: string,
     updateAmbiente: UpdateAmbienteDTO,
   ): Promise<IAmbiente> {
-    const found = await this.getByIdAmbiente(idAmbiente);
+    const found = await this.getByIdAmbiente(updateAmbiente._id);
+    console.log(updateAmbiente._id);
     const updAmbiente = found.updateOne(updateAmbiente);
     return updAmbiente;
   }
 
   async deleteAmbiente(idAmbiente: string) {
     const found = await this.getByIdAmbiente(idAmbiente);
-    const delAmbiente = found.deleteOne({ idAmbiente });
+    const delAmbiente = found.deleteOne();
     return delAmbiente;
   }
 }

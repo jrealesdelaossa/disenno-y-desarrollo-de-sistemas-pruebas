@@ -7,6 +7,7 @@ import { RegionalModule } from './regional/regional.module';
 import { CentroModule } from './centro/centro.module';
 import { AmbienteModule } from './ambiente/ambiente.module';
 import { BloqueModule } from './bloque/bloque.module';
+import { TipoAmbienteModule } from './tipo-ambiente/tipo-ambiente.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { BloqueModule } from './bloque/bloque.module';
     RegionalModule,
     AmbienteModule,
     BloqueModule,
+    TipoAmbienteModule,
   ],
   controllers: [AppController],
   providers: [AppService],
