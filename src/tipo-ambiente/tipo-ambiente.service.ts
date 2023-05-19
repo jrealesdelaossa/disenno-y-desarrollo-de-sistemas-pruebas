@@ -29,7 +29,7 @@ export class TipoAmbienteService {
     }
 
     async createdTipoAmb(tipoAmbiente: CreatedTipoAmbienteDTO): Promise<TipoAmbiente> {
-        let found = this.tipoAmbienteModel.findOne({ codigo: tipoAmbiente.codigo });
+        let found = await this.tipoAmbienteModel.findOne({ codigo: tipoAmbiente.codigo });
         if (found)
             throw new HttpException(`el registro ya existe`, HttpStatus.CONFLICT)
 
