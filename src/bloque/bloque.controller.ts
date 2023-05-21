@@ -8,7 +8,7 @@ import {
   Delete,
 } from '@nestjs/common';
 import { BloqueService } from './bloque.service';
-import { Bloque_Dto } from './dto/bloque.dto';
+import { CrearBloqueDto, ActualizarBloqueDto } from './dto/bloque.dto';
 
 @Controller('bloque')
 export class BloqueController {
@@ -16,28 +16,30 @@ export class BloqueController {
 
   @Get()
   async findAllBlock() {
-    return await this.bloqueService.findAllBlock();
+    return await this.bloqueService.obtenerBloques();
   }
 
-  @Get(':id')
+  @Get('/:id')
   async findOneBlock(@Param('id') id: string) {
-    return await this.bloqueService.findOneBlock(id);
+    return await this.bloqueService.obtenerBloque(id);
   }
 
-  @Post('crear')
-  async createBlock(@Body() bloque: Bloque_Dto) {
-    return await this.bloqueService.createBlock(bloque);
+  @Post('/crear')
+  async crearBloque(@Body() bloqueDto: CrearBloqueDto) {
+    console.log(bloqueDto);
+
+    return await this.bloqueService.crearBloque(bloqueDto);
   }
 
-  @Put('actualizar')
-  async updateBlock(@Body() payload: Bloque_Dto) {
-    console.log(payload._id);
+  @Put('/actualizar')
+  async actualizarBloque(@Body() bloqueDto: ActualizarBloqueDto) {
+    console.log(bloqueDto.id);
 
-    return await this.bloqueService.updateBlock(payload);
+    return await this.bloqueService.actualizarBloque(bloqueDto);
   }
 
-  @Delete('eliminar/:id')
+  @Delete('/eliminar/:id')
   async deleteBlock(@Param('id') id: string) {
-    return await this.bloqueService.deleteBlock(id);
+    return await this.bloqueService.eliminarBloque(id);
   }
 }

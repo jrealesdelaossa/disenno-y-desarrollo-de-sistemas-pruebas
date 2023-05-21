@@ -3,7 +3,6 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Sede } from './schema/sede.schema';
 import { Model } from 'mongoose';
 import { CreateSedeDto, SedeDto } from './dto/sedes.dto';
-import { CreateBloque_Dto } from 'src/bloque/dto/bloque.dto';
 
 @Injectable()
 export class SedesService {
