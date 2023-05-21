@@ -21,12 +21,12 @@ export class RegionalService {
       }
     });
   }
-  /*async checkById(id: string): Promise<boolean> {
-    return await this.regionalModel
-      .findById({ _id: id })
-      .then((data) => (data ? true : false));
-  }De luis - Prueba*/
-  // crear una regional
+  async checkById(id: string): Promise<boolean | string> {
+    return await this.regionalModel.findById(id).then((data) => {
+      return data ? true : false;
+    });
+  }
+
   async create_regional(regional_dto: Regional_Dto): Promise<Regional> {
     // const regional = new this.regionalModel(regional_dto);
     // return await regional.save();

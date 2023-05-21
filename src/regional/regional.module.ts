@@ -12,5 +12,6 @@ import { Regional, RegionalSchema } from './schema/regional.schema';
   ],
   controllers: [RegionalController],
   providers: [RegionalService],
+  exports: [RegionalService],
 })
 export class RegionalModule {}
