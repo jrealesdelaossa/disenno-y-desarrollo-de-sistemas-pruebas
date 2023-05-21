@@ -7,9 +7,9 @@ import { CreatedTipoAmbienteDTO, UpdateTipoAmbienteDTO } from './dto/tipo-ambien
 
 @Injectable()
 export class TipoAmbienteService {
-    constructor(@InjectModel('tipo-ambiente') private readonly tipoAmbienteModel: Model<TipoAmbiente>) { }
+    constructor(@InjectModel('tipo-ambiente') private readonly tipoAmbienteModel: Model<ITipoAmbiente>) { }
 
-    async getAllTipos(): Promise<TipoAmbiente[]> {
+    async getAllTipos(): Promise<ITipoAmbiente[]> {
         return await this.tipoAmbienteModel.find().then(
             (dato) => {
                 if (!dato) throw new HttpException('no se encontraron registros', HttpStatus.NOT_FOUND);
@@ -18,7 +18,7 @@ export class TipoAmbienteService {
         );
     }
 
-    async getByIdTipos(idTipo: string): Promise<TipoAmbiente> {
+    async getByIdTipos(idTipo: string): Promise<ITipoAmbiente> {
         const found = await this.tipoAmbienteModel.findById(idTipo).then(
             (dato) => {
                 if (!dato) throw new HttpException('el registro no existe!!', HttpStatus.NOT_FOUND);
@@ -28,28 +28,26 @@ export class TipoAmbienteService {
         return found;
     }
 
-    async createdTipoAmb(tipoAmbiente: CreatedTipoAmbienteDTO): Promise<TipoAmbiente> {
+    async createdTipoAmb(tipoAmbiente: CreatedTipoAmbienteDTO): Promise<ITipoAmbiente> {
         let found = await this.tipoAmbienteModel.findOne({ codigo: tipoAmbiente.codigo });
         if (found)
-            throw new HttpException(`el registro ya existe`, HttpStatus.CONFLICT)
-
+            throw new HttpException(`el registro ya existe`, HttpStatus.CONFLICT);
         const newTipo = new this.tipoAmbienteModel(tipoAmbiente);
         return await newTipo.save();
     }
 
-    async updateTipoAmb(idTipoAmb: string, updateTipoAmb: UpdateTipoAmbienteDTO): Promise<TipoAmbiente> {
-        let found = await this.getByIdTipos(idTipoAmb);
-        if (found) {
-            const updateTipo = await this.tipoAmbienteModel.findByIdAndUpdate(updateTipoAmb);
+    async updateTipoAmb(updateTipoAmb: UpdateTipoAmbienteDTO): Promise<ITipoAmbiente> {
+        let found = await this.getByIdTipos(updateTipoAmb.id);
+        return found.updateOne(updateTipoAmb);
+        /* if (found) {
+            const updateTipo = await this.tipoAmbienteModel.findByIdAndUpdate(updateTipoAmb.id, updateTipoAmb);
             return updateTipo;
-        }
+        } */
     }
 
     async deleteTipoAmb(idTipoAmb: string) {
         let found = await this.getByIdTipos(idTipoAmb);
-        if (found) {
-            return await this.tipoAmbienteModel.findByIdAndDelete(idTipoAmb);
-        }
+        return found.deleteOne();
 
     }
 }

@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsObject, IsOptional, IsString } from 'class-validator';
+import { IsNotEmpty, IsObject, IsOptional, IsString, Matches, IsMongoId } from 'class-validator';
 
 export class CreatedTipoAmbienteDTO {
 
@@ -17,6 +17,14 @@ export class CreatedTipoAmbienteDTO {
 
 
 export class UpdateTipoAmbienteDTO{
+
+    @IsNotEmpty()
+    @IsString()
+    @Matches(/^(?!\s*$).+/, {
+      message: 'El campo id es obligatorio',
+    })
+    @IsMongoId()
+    readonly id: string;
     
     @IsNotEmpty()
     @IsString()

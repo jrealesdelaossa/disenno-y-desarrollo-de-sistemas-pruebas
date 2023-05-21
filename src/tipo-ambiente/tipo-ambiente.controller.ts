@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Patch, Delete, Body, Param } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Body, Param } from '@nestjs/common';
 import { TipoAmbienteService } from './tipo-ambiente.service';
 import { CreatedTipoAmbienteDTO, UpdateTipoAmbienteDTO } from './dto/tipo-ambiente.dto';
 
@@ -24,9 +24,9 @@ export class TipoAmbienteController {
         return newTipoAmb;
     }
 
-    @Patch('actualizar/:id')
-    async actualizarTipoAmb(@Param('id') idTipoAmb: string, @Body() updateTipeAmb: UpdateTipoAmbienteDTO) {
-        const updateTipo = await this.tipoAmbientService.updateTipoAmb(idTipoAmb, updateTipeAmb);
+    @Put('actualizar')
+    async actualizarTipoAmb(@Body() updateTipeAmb: UpdateTipoAmbienteDTO) {
+        const updateTipo = await this.tipoAmbientService.updateTipoAmb(updateTipeAmb);
         return updateTipo;
     }
 
