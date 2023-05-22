@@ -24,8 +24,6 @@ export class SedeDto {
   @Matches(/^(?!\s*$).+/, { message: 'El municipio no puede ser estar vacío' })
   @IsNotEmpty()
   readonly municipio: string;
-
-
 }
 export class CreateSedeDto {
   @IsNotEmpty()
@@ -56,6 +54,4 @@ export class CreateSedeDto {
   @Matches(/^(?!\s*$).+/, { message: 'El municipio no puede ser estar vacío' })
   @IsNotEmpty()
   readonly municipio: string;
-
- 
 }

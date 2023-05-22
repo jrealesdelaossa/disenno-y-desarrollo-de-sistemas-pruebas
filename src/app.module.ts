@@ -24,4 +24,4 @@ import { TipoAmbienteModule } from './tipo-ambiente/tipo-ambiente.module';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule { }
+export class AppModule {}

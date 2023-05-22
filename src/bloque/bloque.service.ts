@@ -48,14 +48,22 @@ export class BloqueService {
           : new NotFoundException(
               `No se encontro el bloque con id:${bloqueDto.id}`,
             );
+      })
+      .catch((err) => {
+        return new HttpException(err, HttpStatus.CONFLICT);
       });
   }
 
   async eliminarBloque(id: string) {
-    return await this.bloqueModel.findByIdAndDelete(id).then((data) => {
-      return data
-        ? data
-        : new NotFoundException(`No se encontro el bloque con id:${id}`);
-    });
+    return await this.bloqueModel
+      .findByIdAndDelete(id)
+      .then((data) => {
+        return data
+          ? data
+          : new NotFoundException(`No se encontro el bloque con id:${id}`);
+      })
+      .catch((err) => {
+        return new HttpException(err, HttpStatus.CONFLICT);
+      });
   }
 }

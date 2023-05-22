@@ -1,8 +1,7 @@
-import {Document}  from 'mongoose'
+import { Document } from 'mongoose';
 
- export interface ITipoAmbiente extends Document{
-   
-    readonly codigo: string;
-    readonly nombre: string;
-    readonly descripcion: object;
- }
+export interface ITipoAmbiente extends Document {
+  readonly codigo: string;
+  readonly nombre: string;
+  readonly descripcion: object;
+}

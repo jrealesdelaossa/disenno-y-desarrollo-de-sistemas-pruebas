@@ -12,7 +12,7 @@ import { CreatedAmbienteDTO, UpdateAmbienteDTO } from './dto/ambiente.dto';
 
 @Controller('ambiente')
 export class AmbienteController {
-  constructor(private readonly ambienteService: AmbienteService) { }
+  constructor(private readonly ambienteService: AmbienteService) {}
 
   @Get()
   async getAllAmbientes() {
@@ -27,13 +27,16 @@ export class AmbienteController {
 
   @Post('crear')
   async createdAmbiente(@Body() ambienteCreatedDTO: CreatedAmbienteDTO) {
-    const newAmbiente = this.ambienteService.createdAmbiente(ambienteCreatedDTO);
+    const newAmbiente =
+      this.ambienteService.createdAmbiente(ambienteCreatedDTO);
     return newAmbiente;
   }
 
   @Put('editar')
   async updateAmbiente(@Body() updateAmbiente: UpdateAmbienteDTO) {
-    const updAmbiente = await this.ambienteService.updateAmbiente(updateAmbiente);
+    const updAmbiente = await this.ambienteService.updateAmbiente(
+      updateAmbiente,
+    );
     return updAmbiente;
   }
 

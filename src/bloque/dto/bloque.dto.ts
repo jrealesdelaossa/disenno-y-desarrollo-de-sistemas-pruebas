@@ -30,12 +30,12 @@ export class ActualizarBloqueDto {
   @Matches(/^(?!\s*$).+/, {
     message: 'El campo nombre no debe estar vacio',
   })
-  readonly nombre: string;
+  readonly nombre?: string;
 
   @IsNotEmpty()
   @IsString()
   @Matches(/^(?!\s*$).+/, {
     message: 'El campo nomenclatura no debe estar vacio',
   })
-  readonly nomenclatura: string;
+  readonly nomenclatura?: string;
 }
