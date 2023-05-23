@@ -2,7 +2,7 @@ import {
   Controller,
   Get,
   Post,
-  Patch,
+  Put,
   Delete,
   Param,
   Body,
@@ -32,13 +32,9 @@ export class AmbienteController {
     return newAmbiente;
   }
 
-  @Patch('editar/:id')
-  async updateAmbiente(
-    @Body() updateAmbiente: UpdateAmbienteDTO,
-    @Param('id') idAmbiente: string,
-  ) {
+  @Put('editar')
+  async updateAmbiente(@Body() updateAmbiente: UpdateAmbienteDTO) {
     const updAmbiente = await this.ambienteService.updateAmbiente(
-      idAmbiente,
       updateAmbiente,
     );
     return updAmbiente;

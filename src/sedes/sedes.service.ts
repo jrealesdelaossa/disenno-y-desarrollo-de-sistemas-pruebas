@@ -2,7 +2,11 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Sede } from './schema/sede.schema';
 import { Model } from 'mongoose';
+<<<<<<< HEAD
 import { ActualizarSedeDto, SedeDto } from './dto/sedes.dto';
+=======
+import { CreateSedeDto, SedeDto } from './dto/sedes.dto';
+>>>>>>> edc45b77f2d9258a08117ff3ba65c5d40466715a
 
 @Injectable()
 export class SedesService {

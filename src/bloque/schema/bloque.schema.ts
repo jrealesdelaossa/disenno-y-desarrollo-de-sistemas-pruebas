@@ -5,10 +5,10 @@ export type BloqueDocument = HydratedDocument<Bloque>;
 
 @Schema()
 export class Bloque {
-  @Prop()
+  @Prop({ required: true })
   nombre: string;
 
-  @Prop()
+  @Prop({ required: true })
   nomenclatura: string;
 }
 

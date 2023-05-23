@@ -1,30 +1,27 @@
 import {
   IsNotEmpty,
+  IsObject,
   IsOptional,
   IsString,
-  IsMongoId,
   Matches,
+  IsMongoId,
 } from 'class-validator';
 
-export class CreatedAmbienteDTO {
+export class CreatedTipoAmbienteDTO {
   @IsNotEmpty()
   @IsString()
   readonly codigo: string;
 
   @IsNotEmpty()
   @IsString()
-  readonly bloque: string;
+  readonly nombre: string;
 
   @IsNotEmpty()
-  @IsString()
-  readonly tipo: string;
-
-  @IsNotEmpty()
-  @IsString()
-  readonly sede: string;
+  @IsObject()
+  readonly descripcion: object;
 }
 
-export class UpdateAmbienteDTO {
+export class UpdateTipoAmbienteDTO {
   @IsNotEmpty()
   @IsString()
   @Matches(/^(?!\s*$).+/, {
@@ -36,15 +33,15 @@ export class UpdateAmbienteDTO {
   @IsNotEmpty()
   @IsString()
   @IsOptional()
-  readonly bloque: string;
+  readonly codigo?: string;
 
   @IsNotEmpty()
   @IsString()
   @IsOptional()
-  readonly tipo: string;
+  readonly nombre?: string;
 
   @IsNotEmpty()
-  @IsString()
+  @IsObject()
   @IsOptional()
-  readonly sede: string;
+  readonly descripcion?: object;
 }

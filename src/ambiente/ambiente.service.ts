@@ -11,7 +11,14 @@ export class AmbienteService {
   ) {}
 
   async getAllAmbientes(): Promise<IAmbiente[]> {
-    return await this.ambienteModel.find();
+    return await this.ambienteModel.find().then((dato) => {
+      if (!dato)
+        throw new HttpException(
+          'no se encontraron registros',
+          HttpStatus.NOT_FOUND,
+        );
+      else return dato;
+    });
   }
 
   async getByIdAmbiente(idAmbiente: string): Promise<IAmbiente> {
@@ -22,6 +29,7 @@ export class AmbienteService {
     });
     return found;
   }
+
   async createdAmbiente(
     ambienteCreatedDto: CreatedAmbienteDTO,
   ): Promise<IAmbiente> {
@@ -30,22 +38,16 @@ export class AmbienteService {
     });
     if (found)
       throw new HttpException('El ambiente ya existe', HttpStatus.CONFLICT);
-    const newAmbiente = this.ambienteModel.create(ambienteCreatedDto);
-    return newAmbiente;
+    return await this.ambienteModel.create(ambienteCreatedDto);
   }
 
-  async updateAmbiente(
-    idAmbiente: string,
-    updateAmbiente: UpdateAmbienteDTO,
-  ): Promise<IAmbiente> {
-    const found = await this.getByIdAmbiente(idAmbiente);
-    const updAmbiente = found.updateOne(updateAmbiente);
-    return updAmbiente;
+  async updateAmbiente(updateAmbiente: UpdateAmbienteDTO): Promise<IAmbiente> {
+    const found = await this.getByIdAmbiente(updateAmbiente.id);
+    return found.updateOne(updateAmbiente);
   }
 
   async deleteAmbiente(idAmbiente: string) {
     const found = await this.getByIdAmbiente(idAmbiente);
-    const delAmbiente = found.deleteOne({ idAmbiente });
-    return delAmbiente;
+    return found.deleteOne();
   }
 }

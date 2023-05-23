@@ -8,26 +8,29 @@ import {
   Put,
 } from '@nestjs/common';
 import { CentroService } from './centro.service';
-import { Centro_Dto } from './dto/centro.dto';
+import { CentroDto, ActualizarCentroDto } from './dto/centro.dto';
 
 @Controller('centro')
 export class CentroController {
   constructor(private readonly centro: CentroService) {}
+
   @Get()
-  async getAll() {
-    return await this.centro.findAll();
+  async obtenerTodo() {
+    return await this.centro.obtenerTodo();
   }
+
   @Post('/crear')
-  async create(@Body() centro: Centro_Dto) {
-    const data = await this.centro.create_centro(centro);
-    return `Centro creado: ${data}`;
+  async crearCentro(@Body() centro: CentroDto) {
+    return await this.centro.crearCentro(centro);
   }
+
   @Delete('/eliminar/:id')
-  async deleteCentro(@Param('id') id: string) {
-    return await this.centro.delete_centro(id);
+  async eliminarCentro(@Param('id') id: string) {
+    return await this.centro.eliminarCentro(id);
   }
+
   @Put('/editar')
-  async updateCentro(@Body() centro: any) {
-    return await this.centro.update_centro(centro);
+  async actualizarCentro(@Body() centro: ActualizarCentroDto) {
+    return await this.centro.actualizarCentro(centro);
   }
 }
