@@ -8,7 +8,7 @@ import {
   Put,
 } from '@nestjs/common';
 import { SedesService } from './sedes.service';
-import { CreateSedeDto, SedeDto } from './dto/sedes.dto';
+import { ActualizarSedeDto, SedeDto } from './dto/sedes.dto';
 
 @Controller('sedes')
 export class SedesController {
@@ -29,7 +29,7 @@ export class SedesController {
   }
 
   @Put('actualizar')
-  async updateBlock(@Body() sede: CreateSedeDto) {
+  async updateBlock(@Body() sede: ActualizarSedeDto) {
     return await this.sede.updateSede(sede);
   }
 }

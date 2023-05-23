@@ -24,10 +24,8 @@ export class SedeDto {
   @Matches(/^(?!\s*$).+/, { message: 'El municipio no puede ser estar vacío' })
   @IsNotEmpty()
   readonly municipio: string;
-
-
 }
-export class CreateSedeDto {
+export class ActualizarSedeDto {
   @IsNotEmpty()
   @IsMongoId()
   @Matches(/^(?!\s*$).+/, { message: 'El Id no puede ser estar vacío' })
@@ -56,6 +54,4 @@ export class CreateSedeDto {
   @Matches(/^(?!\s*$).+/, { message: 'El municipio no puede ser estar vacío' })
   @IsNotEmpty()
   readonly municipio: string;
-
- 
 }

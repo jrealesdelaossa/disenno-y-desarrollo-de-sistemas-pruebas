@@ -2,8 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Sede } from './schema/sede.schema';
 import { Model } from 'mongoose';
-import { CreateSedeDto, SedeDto } from './dto/sedes.dto';
-import { CreateBloque_Dto } from 'src/bloque/dto/bloque.dto';
+import { ActualizarSedeDto, SedeDto } from './dto/sedes.dto';
 
 @Injectable()
 export class SedesService {
@@ -38,7 +37,7 @@ export class SedesService {
     });
   }
 
-  async updateSede(sede: CreateSedeDto) {
+  async updateSede(sede: ActualizarSedeDto) {
     return await this.SedesModel.findByIdAndUpdate(sede.id, sede).then(
       (data) => {
         return data
