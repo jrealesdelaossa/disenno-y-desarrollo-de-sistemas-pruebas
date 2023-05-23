@@ -15,21 +15,21 @@ export class SedesController {
   constructor(private readonly sede: SedesService) {}
 
   @Get()
-  async getAll() {
-    return await this.sede.findAll();
+  async obtenerTodo() {
+    return await this.sede.obtenerTodo();
   }
   @Post('/crear')
-  async create(@Body() sede: SedeDto) {
-    return await this.sede.crear_sede(sede);
+  async crearSedes(@Body() sede: SedeDto) {
+    return await this.sede.crearSede(sede);
   }
 
   @Delete(':id')
-  async delete(@Param('id') id: string) {
-    return await this.sede.borrar_sede(id);
+  async borrarSedes(@Param('id') id: string) {
+    return await this.sede.borrarSede(id);
   }
 
   @Put('actualizar')
-  async updateBlock(@Body() sede: ActualizarSedeDto) {
-    return await this.sede.updateSede(sede);
+  async actualizarSedes(@Body() sede: ActualizarSedeDto) {
+    return await this.sede.actualizarSede(sede);
   }
 }

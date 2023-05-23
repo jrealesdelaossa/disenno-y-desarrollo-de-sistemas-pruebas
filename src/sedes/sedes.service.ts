@@ -8,7 +8,7 @@ import { ActualizarSedeDto, SedeDto } from './dto/sedes.dto';
 export class SedesService {
   constructor(@InjectModel(Sede.name) private SedesModel: Model<Sede>) {}
 
-  async findAll(): Promise<NotFoundException | Sede[]> {
+  async obtenerTodo(): Promise<NotFoundException | Sede[]> {
     return await this.SedesModel.find()
       .populate('centro')
       .then((data) => {
@@ -20,12 +20,12 @@ export class SedesService {
       });
   }
 
-  async crear_sede(sedeDto: SedeDto): Promise<NotFoundException | Sede> {
+  async crearSede(sedeDto: SedeDto): Promise<NotFoundException | Sede> {
     const sedes = new this.SedesModel(sedeDto);
     return await sedes.save();
   }
 
-  async borrar_sede(id: string) {
+  async borrarSede(id: string) {
     return await this.SedesModel.findByIdAndRemove(id).then((data) => {
       if (data) {
         return data;
@@ -37,7 +37,7 @@ export class SedesService {
     });
   }
 
-  async actualizar_sede(sede: ActualizarSedeDto) {
+  async actualizarSede(sede: ActualizarSedeDto) {
     return await this.SedesModel.findByIdAndUpdate(sede.id, sede).then(
       (data) => {
         return data
