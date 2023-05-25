@@ -7,6 +7,7 @@ export class SedeDto {
 
   @Matches(/^(?!\s*$).+/, { message: 'El centro no puede ser estar vacío' })
   @IsNotEmpty()
+  @IsMongoId()
   readonly centro: string;
 
   @Matches(/^(?!\s*$).+/, {
@@ -37,6 +38,7 @@ export class ActualizarSedeDto {
 
   @Matches(/^(?!\s*$).+/, { message: 'El centro no puede ser estar vacío' })
   @IsNotEmpty()
+  @IsMongoId()
   readonly centro: string;
 
   @Matches(/^(?!\s*$).+/, {
