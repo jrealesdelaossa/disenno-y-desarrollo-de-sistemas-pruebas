@@ -11,17 +11,15 @@ export class ProgramaService {
   ) {}
 
   async obtenerTodo(): Promise<NotFoundException | Programa[]> {
-    return await this.ProgramaModel.find()
-      .populate('tipo-formacion')
-      .then((data) => {
-        if (data) {
-          return data;
-        } else {
-          return new NotFoundException(
-            'No se encontraron documentos en programas',
-          );
-        }
-      });
+    return await this.ProgramaModel.find().then((data) => {
+      if (data) {
+        return data;
+      } else {
+        return new NotFoundException(
+          'No se encontraron documentos en programas',
+        );
+      }
+    });
   }
 
   async crearPrograma(

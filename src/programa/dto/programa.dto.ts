@@ -5,18 +5,17 @@ export class ProgramaDto {
   @Matches(/^(?!\s*$).+/, {
     message: 'El codigo del programa no puede estar vacío',
   })
-  readonly cod_programa: string;
+  readonly codigo: string;
 
   @Matches(/^(?!\s*$).+/, { message: 'El nombre no puede ser estar vacío' })
   @IsNotEmpty()
   readonly nombre: string;
 
   @Matches(/^(?!\s*$).+/, {
-    message: 'El tipo de formacion no puede ser estar vacío',
+    message: 'El nivel de formacion no puede ser estar vacío',
   })
   @IsNotEmpty()
-  @IsMongoId()
-  readonly tipo_formacion: string;
+  readonly nivel: string;
 
   @Matches(/^(?!\s*$).+/, { message: 'La version no puede ser estar vacío' })
   @IsNotEmpty()
@@ -24,8 +23,9 @@ export class ProgramaDto {
 
   @Matches(/^(?!\s*$).+/, { message: 'La version no puede ser estar vacío' })
   @IsNotEmpty()
-  readonly duracion_horas: string;
+  readonly duracion: string;
 }
+
 export class ActualizarProgramaDto {
   @IsNotEmpty()
   @IsMongoId()
@@ -36,7 +36,7 @@ export class ActualizarProgramaDto {
   @Matches(/^(?!\s*$).+/, {
     message: 'El codigo del programa no puede estar vacío',
   })
-  readonly cod_programa: string;
+  readonly codigo: string;
 
   @Matches(/^(?!\s*$).+/, { message: 'El nombre no puede ser estar vacío' })
   @IsNotEmpty()
@@ -46,8 +46,7 @@ export class ActualizarProgramaDto {
     message: 'El tipo de formacion no puede ser estar vacío',
   })
   @IsNotEmpty()
-  @IsMongoId()
-  readonly tipo_formacion: string;
+  readonly nivel: string;
 
   @Matches(/^(?!\s*$).+/, { message: 'La version no puede ser estar vacío' })
   @IsNotEmpty()
@@ -55,5 +54,5 @@ export class ActualizarProgramaDto {
 
   @Matches(/^(?!\s*$).+/, { message: 'La version no puede ser estar vacío' })
   @IsNotEmpty()
-  readonly duracion_horas: string;
+  readonly duracion: string;
 }

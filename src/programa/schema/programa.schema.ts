@@ -1,29 +1,24 @@
 import { Prop, SchemaFactory, Schema } from '@nestjs/mongoose';
-import mongoose, { HydratedDocument } from 'mongoose';
-import { TipoFormacion } from '../interfaces/tipo_programa.interfaces';
+import { HydratedDocument } from 'mongoose';
 
 export type ProgramaDocument = HydratedDocument<Programa>;
 
 @Schema()
 export class Programa {
   @Prop({ required: true })
+  codigo: string;
+
+  @Prop({ required: true })
   nombre: string;
 
-  @Prop({
-    required: true,
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'tipo-formacion',
-  })
-  centro: TipoFormacion;
+  @Prop({ required: true })
+  nivel: string;
 
-  @Prop()
-  lugar_funcionamiento: string;
+  @Prop({ required: true })
+  version: string;
 
-  @Prop()
-  departamento: string;
-
-  @Prop()
-  municipio: string;
+  @Prop({ required: true })
+  duracion: string;
 }
 
-export const SedeSchema = SchemaFactory.createForClass(Programa);
+export const ProgramaSchema = SchemaFactory.createForClass(Programa);
