@@ -8,6 +8,7 @@ import { CentroModule } from './centro/centro.module';
 import { AmbienteModule } from './ambiente/ambiente.module';
 import { BloqueModule } from './bloque/bloque.module';
 import { TipoAmbienteModule } from './tipo-ambiente/tipo-ambiente.module';
+import { ProgramaModule } from './programa/programa.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { TipoAmbienteModule } from './tipo-ambiente/tipo-ambiente.module';
     AmbienteModule,
     BloqueModule,
     TipoAmbienteModule,
+    ProgramaModule,
   ],
   controllers: [AppController],
   providers: [AppService],
