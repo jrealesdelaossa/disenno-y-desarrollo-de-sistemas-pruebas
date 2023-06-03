@@ -11,6 +11,7 @@ import { TipoAmbienteModule } from './tipo-ambiente/tipo-ambiente.module';
 import { ProgramaModule } from './programa/programa.module';
 import { NivelDeFormacionModule } from './nivel-de-formacion/nivel-de-formacion.module';
 import { JornadaModule } from './jornada/jornada.module';
+import { TipoDeVinculacionModule } from './tipo-de-vinculacion/tipo-de-vinculacion.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { JornadaModule } from './jornada/jornada.module';
     ProgramaModule,
     NivelDeFormacionModule,
     JornadaModule,
+    TipoDeVinculacionModule,
   ],
   controllers: [AppController],
   providers: [AppService],
