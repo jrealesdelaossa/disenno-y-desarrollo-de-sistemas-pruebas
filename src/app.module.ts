@@ -9,6 +9,7 @@ import { AmbienteModule } from './ambiente/ambiente.module';
 import { BloqueModule } from './bloque/bloque.module';
 import { TipoAmbienteModule } from './tipo-ambiente/tipo-ambiente.module';
 import { ProgramaModule } from './programa/programa.module';
+import { ModalidadModule } from './modalidad/modalidad.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { ProgramaModule } from './programa/programa.module';
     BloqueModule,
     TipoAmbienteModule,
     ProgramaModule,
+    ModalidadModule,
   ],
   controllers: [AppController],
   providers: [AppService],
