@@ -10,6 +10,7 @@ import { BloqueModule } from './bloque/bloque.module';
 import { TipoAmbienteModule } from './tipo-ambiente/tipo-ambiente.module';
 import { ProgramaModule } from './programa/programa.module';
 import { NivelDeFormacionModule } from './nivel-de-formacion/nivel-de-formacion.module';
+import { JornadaModule } from './jornada/jornada.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { NivelDeFormacionModule } from './nivel-de-formacion/nivel-de-formacion.
     TipoAmbienteModule,
     ProgramaModule,
     NivelDeFormacionModule,
+    JornadaModule,
   ],
   controllers: [AppController],
   providers: [AppService],
