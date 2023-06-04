@@ -17,12 +17,15 @@ import { TipoDeVinculacionModule } from './tipo-de-vinculacion/tipo-de-vinculaci
 import { InstructorModule } from './instructor/instructor.module';
 import { FichaModule } from './ficha/ficha.module';
 import { EnvCofiguration } from './config/env.config';
+import { JoiValidationSchema } from './config/joi.validation';
+
 
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       load: [EnvCofiguration],
+      validationSchema: JoiValidationSchema,
       
     }),
     MongooseModule.forRoot(process.env.MONGODB),
