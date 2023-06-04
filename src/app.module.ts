@@ -14,6 +14,7 @@ import { JornadaModule } from './jornada/jornada.module';
 import { TipoDeVinculacionModule } from './tipo-de-vinculacion/tipo-de-vinculacion.module';
 import { InstructorModule } from './instructor/instructor.module';
 import { FichaModule } from './ficha/ficha.module';
+import { ModalidadModule } from './modalidad/modalidad.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { FichaModule } from './ficha/ficha.module';
     TipoDeVinculacionModule,
     InstructorModule,
     FichaModule,
+    ModalidadModule,
   ],
   controllers: [AppController],
   providers: [AppService],
