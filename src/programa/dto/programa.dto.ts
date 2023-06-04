@@ -1,4 +1,5 @@
-import { IsMongoId, IsNotEmpty, Matches } from 'class-validator';
+import { IsMongoId, IsNotEmpty, IsOptional, Matches } from 'class-validator';
+import { competenciaDto } from './competencia.dto';
 
 export class ProgramaDto {
   @IsNotEmpty()
@@ -24,6 +25,8 @@ export class ProgramaDto {
   @Matches(/^(?!\s*$).+/, { message: 'La version no puede ser estar vacío' })
   @IsNotEmpty()
   readonly duracion: string;
+
+  readonly competencia: competenciaDto[];
 }
 
 export class ActualizarProgramaDto {
