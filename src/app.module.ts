@@ -9,7 +9,11 @@ import { AmbienteModule } from './ambiente/ambiente.module';
 import { BloqueModule } from './bloque/bloque.module';
 import { TipoAmbienteModule } from './tipo-ambiente/tipo-ambiente.module';
 import { ProgramaModule } from './programa/programa.module';
-import { ModalidadModule } from './modalidad/modalidad.module';
+import { NivelDeFormacionModule } from './nivel-de-formacion/nivel-de-formacion.module';
+import { JornadaModule } from './jornada/jornada.module';
+import { TipoDeVinculacionModule } from './tipo-de-vinculacion/tipo-de-vinculacion.module';
+import { InstructorModule } from './instructor/instructor.module';
+import { FichaModule } from './ficha/ficha.module';
 
 @Module({
   imports: [
@@ -23,7 +27,11 @@ import { ModalidadModule } from './modalidad/modalidad.module';
     BloqueModule,
     TipoAmbienteModule,
     ProgramaModule,
-    ModalidadModule,
+    NivelDeFormacionModule,
+    JornadaModule,
+    TipoDeVinculacionModule,
+    InstructorModule,
+    FichaModule,
   ],
   controllers: [AppController],
   providers: [AppService],
