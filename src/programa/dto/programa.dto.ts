@@ -26,6 +26,7 @@ export class ProgramaDto {
   @IsNotEmpty()
   readonly duracion: string;
 
+  @IsOptional()
   readonly competencia: competenciaDto[];
 }
 
@@ -58,4 +59,7 @@ export class ActualizarProgramaDto {
   @Matches(/^(?!\s*$).+/, { message: 'La version no puede ser estar vacío' })
   @IsNotEmpty()
   readonly duracion: string;
+
+  @IsOptional()
+  readonly competencia: competenciaDto[];
 }

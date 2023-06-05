@@ -4,6 +4,8 @@ import { Programa } from './schema/programa.schema';
 import { Model, isValidObjectId } from 'mongoose';
 import { ActualizarProgramaDto, ProgramaDto } from './dto/programa.dto';
 import { competenciaDto } from './dto/competencia.dto';
+import { resultadoDto } from './dto/resultado.dto';
+import { isAlphanumeric, isNumber } from 'class-validator';
 
 @Injectable()
 export class ProgramaService {
@@ -11,6 +13,7 @@ export class ProgramaService {
     @InjectModel(Programa.name) private ProgramaModel: Model<Programa>,
   ) {}
 
+  /* Todos los metodos de obtener */
   async obtenerTodo(): Promise<NotFoundException | Programa[]> {
     return await this.ProgramaModel.find().then((data) => {
       if (data) {
@@ -23,12 +26,79 @@ export class ProgramaService {
     });
   }
 
+  async obtenerCompetencias(id: string) {
+    return await this.ProgramaModel.findById(id).then((programa) => {
+      return programa.competencia;
+    });
+  }
+
+  async obtenerResultados(id: string, codigo: string) {
+    return await this.ProgramaModel.findById(id).then((programa) => {
+      if (programa) {
+        let posicion = this.verificarCompetenciaExistente(codigo, programa);
+        if (posicion == -1) {
+          return new NotFoundException(`No se encontro el codigo ${codigo}`);
+        }
+        return programa.competencia[posicion].resultado;
+      }
+      return new NotFoundException(`No se encontro el programa con id: ${id}`);
+    });
+  }
+
+  /* Todos los metodos de crear */
   async crearPrograma(
     ProgramaDto: ProgramaDto,
   ): Promise<NotFoundException | Programa> {
+    let existe: any = await this.ProgramaModel.exists({
+      codigo: ProgramaDto.codigo,
+    });
+    existe === null ? (existe = false) : (existe = true);
+    if (existe) {
+      return new NotFoundException(
+        `Ya existe un programa con el codigo ${ProgramaDto.codigo}`,
+      );
+    }
     const Programa = new this.ProgramaModel(ProgramaDto);
     return await Programa.save();
   }
+  async crearCompetencia(
+    competencia: competenciaDto,
+    id: String,
+  ): Promise<Programa | NotFoundException> {
+    return await this.ProgramaModel.findById(id).then((miprograma) => {
+      let existe = this.verificarCompetenciaExistente(
+        competencia.codigo,
+        miprograma,
+      );
+      if (miprograma) {
+        if (existe !== -1) {
+          return new NotFoundException('La Competencia ya existe');
+        }
+
+        miprograma.competencia.push(competencia);
+        return this.actualizarDocumento(miprograma);
+      }
+      return new NotFoundException(
+        'No se encontro el programa asociado a la competencia',
+      );
+    });
+  }
+  async crearResultado(id: string, codigo: string, resultado: resultadoDto) {
+    return await this.ProgramaModel.findById(id).then((programa) => {
+      if (programa) {
+        let posicion = this.verificarCompetenciaExistente(codigo, programa);
+        if (posicion == -1) {
+          return new NotFoundException(`No se encontro el codigo ${codigo}`);
+        }
+        programa.competencia[posicion].resultado.push(resultado);
+        return this.actualizarDocumento(programa);
+      }
+
+      return new NotFoundException(`No se encontro el programa con id: ${id}`);
+    });
+  }
+
+  /* Todos los metodos de borrar */
 
   async borrarPrograma(id: string) {
     return await this.ProgramaModel.findByIdAndRemove(id).then((data) => {
@@ -41,7 +111,51 @@ export class ProgramaService {
       }
     });
   }
+  async borrarCompetencia(id: string, codigo: string) {
+    return await this.ProgramaModel.findById(id).then((miprograma) => {
+      let competenciaEliminda = miprograma.competencia.filter(
+        (compencia) => compencia.codigo !== codigo,
+      );
+      if (
+        miprograma.competencia.length == competenciaEliminda.length &&
+        miprograma.competencia.every(function (v, i) {
+          return v === competenciaEliminda[i];
+        })
+      ) {
+        return new NotFoundException(
+          `No se encontro la competencia a eliminar con el codigo ${codigo}`,
+        );
+      }
+      miprograma.competencia = competenciaEliminda;
+      return this.actualizarDocumento(miprograma);
+    });
+  }
+  async borrarResultado(id: string, codigo: string, posicionR: string) {
+    return await this.ProgramaModel.findById(id).then((programa) => {
+      if (programa) {
+        let posicion = this.verificarCompetenciaExistente(codigo, programa);
+        if (posicion == -1) {
+          return new NotFoundException(
+            `No se encontro una competencia con ese codigo ${codigo}`,
+          );
+        }
+        let regex = /^[0-9]*$/;
+        if (!regex.test(posicionR)) {
+          return new NotFoundException(
+            `La posicion no es un numero: ${posicionR}`,
+          );
+        }
 
+        programa.competencia[posicion].resultado.splice(Number(posicionR), 1);
+        return this.actualizarDocumento(programa);
+      }
+      return new NotFoundException(
+        `No se encontro el programa con el id ${id}`,
+      );
+    });
+  }
+
+  /* Todos los metodos de actualizar */
   async actualizarPrograma(programa: ActualizarProgramaDto) {
     return await this.ProgramaModel.findByIdAndUpdate(
       programa.id,
@@ -54,45 +168,70 @@ export class ProgramaService {
           );
     });
   }
-
-  async crearCompetencia(
-    competencia: competenciaDto,
-    id: String,
-  ): Promise<Programa | NotFoundException> {
-    let existe = await this.verificarCompetenciaExistente(competencia);
-    console.log(existe);
-    return await this.ProgramaModel.findById(id).then((miprograma) => {
-      if (miprograma) {
-        if (existe) {
-          return new NotFoundException('La Competencia ya existe');
+  async actualizarCompetencia(id: string, competencia: competenciaDto) {
+    return await this.ProgramaModel.findById(id).then((programa) => {
+      let posicion = this.verificarCompetenciaExistente(
+        competencia.codigo,
+        programa,
+      );
+      if (posicion == -1) {
+        return new NotFoundException(
+          `No se encontro una competencia con ese codigo ${competencia.codigo}`,
+        );
+      }
+      programa.competencia[posicion] = competencia;
+      return this.actualizarDocumento(programa);
+    });
+  }
+  async actualizarResultado(
+    id: string,
+    codigo: string,
+    posicionR: string,
+    resultado: resultadoDto,
+  ) {
+    return await this.ProgramaModel.findById(id).then((programa) => {
+      let regex = /^[0-9]*$/;
+      if (!regex.test(posicionR)) {
+        return new NotFoundException(
+          `La posicion no es un numero: ${posicionR}`,
+        );
+      }
+      if (programa) {
+        let posicion = this.verificarCompetenciaExistente(codigo, programa);
+        if (posicion == -1) {
+          return new NotFoundException(
+            `No se encontro una competencia con el codigo ${codigo}`,
+          );
         }
-        miprograma.competencia.push(competencia);
-        return this.ProgramaModel.findByIdAndUpdate(id, miprograma);
+        programa.competencia[posicion].resultado[posicionR] = resultado;
+        return this.actualizarDocumento(programa);
       }
       return new NotFoundException(
-        'No se encontro el programa asociado a la competencia',
+        `No se encontro el programa con el id ${id}`,
       );
     });
   }
 
-  async remplezarCompetencia(id, competenciap) {
+  async actualizarDocumento(programa) {
     return await this.ProgramaModel.findByIdAndUpdate(
-      { _id: id, 'competencia.codigo': competenciap.codigo },
-      {
-        $set: { competencia: competenciap },
-      },
-    );
-  }
-  async verificarCompetenciaExistente(competenciap): Promise<boolean> {
-    let existe: any = await this.ProgramaModel.exists({
-      'competencia.codigo': competenciap.codigo,
+      programa._id,
+      programa,
+    ).then((data) => {
+      return data
+        ? data
+        : new NotFoundException(
+            `No se encontro el programa con id:${programa._id}`,
+          );
     });
-    existe === null ? (existe = false) : (existe = true);
-    return existe;
   }
-  async borrarCompetencia(id, codigo) {
-    let programa = await this.ProgramaModel.findById(id).then((miprograma) => {
-      console.log(miprograma);
+
+  /* metodos de validacion */
+
+  verificarCompetenciaExistente(codigo: string, programa) {
+    return programa.competencia.findIndex((competenciaModel, index) => {
+      if (competenciaModel.codigo == codigo) {
+        return true;
+      }
     });
   }
 }

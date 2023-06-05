@@ -16,6 +16,7 @@ export class competenciaDto {
   @IsNotEmpty()
   readonly duracion: string;
 
+  @IsOptional()
   @IsNotEmpty()
   readonly resultado: resultadoDto[];
 }
