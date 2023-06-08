@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
-
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { SedesModule } from './sedes/sedes.module';
@@ -16,6 +15,9 @@ import { JornadaModule } from './jornada/jornada.module';
 import { TipoDeVinculacionModule } from './tipo-de-vinculacion/tipo-de-vinculacion.module';
 import { InstructorModule } from './instructor/instructor.module';
 import { FichaModule } from './ficha/ficha.module';
+import { EnvCofiguration } from './config/env.config';
+import { JoiValidationSchema } from './config/joi.validation';
+import { ModalidadModule } from './modalidad/modalidad.module';
 
 @Module({
   imports: [
