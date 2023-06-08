@@ -52,7 +52,7 @@ export class ModalidadService {
           return modalidad
             ? modalidad
             : new NotFoundException(
-                `No existe el nivel de modalidad con id: ${modalidad.id}`,
+                `No existe el nivel de modalidad con id: ${modalidadDto.id}`,
               );
         });
     }
