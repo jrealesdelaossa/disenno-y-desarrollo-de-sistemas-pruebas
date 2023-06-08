@@ -41,12 +41,6 @@ export class InstructorDto {
   @ApiProperty()
   @IsNotEmpty()
   readonly contrato: ContratoDto;
-
-  @ApiProperty()
-  @IsNotEmpty()
-  @IsString()
-  @Matches(/^(?!\s*$).+/, { message: 'La jornada no puede ser estar vacía' })
-  readonly jornada: string;
 }
 
 export class ActualizarInstructorDto {
