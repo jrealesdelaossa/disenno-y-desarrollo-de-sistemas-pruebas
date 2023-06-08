@@ -9,7 +9,9 @@ describe('NivelDeFormacionController', () => {
       controllers: [NivelDeFormacionController],
     }).compile();
 
-    controller = module.get<NivelDeFormacionController>(NivelDeFormacionController);
+    controller = module.get<NivelDeFormacionController>(
+      NivelDeFormacionController,
+    );
   });
 
   it('should be defined', () => {

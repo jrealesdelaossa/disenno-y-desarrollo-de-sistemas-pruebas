@@ -34,7 +34,7 @@ export class ProgramaService {
   async obtenerResultados(id: string, codigo: string) {
     return await this.ProgramaModel.findById(id).then((programa) => {
       if (programa) {
-        let posicion = this.verificarCompetenciaExistente(codigo, programa);
+        const posicion = this.verificarCompetenciaExistente(codigo, programa);
         if (posicion == -1) {
           return new NotFoundException(`No se encontro el codigo ${codigo}`);
         }
@@ -62,10 +62,10 @@ export class ProgramaService {
   }
   async crearCompetencia(
     competencia: competenciaDto,
-    id: String,
+    id: string,
   ): Promise<Programa | NotFoundException> {
     return await this.ProgramaModel.findById(id).then((miprograma) => {
-      let existe = this.verificarCompetenciaExistente(
+      const existe = this.verificarCompetenciaExistente(
         competencia.codigo,
         miprograma,
       );
@@ -85,7 +85,7 @@ export class ProgramaService {
   async crearResultado(id: string, codigo: string, resultado: resultadoDto) {
     return await this.ProgramaModel.findById(id).then((programa) => {
       if (programa) {
-        let posicion = this.verificarCompetenciaExistente(codigo, programa);
+        const posicion = this.verificarCompetenciaExistente(codigo, programa);
         if (posicion == -1) {
           return new NotFoundException(`No se encontro el codigo ${codigo}`);
         }
@@ -112,7 +112,7 @@ export class ProgramaService {
   }
   async borrarCompetencia(id: string, codigo: string) {
     return await this.ProgramaModel.findById(id).then((miprograma) => {
-      let competenciaEliminda = miprograma.competencia.filter(
+      const competenciaEliminda = miprograma.competencia.filter(
         (compencia) => compencia.codigo !== codigo,
       );
       if (
@@ -132,13 +132,13 @@ export class ProgramaService {
   async borrarResultado(id: string, codigo: string, posicionR: string) {
     return await this.ProgramaModel.findById(id).then((programa) => {
       if (programa) {
-        let posicion = this.verificarCompetenciaExistente(codigo, programa);
+        const posicion = this.verificarCompetenciaExistente(codigo, programa);
         if (posicion == -1) {
           return new NotFoundException(
             `No se encontro una competencia con ese codigo ${codigo}`,
           );
         }
-        let regex = /^[0-9]*$/;
+        const regex = /^[0-9]*$/;
         if (!regex.test(posicionR)) {
           return new NotFoundException(
             `La posicion no es un numero: ${posicionR}`,
@@ -169,7 +169,7 @@ export class ProgramaService {
   }
   async actualizarCompetencia(id: string, competencia: competenciaDto) {
     return await this.ProgramaModel.findById(id).then((programa) => {
-      let posicion = this.verificarCompetenciaExistente(
+      const posicion = this.verificarCompetenciaExistente(
         competencia.codigo,
         programa,
       );
@@ -189,14 +189,14 @@ export class ProgramaService {
     resultado: resultadoDto,
   ) {
     return await this.ProgramaModel.findById(id).then((programa) => {
-      let regex = /^[0-9]*$/;
+      const regex = /^[0-9]*$/;
       if (!regex.test(posicionR)) {
         return new NotFoundException(
           `La posicion no es un numero: ${posicionR}`,
         );
       }
       if (programa) {
-        let posicion = this.verificarCompetenciaExistente(codigo, programa);
+        const posicion = this.verificarCompetenciaExistente(codigo, programa);
         if (posicion == -1) {
           return new NotFoundException(
             `No se encontro una competencia con el codigo ${codigo}`,

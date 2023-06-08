@@ -9,7 +9,9 @@ describe('TipoDeVinculacionController', () => {
       controllers: [TipoDeVinculacionController],
     }).compile();
 
-    controller = module.get<TipoDeVinculacionController>(TipoDeVinculacionController);
+    controller = module.get<TipoDeVinculacionController>(
+      TipoDeVinculacionController,
+    );
   });
 
   it('should be defined', () => {
