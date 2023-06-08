@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import {
   IsNotEmpty,
   IsString,
@@ -7,6 +8,7 @@ import {
 } from 'class-validator';
 
 export class ContratoDto {
+  @ApiProperty()
   @IsNotEmpty()
   @IsNumber()
   @Matches(/^(?!\s*$).+/, {
@@ -14,6 +16,7 @@ export class ContratoDto {
   })
   readonly numero: number;
 
+  @ApiProperty()
   @IsNotEmpty()
   @IsString()
   @Matches(/^(?!\s*$).+/, {
@@ -21,6 +24,7 @@ export class ContratoDto {
   })
   readonly fechaInicio: string;
 
+  @ApiProperty()
   @IsNotEmpty()
   @IsString()
   @Matches(/^(?!\s*$).+/, {
@@ -28,6 +32,7 @@ export class ContratoDto {
   })
   readonly fechaTerminacion: string;
 
+  @ApiProperty()
   @IsNotEmpty()
   @IsString()
   @IsMongoId()

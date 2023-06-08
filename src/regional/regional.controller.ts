@@ -9,6 +9,9 @@ import {
 } from '@nestjs/common';
 import { Regional_Dto } from './dto/regional.dto';
 import { RegionalService } from './regional.service';
+import { ApiParam, ApiTags } from '@nestjs/swagger';
+
+@ApiTags('Regional')
 @Controller('regional')
 export class RegionalController {
   constructor(private readonly regional: RegionalService) {}
@@ -25,6 +28,9 @@ export class RegionalController {
     ${data}`;
   }
 
+  @ApiParam({
+    name: 'id',
+  })
   @Delete('/eliminar/:id')
   async deleteRegional(@Param('id') id: string) {
     return await this.regional.delete_regional(id);
