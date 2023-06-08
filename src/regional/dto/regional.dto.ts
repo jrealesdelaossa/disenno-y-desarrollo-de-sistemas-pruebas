@@ -1,22 +1,28 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, Length, IsOptional, IsString } from 'class-validator';
 export class Regional_Dto {
+  @ApiProperty()
   @IsNotEmpty()
   @IsOptional()
-  private id: string;
+  private id?: string;
 
+  @ApiProperty()
   @IsNotEmpty()
   @IsString()
   @Length(1, 10)
   private codigo: string;
 
+  @ApiProperty()
   @IsNotEmpty()
   @IsString()
   private nombre: string;
 
+  @ApiProperty()
   @IsNotEmpty()
   @IsString()
   private departamento: string;
 
+  @ApiProperty()
   @IsNotEmpty()
   @IsString()
   private municipio: string;

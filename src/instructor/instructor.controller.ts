@@ -9,7 +9,9 @@ import {
 } from '@nestjs/common';
 import { InstructorService } from './instructor.service';
 import { ActualizarInstructorDto, InstructorDto } from './dto/instructor.dto';
+import { ApiParam, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Instructor')
 @Controller('instructor')
 export class InstructorController {
   constructor(private readonly instructorService: InstructorService) {}
@@ -19,6 +21,9 @@ export class InstructorController {
     return await this.instructorService.obtenerInstructores();
   }
 
+  @ApiParam({
+    name: 'id',
+  })
   @Get('/:id')
   async obtenerInstructor(@Param('id') id: string) {
     return await this.instructorService.obtenerInstructor(id);
