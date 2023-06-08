@@ -1,55 +1,54 @@
-import { IsNotEmpty, Length, IsOptional, IsString } from 'class-validator';
-export class Regional_Dto {
+import { IsNotEmpty, Length, IsOptional, IsString, Matches,IsMongoId } from 'class-validator';
+export class RegionalDto {
   @IsNotEmpty()
   @IsOptional()
-  private id: string;
+  readonly id: string;
 
   @IsNotEmpty()
   @IsString()
   @Length(1, 10)
-  private codigo: string;
+  readonly codigo: string;
 
   @IsNotEmpty()
   @IsString()
-  private nombre: string;
+  readonly nombre: string;
 
   @IsNotEmpty()
   @IsString()
-  private departamento: string;
+  readonly departamento: string;
 
   @IsNotEmpty()
   @IsString()
-  private municipio: string;
+  readonly municipio: string;
 
-  public get _id(): string {
-    return this.id;
-  }
+  
+}
 
-  public get _codigo(): string {
-    return this.codigo;
-  }
-  public set _codigo(value: string) {
-    this.codigo = value;
-  }
+export class ActualizarRegionalDto{
+  
+  @IsNotEmpty()
+  @Matches(/^(?!\s*$).+/, { message: 'El id no puede estar vacío' })
+  @IsMongoId()
+  readonly id: string;
 
-  public get _nombre(): string {
-    return this.nombre;
-  }
-  public set _nombre(value: string) {
-    this.nombre = value;
-  }
+  @IsNotEmpty()
+  @Matches(/^(?!\s*$).+/, { message: 'El codigo no puede estar vacío' })
+  @IsOptional()
+  readonly codigo: string;
 
-  public get _municipio(): string {
-    return this.municipio;
-  }
-  public set _municipio(value: string) {
-    this.municipio = value;
-  }
+  @IsNotEmpty()
+  @Matches(/^(?!\s*$).+/, { message: 'El nombre no puede estar vacío' })
+  @IsOptional()
+  readonly nombre: string;
 
-  public get _departamento(): string {
-    return this.departamento;
-  }
-  public set _departamento(value: string) {
-    this.departamento = value;
-  }
+  @IsNotEmpty()
+  @Matches(/^(?!\s*$).+/, { message: 'El departamento no puede estar vacía' })
+  @IsOptional()
+  readonly departamento: string;
+
+  @IsNotEmpty()
+  @Matches(/^(?!\s*$).+/, { message: 'El municipio no puede estar vacío' })
+  @IsOptional()
+  readonly municipio: string;
+
 }
