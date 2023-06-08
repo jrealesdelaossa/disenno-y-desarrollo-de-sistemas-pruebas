@@ -36,13 +36,13 @@ export class TipoDeVinculacionService {
             );
       });
   }
-  async existeTipoVinculacion(id: string): Promise<boolean> {
+  /*async existeTipoVinculacion(id: string): Promise<boolean> {
     return await this.tipoDeVinculacionModel
       .findById(id)
       .then((vinculacion) => {
         return vinculacion ? true : false;
       });
-  }
+  }*/
   async crearTipoDeVinculacion(tipoDeVinculacionDto: TipoDeVinculacionDto) {
     const existeDocumento = await this.tipoDeVinculacionModel.findOne({
       nombre: tipoDeVinculacionDto.nombre,

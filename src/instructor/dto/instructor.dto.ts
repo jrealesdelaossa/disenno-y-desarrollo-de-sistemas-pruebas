@@ -8,6 +8,9 @@ import {
 import { ContratoDto } from './contrato.dto';
 
 export class InstructorDto {
+  @Matches(/^(?!\s*$).+/, { message: 'El documento no puede ser estar vacío' })
+  readonly documento: string;
+
   @IsNotEmpty()
   @IsString()
   @Matches(/^(?!\s*$).+/, { message: 'El nombre no puede ser estar vacío' })
@@ -44,6 +47,9 @@ export class ActualizarInstructorDto {
   @IsMongoId()
   readonly id: string;
 
+  @Matches(/^(?!\s*$).+/, { message: 'El documento no puede ser estar vacío' })
+  readonly documento: string;
+
   @IsNotEmpty()
   @IsString()
   @Matches(/^(?!\s*$).+/, { message: 'El codigo no puede ser estar vacío' })
@@ -69,9 +75,4 @@ export class ActualizarInstructorDto {
   @IsNotEmpty()
   @Matches(/^(?!\s*$).+/, { message: 'El municipio no puede ser estar vacío' })
   readonly contrato: ContratoDto;
-
-  @IsNotEmpty()
-  @IsString()
-  @Matches(/^(?!\s*$).+/, { message: 'El municipio no puede ser estar vacío' })
-  readonly jornada: string;
 }
