@@ -1,7 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import mongoose, { HydratedDocument } from 'mongoose';
+import { HydratedDocument } from 'mongoose';
 import { ContratoDto } from '../dto/contrato.dto';
-import { Jornada } from 'src/jornada/schema/jornada.schema';
 
 export type InstructorDocument = HydratedDocument<Instructor>;
 
@@ -21,9 +20,6 @@ export class Instructor {
 
   @Prop({ required: true })
   contrato: ContratoDto;
-
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Jornada' })
-  jornada: Jornada;
 }
 
 export const InstructorSchema = SchemaFactory.createForClass(Instructor);

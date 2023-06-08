@@ -39,17 +39,11 @@ export class InstructorService {
   async crearInstructor(
     instructor: InstructorDto,
   ): Promise<NotFoundException | Instructor> {
-    const existeTipoVinculacion =
-      await this.tipoVinculacionService.existeTipoVinculacion(
-        instructor.contrato.tipoVinculacion,
-      );
-    console.log(existeTipoVinculacion);
-    if (existeTipoVinculacion) {
-      return await this.instructorModel.create(instructor);
-    }
-    return new NotFoundException(
-      `No se puede crear el instructor, no existe una tipo de vinculación con id: ${instructor.contrato.tipoVinculacion}`,
-    );
+    return await this.instructorModel.create(instructor).then((instructor) => {
+      return instructor
+        ? instructor
+        : new NotFoundException(`No se puede crear el instructor`);
+    });
   }
 
   async actualizarInstructor(
