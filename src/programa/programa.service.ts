@@ -1,11 +1,10 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Programa } from './schema/programa.schema';
-import { Model, isValidObjectId } from 'mongoose';
+import { Model } from 'mongoose';
 import { ActualizarProgramaDto, ProgramaDto } from './dto/programa.dto';
 import { competenciaDto } from './dto/competencia.dto';
 import { resultadoDto } from './dto/resultado.dto';
-import { isAlphanumeric, isNumber } from 'class-validator';
 
 @Injectable()
 export class ProgramaService {
