@@ -14,36 +14,40 @@ export class InstructorService {
   ) {}
 
   async obtenerInstructores(): Promise<NotFoundException | Instructor[]> {
-    const instructor = await this.instructorModel.find().populate('jornada');
-    if (instructor) {
-      console.log(
-        await this.tipoVinculacionService.obtenerTipoVinculacion(
-          instructor[0].contrato.tipoVinculacion,
-        ),
-      );
-      return instructor;
-    }
-
-    return new NotFoundException('No se encontraron instructores');
+    return await this.instructorModel.find().then((instructor) => {
+      return instructor
+        ? instructor
+        : new NotFoundException('No se encontraron instructores');
+    });
   }
   async obtenerInstructor(id: string) {
-    return (await this.instructorModel.findById(id))
-      .populate('jornada')
-      .then((instructor) => {
-        return instructor
-          ? instructor
-          : new NotFoundException(`No se encontro el instructor con id: ${id}`);
-      });
+    return await this.instructorModel.findById(id).then((instructor) => {
+      return instructor
+        ? instructor
+        : new NotFoundException(`No se encontro el instructor con id: ${id}`);
+    });
   }
 
   async crearInstructor(
     instructor: InstructorDto,
   ): Promise<NotFoundException | Instructor> {
-    return await this.instructorModel.create(instructor).then((instructor) => {
-      return instructor
-        ? instructor
-        : new NotFoundException(`No se puede crear el instructor`);
-    });
+    if (
+      !this.existeDocYNumContrato(
+        instructor.documento,
+        instructor.contrato.numero,
+      )
+    ) {
+      return await this.instructorModel
+        .create(instructor)
+        .then((instructor) => {
+          return instructor
+            ? instructor
+            : new NotFoundException(`No se pudo crear el instructor`);
+        });
+    }
+    return new NotFoundException(
+      `El instructor con documento: ${instructor.documento} o el número de contrato ${instructor.contrato.numero} ya existen, no se puede crear el instructor`,
+    );
   }
 
   async actualizarInstructor(
@@ -67,6 +71,19 @@ export class InstructorService {
         return instructor
           ? instructor
           : new NotFoundException(`No se encontro el instructor con id: ${id}`);
+      });
+  }
+
+  async existeDocYNumContrato(
+    documento: string,
+    numContrato: string,
+  ): Promise<boolean> {
+    return await this.instructorModel
+      .exists({
+        $or: [{ documento: documento }, { 'contrato.numero': numContrato }],
+      })
+      .then((instructor) => {
+        return instructor ? true : false;
       });
   }
 }

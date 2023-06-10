@@ -14,7 +14,7 @@ export class ContratoDto {
   @Matches(/^(?!\s*$).+/, {
     message: 'El campo numero no debe estar vacio',
   })
-  readonly numero: number;
+  readonly numero: string;
 
   @ApiProperty()
   @IsNotEmpty()

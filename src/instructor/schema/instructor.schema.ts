@@ -7,6 +7,9 @@ export type InstructorDocument = HydratedDocument<Instructor>;
 @Schema()
 export class Instructor {
   @Prop({ required: true })
+  documento: string;
+
+  @Prop({ required: true })
   nombre: string;
 
   @Prop({ required: true })
