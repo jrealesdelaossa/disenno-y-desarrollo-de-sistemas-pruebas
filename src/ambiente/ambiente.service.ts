@@ -8,7 +8,7 @@ import { CreatedAmbienteDTO, UpdateAmbienteDTO } from './dto/ambiente.dto';
 export class AmbienteService {
   constructor(
     @InjectModel('Ambiente') private readonly ambienteModel: Model<IAmbiente>,
-  ) {}
+  ) { }
 
   async getAllAmbientes(): Promise<IAmbiente[]> {
     return await this.ambienteModel.find().then((dato) => {
@@ -38,7 +38,9 @@ export class AmbienteService {
     });
     if (found)
       throw new HttpException('El ambiente ya existe', HttpStatus.CONFLICT);
-    return await this.ambienteModel.create(ambienteCreatedDto);
+    const newAmbiente = new this.ambienteModel(ambienteCreatedDto);
+    return await newAmbiente.save();
+
   }
 
   async updateAmbiente(updateAmbiente: UpdateAmbienteDTO): Promise<IAmbiente> {

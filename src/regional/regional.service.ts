@@ -30,8 +30,9 @@ export class RegionalService {
   async crearRegional(regional_dto: RegionalDto): Promise<Regional> {
     // const regional = new this.regionalModel(regional_dto);
     // return await regional.save();
-    const regional = this.regionalModel.create(regional_dto);
-    return regional;
+    const regional = new  this.regionalModel(regional_dto);
+    return await regional.save();
+  
   }
 
   // eliminar una regional
@@ -60,8 +61,6 @@ export class RegionalService {
     return await this.regionalModel
       .findByIdAndUpdate(regional_dto.id, regional_dto)
       .then((data) => {
-
-        
         if (data) {
           return `Se actualizo la regional con id: ${regional_dto.id}`;
         } else {
