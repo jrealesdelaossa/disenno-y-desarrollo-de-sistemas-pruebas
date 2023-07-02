@@ -4,7 +4,10 @@ import {
   IsString,
   Matches,
   IsDateString,
+  // IsObject,
+  IsArray,
 } from 'class-validator';
+import { jornadaDto } from './jornadaDto';
 export class FichaDto {
   @IsNotEmpty()
   @IsString()
@@ -12,17 +15,17 @@ export class FichaDto {
   readonly codigo: string;
 
   @IsNotEmpty()
+  @IsDateString()
+  readonly fechaInicio: Date;
+
+  @IsNotEmpty()
+  @IsDateString()
+  readonly fechaFin: Date;
+
+  @IsNotEmpty()
   @IsMongoId()
-  @Matches(/^(?!\s*$).+/, { message: 'La jornada no puede ser estar vacía' })
-  readonly jornada: string;
-
-  @IsNotEmpty()
-  @IsDateString()
-  readonly fechaCreacion: Date;
-
-  @IsNotEmpty()
-  @IsDateString()
-  readonly fechaFinalizacion: Date;
+  @Matches(/^(?!\s*$).+/, { message: 'sede no puede ser estar vacío' })
+  readonly sede: string;
 
   @IsNotEmpty()
   @IsMongoId()
@@ -38,6 +41,10 @@ export class FichaDto {
   @IsMongoId()
   @Matches(/^(?!\s*$).+/, { message: 'instructor no puede ser estar vacío' })
   readonly instructor: string;
+
+  @IsNotEmpty()
+  @IsArray()
+  readonly jornadas: jornadaDto[];
 }
 
 export class ActualizarFichaDto {

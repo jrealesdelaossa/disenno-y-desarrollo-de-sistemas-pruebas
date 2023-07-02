@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, HttpStatus } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Ficha } from './schema/ficha.schema';
@@ -30,9 +30,16 @@ export class FichaService {
           : new NotFoundException(`No se encontro la ficha con id:${id}`);
       });
   }
+
   async crearFicha(fichaDto: FichaDto) {
     const ficha = new this.fichaModel(fichaDto);
-    return await ficha.save();
+    //return await ficha.save();
+    const response = await ficha.save();
+    return {
+      statusCode: HttpStatus.CREATED,
+      message: 'Ficha creada exitosamente',
+      data: response,
+    };
   }
 
   async actualizarFicha(
