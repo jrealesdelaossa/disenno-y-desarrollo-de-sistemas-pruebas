@@ -6,10 +6,10 @@ import {
   Matches,
   IsMongoId,
 } from 'class-validator';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class RegionalDto {
-  @ApiProperty()
+  @ApiPropertyOptional()
   @IsNotEmpty()
   @IsOptional()
   readonly id: string;

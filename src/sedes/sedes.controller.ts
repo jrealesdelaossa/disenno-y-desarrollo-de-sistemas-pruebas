@@ -9,7 +9,9 @@ import {
 } from '@nestjs/common';
 import { SedesService } from './sedes.service';
 import { ActualizarSedeDto, SedeDto } from './dto/sedes.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Sedes')
 @Controller('sedes')
 export class SedesController {
   constructor(private readonly sede: SedesService) {}

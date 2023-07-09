@@ -12,7 +12,9 @@ import {
   TipoDeVinculacionDto,
   ActualizarTipoDeVinculacionDto,
 } from './dto/tipo-de-vinculacion.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Tipo de vinculación')
 @Controller('tipo-de-vinculacion')
 export class TipoDeVinculacionController {
   constructor(

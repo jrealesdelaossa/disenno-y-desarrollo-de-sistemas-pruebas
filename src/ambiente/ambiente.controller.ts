@@ -9,7 +9,9 @@ import {
 } from '@nestjs/common';
 import { AmbienteService } from './ambiente.service';
 import { CreatedAmbienteDTO, UpdateAmbienteDTO } from './dto/ambiente.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Ambiente')
 @Controller('ambiente')
 export class AmbienteController {
   constructor(private readonly ambienteService: AmbienteService) {}

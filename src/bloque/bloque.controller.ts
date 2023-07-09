@@ -9,7 +9,9 @@ import {
 } from '@nestjs/common';
 import { BloqueService } from './bloque.service';
 import { CrearBloqueDto, ActualizarBloqueDto } from './dto/bloque.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Bloque')
 @Controller('bloque')
 export class BloqueController {
   constructor(private readonly bloqueService: BloqueService) {}

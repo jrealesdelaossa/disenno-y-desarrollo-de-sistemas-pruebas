@@ -11,7 +11,9 @@ import { ProgramaService } from './programa.service';
 import { ActualizarProgramaDto, ProgramaDto } from './dto/programa.dto';
 import { competenciaDto } from './dto/competencia.dto';
 import { resultadoDto } from './dto/resultado.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Programas')
 @Controller('programas')
 export class ProgramaController {
   constructor(private readonly Programa: ProgramaService) {}

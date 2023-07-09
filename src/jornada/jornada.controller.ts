@@ -9,6 +9,8 @@ import {
 } from '@nestjs/common';
 import { JornadaService } from './jornada.service';
 import { CrearJornadaDto, ActualizarJornadaDto } from './dto/jornada.dto';
+import { ApiTags } from '@nestjs/swagger';
+@ApiTags('Jornada')
 @Controller('jornada')
 export class JornadaController {
   constructor(private readonly jornadaService: JornadaService) {}

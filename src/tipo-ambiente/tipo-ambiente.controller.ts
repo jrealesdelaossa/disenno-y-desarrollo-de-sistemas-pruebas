@@ -12,7 +12,9 @@ import {
   CreatedTipoAmbienteDTO,
   UpdateTipoAmbienteDTO,
 } from './dto/tipo-ambiente.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Tipo Ambiente')
 @Controller('tipo-ambiente')
 export class TipoAmbienteController {
   constructor(private readonly tipoAmbientService: TipoAmbienteService) {}

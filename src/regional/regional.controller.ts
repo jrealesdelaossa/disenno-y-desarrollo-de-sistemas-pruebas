@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { ActualizarRegionalDto, RegionalDto } from './dto/regional.dto';
 import { RegionalService } from './regional.service';
-import { ApiParam, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiParam, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Regional')
 @Controller('regional')
@@ -20,6 +20,9 @@ export class RegionalController {
     return await this.regional.obtenerRegionales();
   }
 
+  @ApiBody({
+    type: RegionalDto,
+  })
   @Post('/crear')
   async crearRegional(@Body() regional: RegionalDto) {
     const data = await this.regional.crearRegional(regional);
@@ -30,6 +33,7 @@ export class RegionalController {
 
   @ApiParam({
     name: 'id',
+    description: 'id de la regional',
   })
   @Delete('/eliminar/:id')
   async eliminarRegional(@Param('id') id: string) {

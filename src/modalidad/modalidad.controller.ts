@@ -9,7 +9,9 @@ import {
 } from '@nestjs/common';
 import { ModalidadService } from './modalidad.service';
 import { ActualizarModalidadDto, ModalidadDto } from './dto/modalidad.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Modalidad')
 @Controller('modalidad')
 export class ModalidadController {
   constructor(private readonly modalidadService: ModalidadService) {}

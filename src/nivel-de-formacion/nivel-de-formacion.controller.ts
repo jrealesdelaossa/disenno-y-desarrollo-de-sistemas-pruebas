@@ -12,7 +12,9 @@ import {
   NivelDeFormacionDto,
   ActualizarNivelDeFormacionDto,
 } from './dto/nivel-de-formacion.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Nivel de formación')
 @Controller('nivel-de-formacion')
 export class NivelDeFormacionController {
   constructor(
