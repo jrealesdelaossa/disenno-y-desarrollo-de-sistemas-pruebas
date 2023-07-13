@@ -4,6 +4,7 @@ import { InstructorService } from './instructor.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Instructor, InstructorSchema } from './schema/instructor.schema';
 import { TipoDeVinculacionModule } from '../tipo-de-vinculacion/tipo-de-vinculacion.module';
+import { ProgramaModule } from 'src/programa/programa.module';
 
 @Module({
   imports: [
@@ -11,6 +12,7 @@ import { TipoDeVinculacionModule } from '../tipo-de-vinculacion/tipo-de-vinculac
       { name: Instructor.name, schema: InstructorSchema },
     ]),
     TipoDeVinculacionModule,
+    ProgramaModule,
   ],
   controllers: [InstructorController],
   providers: [InstructorService],

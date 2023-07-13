@@ -4,6 +4,7 @@ import {
   Matches,
   IsString,
   IsEmail,
+  IsArray,
 } from 'class-validator';
 import { ContratoDto } from './contrato.dto';
 import { ApiProperty } from '@nestjs/swagger';
@@ -41,6 +42,10 @@ export class InstructorDto {
   @ApiProperty()
   @IsNotEmpty()
   readonly contrato: ContratoDto;
+
+  @ApiProperty({})
+  @IsArray()
+  readonly programas: string[];
 }
 
 export class ActualizarInstructorDto {
