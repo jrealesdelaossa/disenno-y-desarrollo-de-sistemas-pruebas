@@ -13,8 +13,7 @@ export class FichaService {
       .find()
       .populate('ambiente')
       .populate('programa')
-      .populate('instructor')
-      .populate('jornada');
+      .populate('instructor');
   }
 
   async obtenerFicha(id: string) {
@@ -23,7 +22,6 @@ export class FichaService {
       .populate('ambiente')
       .populate('programa')
       .populate('instructor')
-      .populate('jornada')
       .then((ficha) => {
         return ficha
           ? ficha

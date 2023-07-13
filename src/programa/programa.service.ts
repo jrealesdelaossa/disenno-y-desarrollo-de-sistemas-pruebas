@@ -24,6 +24,15 @@ export class ProgramaService {
       }
     });
   }
+  async obtenerProgramaId(id: string): Promise<NotFoundException | Programa> {
+    return await this.ProgramaModel.findById(id).then((data) => {
+      if (data) {
+        return data;
+      } else {
+        return new NotFoundException('No hay programas con ese id');
+      }
+    });
+  }
 
   async obtenerCompetencias(id: string) {
     return await this.ProgramaModel.findById(id).then((programa) => {
