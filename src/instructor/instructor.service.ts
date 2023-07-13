@@ -82,10 +82,7 @@ export class InstructorService {
         $or: [{ documento: documento }, { 'contrato.numero': numContrato }],
       })
       .then((instructor) => {
-        if (instructor == null) {
-          return false;
-        }
-        return instructor ? true : false;
+        return instructor == null ? false : instructor ? true : false;
       });
   }
 }
