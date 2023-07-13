@@ -1,6 +1,6 @@
 import { Controller, Get } from '@nestjs/common';
 import { AppService } from './app.service';
-import * as moment from 'moment';
+import moment from 'moment';
 
 @Controller()
 export class AppController {
