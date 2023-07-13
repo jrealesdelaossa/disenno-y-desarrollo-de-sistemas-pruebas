@@ -1,6 +1,6 @@
 import { Controller, Get } from '@nestjs/common';
 import { AppService } from './app.service';
-import moment from 'moment';
+//import moment from 'moment';
 
 @Controller()
 export class AppController {
@@ -15,8 +15,14 @@ export class AppController {
    * Crear el EndPoint de la fecha en el appController
    * Mes en Numero y en letra, anio en Numero
    */
+
   @Get('date')
   getDatosFecha() {
-    return [moment().month() + 1, moment().format('MMMM'), moment().year()];
+    var moment = require('moment');
+    return {
+      mesNum: moment().month() + 1,
+      mes: moment().format('MMMM'),
+      year: moment().year(),
+    };
   }
 }
