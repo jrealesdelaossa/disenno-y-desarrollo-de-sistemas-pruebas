@@ -36,7 +36,27 @@ export class ProgramaService {
 
   async obtenerCompetencias(id: string) {
     return await this.ProgramaModel.findById(id).then((programa) => {
-      return programa.competencia;
+      if (programa) {
+        return programa.competencia;
+      } else {
+        return new NotFoundException(`No hay programas con ese id ${id}`);
+      }
+    });
+  }
+
+  async obtenerCompetenciasId(id: string, codigo: string) {
+    return await this.ProgramaModel.findById(id).then((programa) => {
+      if (programa) {
+        const posicion = this.verificarCompetenciaExistente(codigo, programa);
+        if (posicion == -1) {
+          return new NotFoundException(
+            `No se encontro una competencia con el codigo ${codigo}`,
+          );
+        }
+        return programa.competencia[posicion];
+      } else {
+        return new NotFoundException(`Nose encontro el programa con id ${id}`);
+      }
     });
   }
 

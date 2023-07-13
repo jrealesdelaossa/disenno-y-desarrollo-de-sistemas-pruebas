@@ -31,7 +31,14 @@ export class ProgramaController {
   async obtenerCompetencias(@Param('id') id: string) {
     return await this.Programa.obtenerCompetencias(id);
   }
-  @Get('competencias/:id/:codigo')
+  @Get('/competencias/:id/:codigo')
+  async obtenerCompetenciaId(
+    @Param('id') id: string,
+    @Param('codigo') codigo: string,
+  ) {
+    return await this.Programa.obtenerCompetenciasId(id, codigo);
+  }
+  @Get('competencias/resultados/:id/:codigo')
   async obtenerResultados(
     @Param('id') id: string,
     @Param('codigo') codigo: string,
