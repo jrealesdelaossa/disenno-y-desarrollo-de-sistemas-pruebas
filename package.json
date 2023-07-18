@@ -32,6 +32,7 @@
     "class-validator": "^0.14.0",
     "cors": "^2.8.5",
     "joi": "^17.9.2",
+    "moment": "^2.29.4",
     "mongoose": "^7.1.1",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
