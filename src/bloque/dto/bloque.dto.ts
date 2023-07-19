@@ -14,6 +14,11 @@ export class CrearBloqueDto {
     message: 'El campo nomenclatura no debe estar vacio',
   })
   readonly nomenclatura: string;
+
+  @Matches(/^(?!\s*$).+/, { message: 'La sede no puede ser estar vacío' })
+  @IsNotEmpty()
+  @IsMongoId()
+  readonly sede: string;
 }
 
 export class ActualizarBloqueDto {
@@ -38,4 +43,9 @@ export class ActualizarBloqueDto {
     message: 'El campo nomenclatura no debe estar vacio',
   })
   readonly nomenclatura?: string;
+
+  @Matches(/^(?!\s*$).+/, { message: 'La sede no puede ser estar vacío' })
+  @IsNotEmpty()
+  @IsMongoId()
+  readonly sede: string;
 }
