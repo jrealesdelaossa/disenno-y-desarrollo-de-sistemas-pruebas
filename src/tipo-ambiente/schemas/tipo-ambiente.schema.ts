@@ -11,8 +11,8 @@ export class TipoAmbiente {
   @Prop({ type: String, required: true })
   nombre: string;
 
-  @Prop({ type: Object, required: true })
-  descripcion: object;
+  /* @Prop({ type: Object, required: true })
+  descripcion: object; */
 }
 
 export const TipoAmbienteSchema = SchemaFactory.createForClass(TipoAmbiente);

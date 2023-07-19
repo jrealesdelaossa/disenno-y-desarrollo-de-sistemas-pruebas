@@ -27,6 +27,12 @@ export class FichaController {
     return await this.fichaService.obtenerFicha(id);
   }
 
+  @ApiParam({ name: 'id', type: String, description: 'ObjectId del programa' })
+  @Get('programas/:id')
+  async obtenerFichasPorPrograma(@Param('id') id: string) {
+    return await this.fichaService.obtenerFichasPorPrograma(id);
+  }
+
   @ApiBody({
     type: FichaDto,
   })

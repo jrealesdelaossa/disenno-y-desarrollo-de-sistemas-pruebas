@@ -62,4 +62,8 @@ export class FichaService {
         : new NotFoundException(`No se encontró la ficha con id:${id}`);
     });
   }
+
+  async obtenerFichasPorPrograma(id: string): Promise<Ficha[] | []> {
+    return await this.fichaModel.find({ programa: id });
+  }
 }

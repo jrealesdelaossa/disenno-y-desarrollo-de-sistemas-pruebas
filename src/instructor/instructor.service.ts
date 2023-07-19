@@ -31,12 +31,11 @@ export class InstructorService {
   async crearInstructor(
     instructor: InstructorDto,
   ): Promise<NotFoundException | Instructor> {
-    if (
-      !this.existeDocYNumContrato(
-        instructor.documento,
-        instructor.contrato.numero,
-      )
-    ) {
+    const existe = await this.existeDocYNumContrato(
+      instructor.documento,
+      instructor.contrato.numero,
+    );
+    if (!existe) {
       return await this.instructorModel
         .create(instructor)
         .then((instructor) => {
@@ -83,7 +82,7 @@ export class InstructorService {
         $or: [{ documento: documento }, { 'contrato.numero': numContrato }],
       })
       .then((instructor) => {
-        return instructor ? true : false;
+        return instructor == null ? false : instructor ? true : false;
       });
   }
 }

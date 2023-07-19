@@ -1,6 +1,5 @@
 import {
   IsNotEmpty,
-  IsObject,
   IsOptional,
   IsString,
   Matches,
@@ -16,9 +15,9 @@ export class CreatedTipoAmbienteDTO {
   @IsString()
   readonly nombre: string;
 
-  @IsNotEmpty()
+  /* @IsNotEmpty()
   @IsObject()
-  readonly descripcion: object;
+  readonly descripcion: object; */
 }
 
 export class UpdateTipoAmbienteDTO {
@@ -40,8 +39,8 @@ export class UpdateTipoAmbienteDTO {
   @IsOptional()
   readonly nombre?: string;
 
-  @IsNotEmpty()
+  /* @IsNotEmpty()
   @IsObject()
   @IsOptional()
-  readonly descripcion?: object;
+  readonly descripcion?: object; */
 }
