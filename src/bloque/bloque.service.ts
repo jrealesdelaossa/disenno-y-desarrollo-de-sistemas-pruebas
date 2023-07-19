@@ -66,4 +66,13 @@ export class BloqueService {
         return new HttpException(err, HttpStatus.CONFLICT);
       });
   }
+
+  async getBloqueForSede(id: string) {
+    return await this.bloqueModel.find({ sede: id }).then((data) => {
+      if (data) {
+        return data;
+      }
+      return new NotFoundException(`No se encontro bloques son sedes (${id})`);
+    });
+  }
 }

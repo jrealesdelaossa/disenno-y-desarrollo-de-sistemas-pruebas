@@ -26,6 +26,11 @@ export class BloqueController {
     return await this.bloqueService.obtenerBloque(id);
   }
 
+  @Get('/sede/:id')
+  async findBlockForSede(@Param('id') id: string) {
+    return await this.bloqueService.getBloqueForSede(id);
+  }
+
   @Post('/crear')
   async crearBloque(@Body() bloqueDto: CrearBloqueDto) {
     console.log(bloqueDto);
