@@ -43,9 +43,13 @@ export class InstructorDto {
   @IsNotEmpty()
   readonly contrato: ContratoDto;
 
-  @ApiProperty({})
+  @ApiProperty()
   @IsArray()
   readonly programas: string[];
+
+  @ApiProperty()
+  @Matches(/^(?!\s*$).+/, { message: 'La Sede no puede estar vacía' })
+  readonly sede: string;
 }
 
 export class ActualizarInstructorDto {

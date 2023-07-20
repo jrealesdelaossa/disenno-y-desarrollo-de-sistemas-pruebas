@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { InstructorService } from './instructor.service';
 import { ActualizarInstructorDto, InstructorDto } from './dto/instructor.dto';
-import { ApiParam, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiParam, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Instructor')
 @Controller('instructor')
@@ -29,16 +29,26 @@ export class InstructorController {
     return await this.instructorService.obtenerInstructor(id);
   }
 
+  @ApiBody({
+    type: InstructorDto
+  })
   @Post('/crear')
   async crearInstructor(@Body() instructor: InstructorDto) {
     return await this.instructorService.crearInstructor(instructor);
   }
 
+  @ApiBody({
+    type: ActualizarInstructorDto
+  })
   @Put('/actualizar')
   async actualizarInstructor(@Body() instructor: ActualizarInstructorDto) {
     return await this.instructorService.actualizarInstructor(instructor);
   }
 
+  @ApiParam({
+    name: 'Id',
+    description: 'Id del instructor a eliminar'
+  })
   @Delete('/eliminar/:id')
   async eliminarInstructor(@Param('id') id: string) {
     return await this.instructorService.eliminarInstructor(id);
