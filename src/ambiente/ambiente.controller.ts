@@ -26,7 +26,10 @@ export class AmbienteController {
     const found = await this.ambienteService.getByIdAmbiente(idAmbiente);
     return found;
   }
-
+  @Get('/sede/:id')
+  async ambientesPorSede(@Param('id') id: string) {
+    return await this.ambienteService.ambientesPorSede(id);
+  }
   @Post('crear')
   async createdAmbiente(@Body() ambienteCreatedDTO: CreatedAmbienteDTO) {
     const newAmbiente =

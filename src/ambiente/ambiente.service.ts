@@ -8,17 +8,21 @@ import { CreatedAmbienteDTO, UpdateAmbienteDTO } from './dto/ambiente.dto';
 export class AmbienteService {
   constructor(
     @InjectModel('Ambiente') private readonly ambienteModel: Model<IAmbiente>,
-  ) { }
+  ) {}
 
   async getAllAmbientes(): Promise<IAmbiente[]> {
-    return await this.ambienteModel.find().then((dato) => {
-      if (!dato)
-        throw new HttpException(
-          'no se encontraron registros',
-          HttpStatus.NOT_FOUND,
-        );
-      else return dato;
-    });
+    return await this.ambienteModel
+      .find()
+      .populate('bloque')
+      .populate('sede')
+      .then((dato) => {
+        if (!dato)
+          throw new HttpException(
+            'no se encontraron registros',
+            HttpStatus.NOT_FOUND,
+          );
+        else return dato;
+      });
   }
 
   async getByIdAmbiente(idAmbiente: string): Promise<IAmbiente> {
@@ -40,7 +44,6 @@ export class AmbienteService {
       throw new HttpException('El ambiente ya existe', HttpStatus.CONFLICT);
     const newAmbiente = new this.ambienteModel(ambienteCreatedDto);
     return await newAmbiente.save();
-
   }
 
   async updateAmbiente(updateAmbiente: UpdateAmbienteDTO): Promise<IAmbiente> {
@@ -51,5 +54,12 @@ export class AmbienteService {
   async deleteAmbiente(idAmbiente: string) {
     const found = await this.getByIdAmbiente(idAmbiente);
     return found.deleteOne();
+  }
+
+  async ambientesPorSede(id: string): Promise<IAmbiente[] | []> {
+    return await this.ambienteModel
+      .find({ sede: id })
+      .populate('bloque')
+      .populate('sede');
   }
 }
