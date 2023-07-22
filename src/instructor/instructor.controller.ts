@@ -21,9 +21,15 @@ export class InstructorController {
     return await this.instructorService.obtenerInstructores();
   }
 
-  @Get('/programa/:id')
-  async obtenerInstructoresPorPrograma(@Param('id') id: string) {
-    return await this.instructorService.obtenerInstructoresPorPrograma(id);
+  @Get('/programa/:idPrograma/sede/:idSede')
+  async obtenerInstructoresPorPrograma(
+    @Param('idPrograma') idPrograma: string,
+    @Param('idSede') idSede: string,
+  ) {
+    return await this.instructorService.obtenerInstructoresPorPrograma(
+      idPrograma,
+      idSede,
+    );
   }
 
   @ApiParam({

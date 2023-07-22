@@ -21,15 +21,17 @@ export class InstructorService {
       : new NotFoundException('No se encontraron instrucores');
   }
 
-  // Instructor por programa
+  // Instructor por programa y por sede
   async obtenerInstructoresPorPrograma(
     idPrograma: string,
+    idSede: string,
   ): Promise<NotFoundException | Instructor[]> {
     const response = await this.instructorModel
-      .find({ programas: idPrograma })
+      .find({ programas: idPrograma, sede: idSede })
       .populate('sede')
       .populate({ path: 'programas', model: 'Programa' })
       .exec();
+
     return response
       ? response
       : new NotFoundException('No se encontraron instrucores');

@@ -26,7 +26,7 @@ export class Instructor {
   @Prop({ required: true })
   contrato: ContratoDto;
 
-  @Prop({type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Programa' }]})
+  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Programa' }] })
   programas: string[];
 
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Sede' })
