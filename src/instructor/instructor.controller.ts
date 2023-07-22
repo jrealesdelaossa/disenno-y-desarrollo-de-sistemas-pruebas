@@ -21,6 +21,11 @@ export class InstructorController {
     return await this.instructorService.obtenerInstructores();
   }
 
+  @Get('/programa/:id')
+  async obtenerInstructoresPorPrograma(@Param('id') id: string) {
+    return await this.instructorService.obtenerInstructoresPorPrograma(id);
+  }
+
   @ApiParam({
     name: 'id',
   })
@@ -30,7 +35,7 @@ export class InstructorController {
   }
 
   @ApiBody({
-    type: InstructorDto
+    type: InstructorDto,
   })
   @Post('/crear')
   async crearInstructor(@Body() instructor: InstructorDto) {
@@ -38,7 +43,7 @@ export class InstructorController {
   }
 
   @ApiBody({
-    type: ActualizarInstructorDto
+    type: ActualizarInstructorDto,
   })
   @Put('/actualizar')
   async actualizarInstructor(@Body() instructor: ActualizarInstructorDto) {
@@ -47,7 +52,7 @@ export class InstructorController {
 
   @ApiParam({
     name: 'Id',
-    description: 'Id del instructor a eliminar'
+    description: 'Id del instructor a eliminar',
   })
   @Delete('/eliminar/:id')
   async eliminarInstructor(@Param('id') id: string) {

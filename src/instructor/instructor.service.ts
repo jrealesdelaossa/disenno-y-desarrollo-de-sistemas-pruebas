@@ -1,25 +1,40 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Instructor } from './schema/instructor.schema';
 import { ActualizarInstructorDto, InstructorDto } from './dto/instructor.dto';
-import { TipoDeVinculacionService } from '../tipo-de-vinculacion/tipo-de-vinculacion.service';
 
 @Injectable()
 export class InstructorService {
   constructor(
-    @InjectModel(Instructor.name) private instructorModel: Model<Instructor>, // TODO: Injectar el servicio de Jornada
-    @Inject(TipoDeVinculacionService)
-    private tipoVinculacionService: TipoDeVinculacionService,
+    @InjectModel(Instructor.name) private instructorModel: Model<Instructor>,
   ) {}
 
   async obtenerInstructores(): Promise<NotFoundException | Instructor[]> {
-    return await this.instructorModel.find().then((instructor) => {
-      return instructor
-        ? instructor
-        : new NotFoundException('No se encontraron instructores');
-    });
+    const response = await this.instructorModel
+      .find()
+      .populate('sede')
+      .populate({ path: 'programas', model: 'Programa' })
+      .exec();
+    return response
+      ? response
+      : new NotFoundException('No se encontraron instrucores');
   }
+
+  // Instructor por programa
+  async obtenerInstructoresPorPrograma(
+    idPrograma: string,
+  ): Promise<NotFoundException | Instructor[]> {
+    const response = await this.instructorModel
+      .find({ programas: idPrograma })
+      .populate('sede')
+      .populate({ path: 'programas', model: 'Programa' })
+      .exec();
+    return response
+      ? response
+      : new NotFoundException('No se encontraron instrucores');
+  }
+
   async obtenerInstructor(id: string) {
     return await this.instructorModel.findById(id).then((instructor) => {
       return instructor
