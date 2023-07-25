@@ -64,6 +64,11 @@ export class FichaService {
   }
 
   async obtenerFichasPorPrograma(id: string): Promise<Ficha[] | []> {
-    return await this.fichaModel.find({ programa: id });
+    return await this.fichaModel
+      .find({ programa: id })
+      .populate('sede')
+      .populate('ambiente')
+      .populate('programa')
+      .populate('instructor');
   }
 }
