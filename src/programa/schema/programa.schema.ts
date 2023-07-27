@@ -1,6 +1,5 @@
 import { Prop, SchemaFactory, Schema } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
-import { competenciaDto } from '../dto/competencia.dto';
 
 export type ProgramaDocument = HydratedDocument<Programa>;
 
@@ -19,10 +18,7 @@ export class Programa {
   version: string;
 
   @Prop({ required: true })
-  duracion: string;
-
-  @Prop({ required: true })
-  competencia: competenciaDto[];
+  duracion: number;
 }
 
 export const ProgramaSchema = SchemaFactory.createForClass(Programa);
