@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsOptional, Matches } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional, Matches } from 'class-validator';
 import { resultadoDto } from './resultado.dto';
 
 export class competenciasDto {
@@ -12,9 +12,10 @@ export class competenciasDto {
   @IsNotEmpty()
   readonly nombre: string;
 
-  @Matches(/^(?!\s*$).+/, { message: 'La version no puede ser estar vacío' })
+  @Matches(/^(?!\s*$).+/, { message: 'La duración no puede ser estar vacío' })
+  @IsNumber()
   @IsNotEmpty()
-  readonly duracion: string;
+  readonly duracion: number;
 
   @IsOptional()
   @IsNotEmpty()

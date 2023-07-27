@@ -1,8 +1,12 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
 import { CompetenciaService } from './competencia.service';
-import { competenciaDto } from './dto/competencia.dto';
-import { ApiParam } from '@nestjs/swagger';
+import {
+  actualizarCompetenciaDto,
+  competenciaDto,
+} from './dto/competencia.dto';
+import { ApiBody, ApiParam, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Competencia')
 @Controller('competencia')
 export class CompetenciaController {
   constructor(private readonly competenciaService: CompetenciaService) {}
@@ -18,8 +22,15 @@ export class CompetenciaController {
     return this.competenciaService.obtenerCompetenciasPorPrograma(idProgram);
   }
 
+  @ApiBody({ type: competenciaDto })
   @Post('/crear')
   crearCompetencia(@Body() competencia: competenciaDto) {
     return this.competenciaService.crearCompetencia(competencia);
+  }
+
+  @ApiBody({ type: actualizarCompetenciaDto })
+  @Put('/actualizar/')
+  actualizarResultados(@Body() resultado: actualizarCompetenciaDto) {
+    return this.competenciaService.actualizarResultados(resultado);
   }
 }
