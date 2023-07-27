@@ -1,5 +1,5 @@
-import { IsMongoId, IsNotEmpty, Matches } from 'class-validator';
-// import { competenciaDto } from './competencia.dto';
+import { IsMongoId, IsOptional, IsNotEmpty, Matches } from 'class-validator';
+import { competenciaDto } from './competencia.dto';
 
 export class ProgramaDto {
   @IsNotEmpty()
@@ -26,10 +26,8 @@ export class ProgramaDto {
   @IsNotEmpty()
   readonly duracion: string;
 
-  /*
   @IsOptional()
   readonly competencia: competenciaDto[];
-  */
 }
 
 export class ActualizarProgramaDto {
@@ -62,8 +60,6 @@ export class ActualizarProgramaDto {
   @IsNotEmpty()
   readonly duracion: string;
 
-  /*
   @IsOptional()
   readonly competencia: competenciaDto[];
-  */
 }
