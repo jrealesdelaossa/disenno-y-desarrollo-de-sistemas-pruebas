@@ -22,6 +22,27 @@ export class CompetenciaController {
     return this.competenciaService.obtenerCompetenciasPorPrograma(idProgram);
   }
 
+  @ApiParam({
+    name: 'idPrograma',
+    type: String,
+    description: 'Id del programa asociado a la competencia',
+  })
+  @ApiParam({
+    name: 'cocompetencia',
+    type: String,
+    description: 'Codigo de la competencia',
+  })
+  @Get('programa/:idPrograma/cocompetencia/:cocompetencia')
+  obtenerCompetenciaPorCodigo(
+    @Param('idPrograma') idPrograma: string,
+    @Param('cocompetencia') cocompetencia: string,
+  ) {
+    return this.competenciaService.obtenerCompetenciaPorCodigo(
+      idPrograma,
+      cocompetencia,
+    );
+  }
+
   @ApiBody({ type: competenciaDto })
   @Post('/crear')
   crearCompetencia(@Body() competencia: competenciaDto) {

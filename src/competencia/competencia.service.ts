@@ -30,6 +30,19 @@ export class CompetenciaService {
     return await this.competenciaModel.find({ programa: programa }).exec();
   }
 
+  // competencia por codigos
+  async obtenerCompetenciaPorCodigo(
+    idPrograma: string,
+    cocompetencia: string,
+  ): Promise<Competencia> {
+    return await this.competenciaModel
+      .findOne({
+        programa: idPrograma,
+        'competencias.codigo': cocompetencia,
+      })
+      .exec();
+  }
+
   // crear competencia
   async crearCompetencia(competencia: competenciaDto): Promise<Competencia> {
     const newCompetencia = new this.competenciaModel(competencia);
