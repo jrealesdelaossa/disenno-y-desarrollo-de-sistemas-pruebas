@@ -18,6 +18,7 @@ import { FichaModule } from './ficha/ficha.module';
 import { EnvCofiguration } from './config/env.config';
 import { JoiValidationSchema } from './config/joi.validation';
 import { ModalidadModule } from './modalidad/modalidad.module';
+import { CompetenciaModule } from './competencia/competencia.module';
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import { ModalidadModule } from './modalidad/modalidad.module';
     InstructorModule,
     FichaModule,
     ModalidadModule,
+    CompetenciaModule,
   ],
   controllers: [AppController],
   providers: [AppService],
