@@ -1,4 +1,4 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import { ConflictException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Evento } from './schema/evento.schema';
@@ -12,7 +12,7 @@ export class EventoService {
     return this.eventoModel.find().exec();
   }
 
-  async crearEvento(evento: eventoDto): Promise<Evento> {
+  async crearEvento(evento: eventoDto) {
     /*
     const condicionesConsulta = {
       mes: evento.mes,
@@ -53,7 +53,12 @@ export class EventoService {
     }
 
     const createdEvento = new this.eventoModel(evento);
-    return createdEvento.save();
+    createdEvento.save();
+    // return createdEvento.save();
+    return {
+      statusCode: HttpStatus.CREATED,
+      message: createdEvento,
+    };
   }
 
   async obtenerEventosPorFecha(
