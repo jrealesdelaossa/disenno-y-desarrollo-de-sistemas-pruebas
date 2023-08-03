@@ -13,15 +13,7 @@ export class EventoService {
   }
 
   async crearEvento(evento: eventoDto) {
-    /*
-    const condicionesConsulta = {
-      mes: evento.mes,
-      year: evento.year,
-      'eventos.ambiente.ambiente': evento.eventos[0].ambiente.ambiente,
-      'eventos.horario': evento.eventos[0].horario,
-    };
-    */
-
+    // * Extracción de datos para la consulta
     const mesConsulta = evento.mes;
     const yearConsulta = evento.year;
 
@@ -31,19 +23,41 @@ export class EventoService {
         year: yearConsulta,
         'eventos.ambiente.ambiente': evento.ambiente.ambiente,
         'eventos.horario': evento.horario,
+        // 'eventos.diainicial': evento.diainicial,
       };
     });
 
-    console.log(condicionesConsulta);
+    // ? console.log('Condiciones de consulta \n', condicionesConsulta);
 
-    const numeroEventoEncontrado = await this.eventoModel.countDocuments({
-      //...condicionesConsulta,
-      $or: condicionesConsulta,
+    // * Consulta de eventos existentes
+    const eventosEncontrados = await this.eventoModel
+      .find({
+        $or: condicionesConsulta,
+      })
+      .exec();
+    // console.log('Eventos encontrados\n' + eventosEncontrados);
+
+    // TODO: Refactorizar la validación de dias
+    let diasNuevos = evento.eventos.map((evento) => {
+      return evento.diastrabajados;
     });
 
-    console.log('Conteo de eventos ' + numeroEventoEncontrado);
+    let diasExistentes = eventosEncontrados.map((evento) => {
+      return evento.eventos.map((evento) => evento.diastrabajados);
+    });
 
-    if (numeroEventoEncontrado > 0) {
+    diasNuevos = [].concat(...diasNuevos);
+    diasExistentes = [].concat(...diasExistentes);
+
+    const arrExisteDia = diasNuevos.map((dia) => {
+      return diasExistentes.some((arrdias) => arrdias.some((i) => i === dia));
+    });
+
+    const existeDia = arrExisteDia.every((item) => item === false);
+
+    // TODO: -----------------------------------------------
+
+    if (eventosEncontrados.length > 0 && !existeDia) {
       const eventosEncontrados = await this.eventoModel
         .find({
           $or: condicionesConsulta,
@@ -54,7 +68,6 @@ export class EventoService {
 
     const createdEvento = new this.eventoModel(evento);
     createdEvento.save();
-    // return createdEvento.save();
     return {
       statusCode: HttpStatus.CREATED,
       message: createdEvento,

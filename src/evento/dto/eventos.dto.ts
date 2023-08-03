@@ -1,5 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsNumber, IsObject, IsString } from 'class-validator';
+import {
+  IsArray,
+  IsNotEmpty,
+  IsNumber,
+  IsObject,
+  IsString,
+} from 'class-validator';
 import { fichaDto } from './ficha.dto';
 import { programaDto } from './programa.dto';
 import { ambienteDto } from './ambiente.dto';
@@ -73,27 +79,11 @@ export class eventosDto {
 
   @ApiProperty({
     type: Number,
-    default: '10',
-    description: 'Día inicial de formación',
+    default: '1',
+    description: 'Días trabajados',
   })
-  @IsNumber()
-  readonly diainicial: number;
-
-  @ApiProperty({
-    type: Number,
-    default: '24',
-    description: 'Día final de formación',
-  })
-  @IsNumber()
-  readonly diafinal: number;
-
-  @ApiProperty({
-    type: String,
-    default: '10-24',
-    description: 'Dias completos de formación',
-  })
-  @IsString()
-  readonly diacompleto: string;
+  @IsArray()
+  readonly diastrabajados: number[];
 
   @ApiProperty({
     type: competenciaDto,
