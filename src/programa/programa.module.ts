@@ -12,5 +12,6 @@ import { Programa, ProgramaSchema } from './schema/programa.schema';
   ],
   controllers: [ProgramaController],
   providers: [ProgramaService],
+  exports: [ProgramaService],
 })
 export class ProgramaModule {}

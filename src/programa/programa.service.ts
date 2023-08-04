@@ -76,4 +76,9 @@ export class ProgramaService {
           );
     });
   }
+  async obtenerDuracion(id) {
+    return await this.ProgramaModel.findById(id).then((programa) => {
+      return programa.duracion;
+    });
+  }
 }

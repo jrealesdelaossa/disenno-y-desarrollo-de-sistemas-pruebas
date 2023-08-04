@@ -15,5 +15,6 @@ import { ProgramaModule } from 'src/programa/programa.module';
 
   providers: [CompetenciaService],
   controllers: [CompetenciaController],
+  exports: [CompetenciaService],
 })
 export class CompetenciaModule {}

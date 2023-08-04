@@ -1,12 +1,25 @@
-import { Injectable, NotFoundException, HttpStatus } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  HttpStatus,
+  Inject,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Ficha } from './schema/ficha.schema';
 import { ActualizarFichaDto, FichaDto } from './dto/ficha.dto';
+import { CompetenciaService } from 'src/competencia/competencia.service';
+import { ProgramaService } from 'src/programa/programa.service';
+import { any } from 'joi';
+import { log } from 'console';
 
 @Injectable()
 export class FichaService {
-  constructor(@InjectModel(Ficha.name) private fichaModel: Model<Ficha>) {}
+  constructor(
+    @InjectModel(Ficha.name) private fichaModel: Model<Ficha>,
+    @Inject(CompetenciaService) readonly competenciaService: CompetenciaService,
+    @Inject(ProgramaService) readonly programaService: ProgramaService,
+  ) {}
 
   async obtenerTodo() {
     return await this.fichaModel
@@ -30,14 +43,32 @@ export class FichaService {
   }
 
   async crearFicha(fichaDto: FichaDto) {
-    const ficha = new this.fichaModel(fichaDto);
-    //return await ficha.save();
-    const response = await ficha.save();
-    return {
-      statusCode: HttpStatus.CREATED,
-      message: 'Ficha creada exitosamente',
-      data: response,
-    };
+    var gestor;
+    return await this.fichaModel.create(fichaDto).then((fichaCreada) => {
+      return this.competenciaService
+        .obtenerCompetenciasPorPrograma(fichaDto.programa)
+        .then((competenciasM: any) => {
+          return this.programaService
+            .obtenerDuracion(fichaDto.programa)
+            .then((duracion) => {
+              gestor = {
+                ficha: fichaCreada._id,
+                duracion: duracion,
+                acumulado: 0,
+                competencias: [],
+              };
+              competenciasM[0].competencias.map((competencias: any) => {
+                competencias.acumulado = 0;
+                competencias.resultados.map((resultado) => {
+                  resultado.acumulado = 0;
+                });
+                gestor.competencias.push(competencias);
+              });
+
+              return fichaCreada;
+            });
+        });
+    });
   }
 
   async actualizarFicha(
