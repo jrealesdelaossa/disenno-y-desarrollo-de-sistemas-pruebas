@@ -20,6 +20,7 @@ import { JoiValidationSchema } from './config/joi.validation';
 import { ModalidadModule } from './modalidad/modalidad.module';
 import { CompetenciaModule } from './competencia/competencia.module';
 import { EventoModule } from './evento/evento.module';
+import { GestorTModule } from './gestor-t/gestor-t.module';
 
 @Module({
   imports: [
@@ -43,6 +44,7 @@ import { EventoModule } from './evento/evento.module';
     ModalidadModule,
     CompetenciaModule,
     EventoModule,
+    GestorTModule,
   ],
   controllers: [AppController],
   providers: [AppService],
