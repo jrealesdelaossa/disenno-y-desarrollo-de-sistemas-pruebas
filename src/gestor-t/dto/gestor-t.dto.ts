@@ -1,7 +1,7 @@
 import { IsArray, IsMongoId, IsNotEmpty } from 'class-validator';
 import { competenciaDto } from './competencia.dto';
 
-export class gestorTDto {
+export class GestorTDto {
   @IsMongoId()
   @IsNotEmpty({ message: 'El id de la ficha no puede estar vacío' })
   readonly ficha: string;

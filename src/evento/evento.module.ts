@@ -4,11 +4,13 @@ import { EventoController } from './evento.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Evento, EventoSchema } from './schema/evento.schema';
 import { InstructorModule } from 'src/instructor/instructor.module';
+import { GestorTModule } from 'src/gestor-t/gestor-t.module';
 
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: Evento.name, schema: EventoSchema }]),
     InstructorModule,
+    GestorTModule,
   ],
 
   providers: [EventoService],
