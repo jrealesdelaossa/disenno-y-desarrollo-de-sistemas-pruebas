@@ -12,6 +12,7 @@ import { CompetenciaService } from 'src/competencia/competencia.service';
 import { ProgramaService } from 'src/programa/programa.service';
 import { any } from 'joi';
 import { log } from 'console';
+import { GestorTService } from 'src/gestor-t/gestor-t.service';
 
 @Injectable()
 export class FichaService {
@@ -19,6 +20,7 @@ export class FichaService {
     @InjectModel(Ficha.name) private fichaModel: Model<Ficha>,
     @Inject(CompetenciaService) readonly competenciaService: CompetenciaService,
     @Inject(ProgramaService) readonly programaService: ProgramaService,
+    @Inject(GestorTService) readonly gestorTService: GestorTService,
   ) {}
 
   async obtenerTodo() {
@@ -64,7 +66,7 @@ export class FichaService {
                 });
                 gestor.competencias.push(competencias);
               });
-
+              this.gestorTService.crearGestor(gestor);
               return fichaCreada;
             });
         });

@@ -10,5 +10,6 @@ import { Gestor, GestorSchema } from './schema/gestor-t.schema';
   ],
   controllers: [GestorTController],
   providers: [GestorTService],
+  exports: [GestorTService],
 })
 export class GestorTModule {}
