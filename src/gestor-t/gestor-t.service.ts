@@ -210,31 +210,4 @@ export class GestorTService {
   async obtenerGestoresPorFicha(ficha: any[]): Promise<any> {
     return await this.gestorTModel.find({ $or: ficha }).exec();
   }
-  /*
-  async validarTiempos(payload: any): Promise<any> {
-    const idFichas = payload.eventos.map((evento) => evento.ficha.ficha);
-    const gestoresFicha = await this.gestorTModel.find({ficha: $or: idFichas}); // obtener gestores por ficha ficha
-
-    // validar tiempo en ficha
-    const tiempoFichas = gestoresFicha.map((gestor) => {
-      let tiempoFicha: string;
-      if (gestor.duracion == gestor.acumulado) {
-        tiempoFicha = 'Cumplido';
-      } else if (gestor.duracion > gestor.acumulado) {
-        tiempoFicha = 'En proceso';
-      }
-
-      return {
-        ficha: gestor.ficha,
-        tiempoFicha: tiempoFicha,
-      };
-    });
-
-    // validar tiempo en conpetencias
-
-    return {
-      tiempoFichas: tiempoFichas,
-    };
-  }
-  */
 }

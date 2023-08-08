@@ -126,6 +126,25 @@ export class EventoService {
     return evento.length > 0 ? true : false;
   }
 
+  async obtenerEventosEspecificos(
+    mes: number,
+    year: number,
+    instructor: string,
+  ) {
+    const eventos = await this.eventoModel.find({
+      mes: mes,
+      year: year,
+      instructor: instructor,
+    });
+
+    if (eventos.length === 0) {
+      throw new BadRequestException(
+        `No se encontraron eventos para el instructor ${instructor} en el mes ${mes} del año ${year}`,
+      );
+    }
+    return eventos;
+  }
+
   async validarTiempos(payload: eventoDto) {
     const idFichas = payload.eventos.map((evento) => {
       return {

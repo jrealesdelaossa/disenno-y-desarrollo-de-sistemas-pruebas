@@ -36,6 +36,19 @@ export class EventoController {
     );
   }
 
+  @Get('/especificos/:mes/:year/:instructor/:instructor')
+  async obtenerEventosEspecificos(
+    @Param('mes') mes: number,
+    @Param('year') year: number,
+    @Param('instructor') instructor: string,
+  ) {
+    return await this.eventoService.obtenerEventosEspecificos(
+      mes,
+      year,
+      instructor,
+    );
+  }
+
   @Get('/validar-tiempos')
   async validarTiempos(@Body() payload: eventoDto) {
     return await this.eventoService.validarTiempos(payload);
