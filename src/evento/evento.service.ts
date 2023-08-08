@@ -67,10 +67,7 @@ export class EventoService {
 
     // TODO: -----------------------------------------------
 
-    const validacionTiempos = await this.validarTiempos(evento);
-    console.log(`Validación de tiempos: ${validacionTiempos}`);
-
-    if (eventosEncontrados.length > 0 && !existeDia && validacionTiempos) {
+    if (eventosEncontrados.length > 0 && !existeDia) {
       const eventosEncontrados = await this.eventoModel
         .find({
           $or: condicionesConsulta,
@@ -78,8 +75,12 @@ export class EventoService {
         .exec();
       throw new ConflictException(eventosEncontrados);
     }
+    const validacionTiempos = await this.validarTiempos(evento);
+    console.log(`Validación de tiempos: ${validacionTiempos}`);
+
     const createdEvento = new this.eventoModel(evento);
     createdEvento.save();
+
     //Se crea el objeto para enviarlo al gestor de tiempo para actualizar los tiempos de la ficha
     const gestorFicha = {
       eventos: evento.eventos.map((evento) => {
