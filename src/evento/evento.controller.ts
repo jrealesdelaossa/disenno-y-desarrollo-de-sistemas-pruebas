@@ -35,4 +35,9 @@ export class EventoController {
       horario,
     );
   }
+
+  @Get('/validar-tiempos')
+  async validarTiempos(@Body() payload: eventoDto) {
+    return await this.eventoService.validarTiempos(payload);
+  }
 }

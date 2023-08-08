@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   ConflictException,
   HttpStatus,
   Inject,
@@ -66,7 +67,10 @@ export class EventoService {
 
     // TODO: -----------------------------------------------
 
-    if (eventosEncontrados.length > 0 && !existeDia) {
+    const validacionTiempos = await this.validarTiempos(evento);
+    console.log(`Validación de tiempos: ${validacionTiempos}`);
+
+    if (eventosEncontrados.length > 0 && !existeDia && validacionTiempos) {
       const eventosEncontrados = await this.eventoModel
         .find({
           $or: condicionesConsulta,
@@ -119,5 +123,155 @@ export class EventoService {
       .exec();
 
     return evento.length > 0 ? true : false;
+  }
+
+  async validarTiempos(payload: eventoDto) {
+    const idFichas = payload.eventos.map((evento) => {
+      return {
+        ficha: evento.ficha.ficha,
+      };
+    });
+
+    const gestores = await this.gestorTService.obtenerGestoresPorFicha(
+      idFichas,
+    );
+
+    // validación de tiempo para los resultados
+    const tiempoResultado = idFichas.map((ficha, index) => {
+      const validaciones = gestores.map((gestor) => {
+        const idFichaEnvio = ficha.ficha;
+        const idFichaGestor = JSON.stringify(gestor.ficha).replace(
+          /['"]+/g,
+          '',
+        );
+
+        if (idFichaEnvio === idFichaGestor) {
+          // payload.eventos[index].horas == gestor.tiempo;
+          const indiceCompetencia = gestor.competencias.findIndex(
+            (competencia) =>
+              competencia.codigo === payload.eventos[index].competencia.codigo,
+          );
+
+          const indiceResultado = gestor.competencias[
+            indiceCompetencia
+          ].resultados.findIndex(
+            (resultado) =>
+              resultado.descripcion ===
+              payload.eventos[index].resultado.resultado,
+          );
+
+          const duracion =
+            gestor.competencias[indiceCompetencia].resultados[indiceResultado]
+              .duracion;
+
+          const acumulado =
+            gestor.competencias[indiceCompetencia].resultados[indiceResultado]
+              .acumulado;
+
+          const validacionResultado =
+            acumulado + payload.eventos[index].horas <= duracion;
+
+          if (!validacionResultado) {
+            return false;
+          } else {
+            return true;
+          }
+        }
+      });
+
+      return validaciones.toString() === 'false' ? false : true;
+    });
+
+    tiempoResultado.forEach((resultado, index) => {
+      console.log(`Resultado ${index} - ${resultado}`);
+      if (!resultado) {
+        throw new BadRequestException(
+          `La ficha ${payload.eventos[index].ficha.codigo} no tiene tiempo disponible para el resultado ${payload.eventos[index].resultado.resultado}`,
+        );
+      }
+    });
+
+    // validación de tiempo para las competencias
+    const tiempoCompetencia = idFichas.map((ficha, index) => {
+      // se suman las horas de envio para la misma ficha
+      const sumaHorasEnvio = payload.eventos.reduce((acumulador, evento) => {
+        if (evento.ficha.ficha === ficha.ficha) {
+          return acumulador + evento.horas;
+        }
+      }, 0);
+
+      const validaciones = gestores.map((gestor) => {
+        const idFichaEnvio = ficha.ficha;
+        const idFichaGestor = JSON.stringify(gestor.ficha).replace(
+          /['"]+/g,
+          '',
+        );
+
+        if (idFichaEnvio === idFichaGestor) {
+          // payload.eventos[index].horas == gestor.tiempo;
+          const indiceCompetencia = gestor.competencias.findIndex(
+            (competencia) =>
+              competencia.codigo === payload.eventos[index].competencia.codigo,
+          );
+
+          const duracion = gestor.competencias[indiceCompetencia].duracion;
+          const acumulado = gestor.competencias[indiceCompetencia].acumulado;
+          const validacionCompetencia = acumulado + sumaHorasEnvio <= duracion;
+
+          return !validacionCompetencia ? false : true;
+        }
+      });
+      return validaciones;
+    });
+
+    tiempoCompetencia.forEach((competencia, index) => {
+      console.log(`Competencia ${index} - ${competencia}`);
+      if (!competencia) {
+        throw new BadRequestException(
+          `La ficha ${payload.eventos[index].ficha.codigo} no tiene tiempo disponible para la competencia ${payload.eventos[index].competencia.codigo}`,
+        );
+      }
+    });
+    // validación de tiempo para las fichas
+    const tiempoFicha = idFichas.map((ficha) => {
+      // se suman las horas de envio para la misma ficha
+      const sumaHorasEnvio = payload.eventos.reduce((acumulador, evento) => {
+        if (evento.ficha.ficha === ficha.ficha) {
+          return acumulador + evento.horas;
+        }
+      }, 0);
+
+      const validaciones = gestores.map((gestor) => {
+        const idFichaEnvio = ficha.ficha;
+        const idFichaGestor = JSON.stringify(gestor.ficha).replace(
+          /['"]+/g,
+          '',
+        );
+
+        if (idFichaEnvio === idFichaGestor) {
+          // payload.eventos[index].horas == gestor.tiempo;
+
+          const duracion = gestor.duracion;
+          const acumulado = gestor.acumulado;
+          const validacionFicha = acumulado + sumaHorasEnvio <= duracion;
+
+          return !validacionFicha ? false : true;
+        }
+      });
+      return validaciones;
+    });
+
+    tiempoFicha.forEach((ficha, index) => {
+      console.log(`Ficha ${index} - ${ficha}`);
+      if (!ficha) {
+        throw new BadRequestException(
+          `La ficha ${payload.eventos[index].ficha.codigo} no tiene tiempo disponible`,
+        );
+      }
+    });
+
+    //console.log(tiempoResultado);
+
+    return true;
   }
 }
