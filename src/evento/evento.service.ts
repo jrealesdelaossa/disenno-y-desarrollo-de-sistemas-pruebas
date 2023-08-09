@@ -54,18 +54,39 @@ export class EventoService {
       const respuesta = [];
 
       // eventos retornados por la consulta
-      eventosEncontrados.forEach((event) => {
+      eventosEncontrados.forEach((eventoEncontrado) => {
         // eventos de cada evento retornado
-        event.eventos.forEach((events, index) => {
+        eventoEncontrado.eventos.forEach((eventoEventoEncontrado, index) => {
+          // Recorro los eventos nuevos
           evento.eventos.forEach((eventos) => {
+            if (
+              eventoEventoEncontrado.diastrabajados.some((dia) =>
+                eventos.diastrabajados.includes(dia),
+              )
+            ) {
+              // eliminar evento no valido
+              const arrEventos = [...eventoEncontrado.eventos];
+              for (let i = 0; eventoEncontrado.eventos.length > i; i++) {
+                if (i !== index) {
+                  arrEventos.splice(i, 1);
+                }
+              }
+              respuesta.push({
+                evento: arrEventos,
+                mensaje: `Ya existe un evento en el ambiente ${eventos.ambiente.ambiente} con horario ${eventos.horario} para el mes ${eventoEncontrado.mes} del año ${eventoEncontrado.year}`,
+              });
+            }
+            // recorrer los día nuevos
+            /*
             eventos.diastrabajados.forEach((dia) => {
-              if (events.diastrabajados.includes(dia)) {
+              if (eventoEventoEncontrado.diastrabajados.includes(dia)) {
                 respuesta.push({
-                  evento: event,
+                  evento: eventoEncontrado,
                   mensaje: `Ya existe un evento en el ambiente ${eventos.ambiente.ambiente} con horario ${eventos.horario} para el día ${dia} del mes ${event.mes} del año ${event.year}`,
                 });
               }
             });
+            */
           });
         });
       });
