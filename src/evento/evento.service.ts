@@ -23,21 +23,23 @@ export class EventoService {
   }
 
   async crearEvento(evento: eventoDto) {
-    // * Extracción de datos para la consulta
+    // * Obtenemos las condiciones de consulta para los eventos existentes
     const mesConsulta = evento.mes;
     const yearConsulta = evento.year;
 
     const condicionesConsulta = evento.eventos.map((evento) => {
+      const dias = evento.diastrabajados.map((dia) => {
+        return Number(dia);
+      });
+
       return {
         mes: mesConsulta,
         year: yearConsulta,
         'eventos.ambiente.ambiente': evento.ambiente.ambiente,
         'eventos.horario': evento.horario,
-        // 'eventos.diainicial': evento.diainicial,
+        'eventos.diastrabajados': { $in: dias },
       };
     });
-
-    // ? console.log('Condiciones de consulta \n', condicionesConsulta);
 
     // * Consulta de eventos existentes
     const eventosEncontrados = await this.eventoModel
@@ -45,53 +47,30 @@ export class EventoService {
         $or: condicionesConsulta,
       })
       .exec();
-    // console.log('Eventos encontrados\n' + eventosEncontrados);
 
-    // TODO: Refactorizar la validación de dias
-    let diasNuevos = evento.eventos.map((evento) => {
-      return evento.diastrabajados;
-    });
+    if (eventosEncontrados.length > 0) {
+      console.log('@@@@');
 
-    let diasExistentes = eventosEncontrados.map((evento) => {
-      return evento.eventos.map((evento) => evento.diastrabajados);
-    });
+      const respuesta = [];
 
-    diasNuevos = [].concat(...diasNuevos);
-    diasExistentes = [].concat(...diasExistentes);
-
-    console.log('Dias nuevos\n', diasNuevos);
-    console.log('Dias existentes\n', diasExistentes);
-
-    const arrExisteDia = diasNuevos.map((dia) => {
-      return diasExistentes.some((arrdias) => arrdias.some((i) => i === dia));
-    });
-
-    console.log('Array de dias\n', arrExisteDia);
-
-    const existeDia = arrExisteDia.every((item) => item === false);
-
-    // TODO: -----------------------------------------------
-
-    if (eventosEncontrados.length > 0 && !existeDia) {
-      const eventosEncontrados = await this.eventoModel
-        .find({
-          $or: condicionesConsulta,
-        })
-        .exec();
-
-      // eliminar eventos innecesarios
-      eventosEncontrados.forEach((evento) => {
-        // Arreglo con documentos encontrados
-        evento.eventos.forEach((item, index) => {
-          // Arreglo con eventos de cada documento
-          diasNuevos.forEach((dia) => {
-            if (!item.diastrabajados.includes(Number(dia))) {
-              evento.eventos.splice(index, 1);
-            }
+      // eventos retornados por la consulta
+      eventosEncontrados.forEach((event) => {
+        // eventos de cada evento retornado
+        event.eventos.forEach((events, index) => {
+          evento.eventos.forEach((eventos) => {
+            eventos.diastrabajados.forEach((dia) => {
+              if (events.diastrabajados.includes(dia)) {
+                respuesta.push({
+                  evento: event,
+                  mensaje: `Ya existe un evento en el ambiente ${eventos.ambiente.ambiente} con horario ${eventos.horario} para el día ${dia} del mes ${event.mes} del año ${event.year}`,
+                });
+              }
+            });
           });
         });
       });
 
+      /*
       const respuesta = eventosEncontrados.map((evento) => {
         return {
           evento,
@@ -99,6 +78,7 @@ export class EventoService {
         };
       });
 
+      */
       throw new ConflictException(respuesta);
     }
 
@@ -229,7 +209,6 @@ export class EventoService {
     });
 
     tiempoResultado.forEach((resultado, index) => {
-      console.log(`Resultado ${index} - ${resultado}`);
       if (!resultado) {
         throw new BadRequestException(
           `La ficha ${payload.eventos[index].ficha.codigo} no tiene tiempo disponible para el resultado ${payload.eventos[index].resultado.resultado}`,
