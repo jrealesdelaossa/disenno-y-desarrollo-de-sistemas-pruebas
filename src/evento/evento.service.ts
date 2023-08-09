@@ -73,7 +73,10 @@ export class EventoService {
           $or: condicionesConsulta,
         })
         .exec();
-      throw new ConflictException(eventosEncontrados);
+      const mensajes = eventosEncontrados.map((evento) => {
+        return `Ya existe un evento en el ambiente ${evento.eventos[0].ambiente.ambiente} con horario ${evento.eventos[0].horario} para el mes ${evento.mes} del año ${evento.year}`;
+      });
+      throw new ConflictException(mensajes);
     }
     const validacionTiempos = await this.validarTiempos(evento);
     console.log(`Validación de tiempos: ${validacionTiempos}`);
