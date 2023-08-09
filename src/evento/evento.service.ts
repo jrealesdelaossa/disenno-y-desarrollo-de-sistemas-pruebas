@@ -59,9 +59,14 @@ export class EventoService {
     diasNuevos = [].concat(...diasNuevos);
     diasExistentes = [].concat(...diasExistentes);
 
+    console.log('Dias nuevos\n', diasNuevos);
+    console.log('Dias existentes\n', diasExistentes);
+
     const arrExisteDia = diasNuevos.map((dia) => {
       return diasExistentes.some((arrdias) => arrdias.some((i) => i === dia));
     });
+
+    console.log('Array de dias\n', arrExisteDia);
 
     const existeDia = arrExisteDia.every((item) => item === false);
 
@@ -74,9 +79,20 @@ export class EventoService {
         })
         .exec();
 
-      const respuesta = eventosEncontrados.map((evento) => {
-        console.log(evento);
+      // eliminar eventos innecesarios
+      eventosEncontrados.forEach((evento) => {
+        // Arreglo con documentos encontrados
+        evento.eventos.forEach((item, index) => {
+          // Arreglo con eventos de cada documento
+          diasNuevos.forEach((dia) => {
+            if (!item.diastrabajados.includes(Number(dia))) {
+              evento.eventos.splice(index, 1);
+            }
+          });
+        });
+      });
 
+      const respuesta = eventosEncontrados.map((evento) => {
         return {
           evento,
           mensaje: `Ya existe un evento en el ambiente ${evento.eventos[0].ambiente.ambiente} con horario ${evento.eventos[0].horario} para el mes ${evento.mes} del año ${evento.year}`,
@@ -85,8 +101,8 @@ export class EventoService {
 
       throw new ConflictException(respuesta);
     }
-    const validacionTiempos = await this.validarTiempos(evento);
-    console.log(`Validación de tiempos: ${validacionTiempos}`);
+
+    await this.validarTiempos(evento);
 
     const createdEvento = new this.eventoModel(evento);
     createdEvento.save();
