@@ -1,4 +1,10 @@
-import { IsNotEmpty, IsString, Matches, IsMongoId } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsString,
+  Matches,
+  IsMongoId,
+  IsNumber,
+} from 'class-validator';
 
 export class CrearJornadaDto {
   @IsNotEmpty()
@@ -21,6 +27,10 @@ export class CrearJornadaDto {
     message: 'El campo nomenclatura no debe estar vacio',
   })
   readonly horaFin: string;
+
+  @IsNotEmpty()
+  @IsNumber()
+  readonly horas: number;
 }
 
 export class ActualizarJornadaDto {
@@ -52,4 +62,8 @@ export class ActualizarJornadaDto {
     message: 'El campo nomenclatura no debe estar vacio',
   })
   readonly horaFin: string;
+
+  @IsNotEmpty()
+  @IsNumber()
+  readonly horas: number;
 }

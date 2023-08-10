@@ -13,6 +13,9 @@ export class Jornada {
 
   @Prop({ required: true })
   horaFin: string;
+
+  @Prop({ required: true })
+  horas: number;
 }
 
 export const JornadaSchema = SchemaFactory.createForClass(Jornada);
