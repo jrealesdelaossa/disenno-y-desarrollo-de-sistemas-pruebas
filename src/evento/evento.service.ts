@@ -49,8 +49,6 @@ export class EventoService {
       .exec();
 
     if (eventosEncontrados.length > 0) {
-      console.log('@@@@');
-
       const respuesta = [];
 
       // eventos retornados por la consulta
@@ -59,11 +57,23 @@ export class EventoService {
         eventoEncontrado.eventos.forEach((eventoEventoEncontrado, index) => {
           // Recorro los eventos nuevos
           evento.eventos.forEach((eventos) => {
+            let dias = [];
+
             if (
-              eventoEventoEncontrado.diastrabajados.some((dia) =>
-                eventos.diastrabajados.includes(dia),
-              )
+              eventoEventoEncontrado.diastrabajados.some((dia) => {
+                if (eventos.diastrabajados.includes(dia)) {
+                  console.log('dia encontrado', dia);
+
+                  dias.push(dia);
+                }
+                return eventos.diastrabajados.includes(dia);
+              })
             ) {
+              const diasCadena = '';
+              dias.forEach((dia) => {
+                diasCadena.concat(dia) + ' ';
+              });
+
               // eliminar evento no valido
               const arrEventos = [...eventoEncontrado.eventos];
               for (let i = 0; eventoEncontrado.eventos.length > i; i++) {
@@ -71,9 +81,10 @@ export class EventoService {
                   arrEventos.splice(i, 1);
                 }
               }
+
               respuesta.push({
                 evento: arrEventos,
-                mensaje: `Ya existe un evento en el ambiente ${eventos.ambiente.ambiente} con horario ${eventos.horario} para el mes ${eventoEncontrado.mes} del año ${eventoEncontrado.year}`,
+                mensaje: `Ya existe un evento en el ambiente ${eventos.ambiente.ambiente} con horario ${eventos.horario} para los días ${dias} del mes ${eventoEncontrado.mes} del año ${eventoEncontrado.year}`,
               });
             }
             // recorrer los día nuevos
