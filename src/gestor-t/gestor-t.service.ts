@@ -9,6 +9,7 @@ import { Gestor } from './schema/gestor-t.schema';
 import { Model } from 'mongoose';
 import { EventosReporteDto } from './dto/eventos.reporte.dto';
 import { resolve } from 'path';
+import { RestarTiempoFichaDto } from './dto/restarTiempoFicha.dto';
 
 @Injectable()
 export class GestorTService {
@@ -209,5 +210,63 @@ export class GestorTService {
 
   async obtenerGestoresPorFicha(ficha: any[]): Promise<any> {
     return await this.gestorTModel.find({ $or: ficha }).exec();
+  }
+  /**
+   *
+   * @param restarTiempoFichaDto Información para encontrar el gestor de la ficha, competencia y resultado de aprendizaje para restarle las horas.
+   * @returns {boolean} Si se restaron las horas al resultado de aprendizaje enviado, retorna true, en otro caso, retorna false.
+   */
+  async restarTiempoFicha(
+    restarTiempoFichaDto: RestarTiempoFichaDto,
+  ): Promise<boolean> {
+    const gestor = await this.obtenerGestor(restarTiempoFichaDto.ficha.ficha);
+
+    if (gestor.length == 1) {
+      const competenciasGestor = gestor[0].competencias;
+      //Si el gestor tiene competencias
+      if (competenciasGestor.length > 0) {
+        const compIndex = competenciasGestor.findIndex(
+          (competencia: any) =>
+            competencia.codigo == restarTiempoFichaDto.competencia.codigo,
+        );
+        if (compIndex != -1) {
+          const resuIndex = competenciasGestor[compIndex].resultados.findIndex(
+            (resultado: any) =>
+              resultado.orden == restarTiempoFichaDto.resultado.orden,
+          );
+          if (resuIndex != -1) {
+            //Valido que el tiempo acumulado menos el que voy a restar no dé resultado negativo
+            if (
+              competenciasGestor[compIndex].resultados[resuIndex].acumulado -
+                restarTiempoFichaDto.horas >=
+              0
+            ) {
+              //Resto las horas al acumulado del resultado de aprendizaje
+              competenciasGestor[compIndex].resultados[resuIndex].acumulado -=
+                restarTiempoFichaDto.horas;
+              //Resto las horas al acumulado de la competencia
+              competenciasGestor[compIndex].acumulado -=
+                restarTiempoFichaDto.horas;
+
+              //Armo el objeto para actualizar los tiempos de la ficha en el gestor de tiempoCompetencia
+              const actualizarTiempoFicha = {
+                acumulado: gestor[0].acumulado - restarTiempoFichaDto.horas, //Acumulado de la ficha
+                competencias: competenciasGestor,
+              };
+
+              return await this.gestorTModel
+                .findOneAndUpdate(
+                  { ficha: restarTiempoFichaDto.ficha.ficha },
+                  actualizarTiempoFicha,
+                )
+                .then((gestor) => {
+                  return gestor ? true : false;
+                });
+            }
+          }
+        }
+      }
+    }
+    return false;
   }
 }

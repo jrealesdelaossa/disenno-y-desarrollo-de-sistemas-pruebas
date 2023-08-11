@@ -353,16 +353,37 @@ export class EventoService {
       })
       .exec();
 
+    let fichaEvento = [];
     evento[0].eventos.forEach((event, index) => {
       if (
         event.diastrabajados.some((item) =>
           eventoInfo.diasTrabajados.includes(item),
         )
       ) {
-        evento[0].eventos.splice(index, 1);
+        fichaEvento = evento[0].eventos.splice(index, 1);
       }
     });
     delete evento[0]._id;
+    //Si se elimino un evento con splice
+    if (fichaEvento.length == 1) {
+      const gestorActualizar = {
+        ficha: {
+          ficha: fichaEvento[0].ficha.ficha,
+        },
+        horas: eventoInfo.horas,
+        competencia: {
+          codigo: fichaEvento[0].competencia.codigo,
+        },
+        resultado: {
+          orden: fichaEvento[0].resultado.orden,
+        },
+      };
+      //true si se resto bien sino false
+      const tiempoFichaGestorActualizado =
+        await this.gestorTService.restarTiempoFicha(gestorActualizar);
+
+      return tiempoFichaGestorActualizado;
+    }
 
     const eventoActualizado = await this.eventoModel
       .findByIdAndUpdate(evento[0]._id, evento[0])
