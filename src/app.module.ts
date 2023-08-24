@@ -22,6 +22,7 @@ import { CompetenciaModule } from './competencia/competencia.module';
 import { EventoModule } from './evento/evento.module';
 import { GestorTModule } from './gestor-t/gestor-t.module';
 import { GestorAmbienteModule } from './gestor-ambiente/gestor-ambiente.module';
+import { CargueMasivoCompetenciasModule } from './cargue-masivo-competencias/cargue-masivo-competencias.module';
 
 @Module({
   imports: [
@@ -47,6 +48,7 @@ import { GestorAmbienteModule } from './gestor-ambiente/gestor-ambiente.module';
     EventoModule,
     GestorTModule,
     GestorAmbienteModule,
+    CargueMasivoCompetenciasModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -10,12 +10,16 @@ import { Model } from 'mongoose';
 import { Evento } from './schema/evento.schema';
 import { eventoDto } from './dto/evento.dto';
 import { GestorTService } from 'src/gestor-t/gestor-t.service';
+import { eliminarEventoDto } from './dto/eliminarEvento.dto';
+import { GestorAmbienteService } from 'src/gestor-ambiente/gestor-ambiente.service';
 
 @Injectable()
 export class EventoService {
   constructor(
     @InjectModel(Evento.name) private eventoModel: Model<Evento>,
     @Inject(GestorTService) private gestorTService: GestorTService,
+    @Inject(GestorAmbienteService)
+    private gestorAmbienteService: GestorAmbienteService,
   ) {}
 
   async obtenerEventos(): Promise<Evento[]> {
@@ -57,13 +61,11 @@ export class EventoService {
         eventoEncontrado.eventos.forEach((eventoEventoEncontrado, index) => {
           // Recorro los eventos nuevos
           evento.eventos.forEach((eventos) => {
-            let dias = [];
+            const dias = [];
 
             if (
               eventoEventoEncontrado.diastrabajados.some((dia) => {
                 if (eventos.diastrabajados.includes(dia)) {
-                  console.log('dia encontrado', dia);
-
                   dias.push(dia);
                 }
                 return eventos.diastrabajados.includes(dia);
@@ -82,38 +84,25 @@ export class EventoService {
                 }
               }
 
+              console.log(`Dias reportados : ${dias}`);
+
               respuesta.push({
                 evento: arrEventos,
-                mensaje: `Ya existe un evento en el ambiente ${eventos.ambiente.ambiente} con horario ${eventos.horario} para los días ${dias} del mes ${eventoEncontrado.mes} del año ${eventoEncontrado.year}`,
+                mensaje: `Ya existe un evento en el ambiente ${eventos.ambiente.ambiente} con horario ${eventos.horario} para el día ${dias} del mes ${eventoEncontrado.mes} de ${eventoEncontrado.year}`,
               });
             }
-            // recorrer los día nuevos
-            /*
-            eventos.diastrabajados.forEach((dia) => {
-              if (eventoEventoEncontrado.diastrabajados.includes(dia)) {
-                respuesta.push({
-                  evento: eventoEncontrado,
-                  mensaje: `Ya existe un evento en el ambiente ${eventos.ambiente.ambiente} con horario ${eventos.horario} para el día ${dia} del mes ${event.mes} del año ${event.year}`,
-                });
-              }
-            });
-            */
           });
         });
       });
 
-      /*
-      const respuesta = eventosEncontrados.map((evento) => {
-        return {
-          evento,
-          mensaje: `Ya existe un evento en el ambiente ${evento.eventos[0].ambiente.ambiente} con horario ${evento.eventos[0].horario} para el mes ${evento.mes} del año ${evento.year}`,
-        };
-      });
-
-      */
       throw new ConflictException(respuesta);
     }
 
+    /**
+     * Valida los tiempos que se piensan agregar al gestor de tiempo
+     * y retorna un error en la respuesta en caso de encontrar
+     * alguno.
+     */
     await this.validarTiempos(evento);
 
     const createdEvento = new this.eventoModel(evento);
@@ -164,6 +153,15 @@ export class EventoService {
     return evento.length > 0 ? true : false;
   }
 
+  /**
+   * Obtener los eventos de un instructor en especifico filtrando por
+   * mes y año para mostrarlos en la vista de Eventos
+   *
+   * @param mes Mes de los eventos a consultar
+   * @param year Año de los eventos a consultar
+   * @param instructor ObjectId del instructor al que se le consultaran los eventos
+   * @returns Eventos de un instructor por mes y año
+   */
   async obtenerEventosEspecificos(
     mes: number,
     year: number,
@@ -180,9 +178,18 @@ export class EventoService {
         `No se encontraron eventos para el instructor ${instructor} en el mes ${mes} del año ${year}`,
       );
     }
+
     return eventos;
   }
 
+  /**
+   * Valida los tiempos acumulados de los Resultados de aprendizaje,
+   * las Competencias y la Ficha de los eventos que se están intentando
+   * registrar haciendo uso del campo "horas" de los eventos enviados.
+   *
+   * @param payload Registro de evento que se quiere guardar en la base de datos
+   * @returns true en caso de pasar las validaciones
+   */
   async validarTiempos(payload: eventoDto) {
     const idFichas = payload.eventos.map((evento) => {
       return {
@@ -330,5 +337,61 @@ export class EventoService {
     //console.log(tiempoResultado);
 
     return true;
+  }
+
+  /**
+   * Eliminar evento registrado en la base de datos
+   *
+   * @param eventoInfo Información del evento a eliminar
+   * @returns Evento eliminado
+   */
+  async eliminarEvento(eventoInfo: eliminarEventoDto) {
+    const evento = await this.eventoModel
+      .find({
+        mes: eventoInfo.mes,
+        year: eventoInfo.year,
+        'eventos.ambiente.ambiente': eventoInfo.ambiente,
+        'eventos.horario': eventoInfo.horario,
+        'eventos.diastrabajados': { $in: eventoInfo.diasTrabajados },
+      })
+      .exec();
+
+    let fichaEvento = [];
+    evento[0].eventos.forEach((event, index) => {
+      if (
+        event.diastrabajados.some((item) =>
+          eventoInfo.diasTrabajados.includes(item),
+        )
+      ) {
+        fichaEvento = evento[0].eventos.splice(index, 1);
+      }
+    });
+    delete evento[0]._id;
+    //Si se elimino un evento con splice
+    if (fichaEvento.length == 1) {
+      const gestorActualizar = {
+        ficha: {
+          ficha: fichaEvento[0].ficha.ficha,
+        },
+        horas: eventoInfo.horas,
+        competencia: {
+          codigo: fichaEvento[0].competencia.codigo,
+        },
+        resultado: {
+          orden: fichaEvento[0].resultado.orden,
+        },
+      };
+      //true si se resto bien sino false
+      const tiempoFichaGestorActualizado =
+        await this.gestorTService.restarTiempoFicha(gestorActualizar);
+
+      return tiempoFichaGestorActualizado;
+    }
+
+    const eventoActualizado = await this.eventoModel
+      .findByIdAndUpdate(evento[0]._id, evento[0])
+      .exec();
+
+    return eventoActualizado;
   }
 }

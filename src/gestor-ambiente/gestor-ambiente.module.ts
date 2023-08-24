@@ -18,5 +18,6 @@ import {
   ],
   controllers: [GestorAmbienteController],
   providers: [GestorAmbienteService],
+  exports: [GestorAmbienteService],
 })
 export class GestorAmbienteModule {}

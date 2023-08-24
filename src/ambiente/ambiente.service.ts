@@ -10,7 +10,7 @@ export class AmbienteService {
     @InjectModel('Ambiente') private readonly ambienteModel: Model<IAmbiente>,
   ) {}
 
-  async getAllAmbientes(): Promise<IAmbiente[]> {
+  async getAllAmbientes(): Promise<any[]> {
     return await this.ambienteModel
       .find()
       .populate('bloque')

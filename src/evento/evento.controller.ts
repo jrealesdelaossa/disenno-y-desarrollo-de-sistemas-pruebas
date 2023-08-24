@@ -1,7 +1,8 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { EventoService } from './evento.service';
 import { eventoDto } from './dto/evento.dto';
+import { eliminarEventoDto } from './dto/eliminarEvento.dto';
 
 @ApiTags('Evento')
 @Controller('evento')
@@ -52,5 +53,10 @@ export class EventoController {
   @Get('/validar-tiempos')
   async validarTiempos(@Body() payload: eventoDto) {
     return await this.eventoService.validarTiempos(payload);
+  }
+
+  @Delete('/eliminar')
+  async eliminarEvento(@Body() payload: eliminarEventoDto) {
+    return this.eventoService.eliminarEvento(payload);
   }
 }

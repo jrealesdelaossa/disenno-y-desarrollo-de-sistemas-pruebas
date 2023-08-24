@@ -1,4 +1,9 @@
-import { Inject, Injectable } from '@nestjs/common';
+import {
+  Inject,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { GestorAmbiente } from './schema/gestor-ambiente.schema';
 import { Model } from 'mongoose';
@@ -33,8 +38,15 @@ export class GestorAmbienteService {
     return await this.gestorAmbienteModel.create(gestorAmbiente);
   }
 
-  findAll() {
-    return `This action returns all gestorAmbiente`;
+  async findAll() {
+    try {
+      return this.gestorAmbienteModel.find().then((resp) => resp[0]);
+    } catch (error) {
+      console.log(error);
+      return new InternalServerErrorException(
+        'Ocurrio un error, Revise los logs del sistema.',
+      );
+    }
   }
 
   findOne(id: number) {
