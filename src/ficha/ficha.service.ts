@@ -45,7 +45,7 @@ export class FichaService {
   }
 
   async crearFicha(fichaDto: FichaDto) {
-    var gestor;
+    let gestor;
     return await this.fichaModel.create(fichaDto).then((fichaCreada) => {
       return this.competenciaService
         .obtenerCompetenciasPorPrograma(fichaDto.programa)

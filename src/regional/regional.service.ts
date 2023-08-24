@@ -30,17 +30,18 @@ export class RegionalService {
   async crearRegional(regional_dto: RegionalDto): Promise<Regional> {
     // const regional = new this.regionalModel(regional_dto);
     // return await regional.save();
-    const regional = new  this.regionalModel(regional_dto);
+    const regional = new this.regionalModel(regional_dto);
     return await regional.save();
-  
   }
 
   // eliminar una regional
   async eliminarRegional(id: string) {
     return await this.regionalModel.findByIdAndRemove(id).then((data) => {
-      return data ? data : new NotFoundException(
-        `No se encontro el documento con id:${id} en regionales`,
-      );
+      return data
+        ? data
+        : new NotFoundException(
+            `No se encontro el documento con id:${id} en regionales`,
+          );
     });
   }
   // actualizar una regional
