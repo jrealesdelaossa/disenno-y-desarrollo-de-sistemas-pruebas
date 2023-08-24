@@ -21,6 +21,7 @@ import { ModalidadModule } from './modalidad/modalidad.module';
 import { CompetenciaModule } from './competencia/competencia.module';
 import { EventoModule } from './evento/evento.module';
 import { GestorTModule } from './gestor-t/gestor-t.module';
+import { GestorAmbienteModule } from './gestor-ambiente/gestor-ambiente.module';
 
 @Module({
   imports: [
@@ -45,6 +46,7 @@ import { GestorTModule } from './gestor-t/gestor-t.module';
     CompetenciaModule,
     EventoModule,
     GestorTModule,
+    GestorAmbienteModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -16,5 +16,6 @@ import { BloqueModule } from 'src/bloque/bloque.module';
   ],
   controllers: [AmbienteController],
   providers: [AmbienteService],
+  exports: [AmbienteService],
 })
 export class AmbienteModule {}
