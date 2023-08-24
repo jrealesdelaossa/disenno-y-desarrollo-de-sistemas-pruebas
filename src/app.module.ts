@@ -21,6 +21,9 @@ import { ModalidadModule } from './modalidad/modalidad.module';
 import { CompetenciaModule } from './competencia/competencia.module';
 import { EventoModule } from './evento/evento.module';
 import { GestorTModule } from './gestor-t/gestor-t.module';
+import { CargueMasivoCompetenciasModule } from './cargue-masivo-competencias/cargue-masivo-competencias.module';
+import { GestorDisponibilidadModule } from './gestor-disponibilidad/gestor-disponibilidad.module';
+import { GestorDisponibilidadnestService } from './generate/gestor-disponibilidadnest/gestor-disponibilidadnest.service';
 
 @Module({
   imports: [
@@ -45,8 +48,10 @@ import { GestorTModule } from './gestor-t/gestor-t.module';
     CompetenciaModule,
     EventoModule,
     GestorTModule,
+    CargueMasivoCompetenciasModule,
+    GestorDisponibilidadModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, GestorDisponibilidadnestService],
 })
 export class AppModule {}
