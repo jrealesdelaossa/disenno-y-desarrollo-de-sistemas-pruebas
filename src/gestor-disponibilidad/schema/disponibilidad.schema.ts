@@ -6,8 +6,9 @@ export type DisponibilidadDocument = HydratedDocument<Disponibilidad>;
 
 @Schema()
 export class Disponibilidad {
-   @Prop({ required: true })
-      ambientes: disponibilidadDto[];
+  @Prop({ required: true })
+  ambientes: disponibilidadDto[];
 }
 
-export const DisponibilidadSchema = SchemaFactory.createForClass(Disponibilidad);
+export const DisponibilidadSchema =
+  SchemaFactory.createForClass(Disponibilidad);

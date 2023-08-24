@@ -15,7 +15,6 @@ export class disponibilidadDto {
   @IsNotEmpty()
   readonly nombre: string;
 
-
   @IsOptional()
   @IsNotEmpty()
   readonly calendario: jornadaDto[];

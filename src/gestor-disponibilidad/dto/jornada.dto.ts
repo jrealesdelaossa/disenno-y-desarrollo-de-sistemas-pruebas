@@ -10,6 +10,4 @@ export class jornadaDto {
 
   @ApiProperty({ type: String, default: null })
   readonly night: string;
-
-  
 }

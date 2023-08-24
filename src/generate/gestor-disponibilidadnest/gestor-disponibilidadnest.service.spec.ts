@@ -9,7 +9,9 @@ describe('GestorDisponibilidadnestService', () => {
       providers: [GestorDisponibilidadnestService],
     }).compile();
 
-    service = module.get<GestorDisponibilidadnestService>(GestorDisponibilidadnestService);
+    service = module.get<GestorDisponibilidadnestService>(
+      GestorDisponibilidadnestService,
+    );
   });
 
   it('should be defined', () => {
