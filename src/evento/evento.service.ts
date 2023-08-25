@@ -128,6 +128,8 @@ export class EventoService {
 
     //Llamado a gestor de tiempo para actualizar los tiempos de la ficha
     const respGestor = await this.gestorTService.reporteTiempos(gestorFicha);
+    //LLamado a gestor ambiente para actualizar la disponibilidad de los ambientes
+    await this.gestorAmbienteService.actualizarAmbiente(evento.eventos);
     return {
       statusCode: HttpStatus.CREATED,
       message: createdEvento,

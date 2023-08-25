@@ -8,6 +8,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { GestorAmbiente } from './schema/gestor-ambiente.schema';
 import { Model } from 'mongoose';
 import { AmbienteService } from 'src/ambiente/ambiente.service';
+import { eventosDto } from 'src/evento/dto/eventos.dto';
 
 @Injectable()
 export class GestorAmbienteService {
@@ -36,6 +37,48 @@ export class GestorAmbienteService {
       gestorAmbiente.ambientes.push(objectAmbiente);
     });
     return await this.gestorAmbienteModel.create(gestorAmbiente);
+  }
+
+  async actualizarAmbiente(evento: eventosDto[]) {
+    let idGestor = null;
+    const ambientesCalendario = await this.gestorAmbienteModel
+      .find()
+      .then((resp: any) => {
+        idGestor = resp[0].id;
+        return resp[0].ambientes;
+      });
+    ambientesCalendario.map((ambiente) => {
+      evento.map((evento) => {
+        if (evento.ambiente.id == ambiente.id) {
+          switch (evento.horario) {
+            case '6-12':
+              for (let i = 0; i < evento.diastrabajados.length; i++) {
+                ambiente.calendario[evento.diastrabajados[i] - 1].morning =
+                  true;
+              }
+              break;
+            case '12-18':
+              for (let i = 0; i < evento.diastrabajados.length; i++) {
+                ambiente.calendario[evento.diastrabajados[i] - 1].afternoon =
+                  true;
+              }
+              break;
+            case '6-12':
+              for (let i = 0; i < evento.diastrabajados.length; i++) {
+                ambiente.calendario[evento.diastrabajados[i] - 1].night = true;
+              }
+              break;
+
+            default:
+              break;
+          }
+        }
+        return evento;
+      });
+    });
+    return await this.gestorAmbienteModel.findByIdAndUpdate(idGestor, {
+      $set: { ambientes: ambientesCalendario },
+    });
   }
 
   async findAll() {
