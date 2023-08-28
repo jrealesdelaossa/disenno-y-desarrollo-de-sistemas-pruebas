@@ -105,9 +105,6 @@ export class EventoService {
      */
     await this.validarTiempos(evento);
 
-    const createdEvento = new this.eventoModel(evento);
-    createdEvento.save();
-
     //Se crea el objeto para enviarlo al gestor de tiempo para actualizar los tiempos de la ficha
     const gestorFicha = {
       eventos: evento.eventos.map((evento) => {
@@ -130,11 +127,39 @@ export class EventoService {
     const respGestor = await this.gestorTService.reporteTiempos(gestorFicha);
     //LLamado a gestor ambiente para actualizar la disponibilidad de los ambientes
     await this.gestorAmbienteService.actualizarAmbiente(evento.eventos);
-    return {
-      statusCode: HttpStatus.CREATED,
-      message: createdEvento,
-      messageGestor: respGestor,
-    };
+
+    const registroEventoExistente = await this.eventoModel.find({
+      mes: evento.mes,
+      year: evento.year,
+      instructor: evento.instructor,
+    });
+
+    if (registroEventoExistente.length === 0) {
+      const createdEvento = new this.eventoModel(evento);
+      createdEvento.save();
+      return {
+        statusCode: HttpStatus.CREATED,
+        message: createdEvento,
+        messageGestor: respGestor,
+      };
+    } else {
+      evento.eventos.forEach((evento) => {
+        registroEventoExistente[0].eventos.push(evento);
+      });
+      const eventoActualizado = await this.eventoModel
+        .findByIdAndUpdate(
+          registroEventoExistente[0]._id,
+          registroEventoExistente[0],
+        )
+        .exec();
+
+      return {
+        isUpdated: true,
+        statusCode: HttpStatus.CREATED,
+        message: eventoActualizado,
+        messageGestor: respGestor,
+      };
+    }
   }
 
   async obtenerEventosPorFecha(
