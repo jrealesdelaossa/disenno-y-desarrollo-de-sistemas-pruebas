@@ -23,6 +23,8 @@ import { EventoModule } from './evento/evento.module';
 import { GestorTModule } from './gestor-t/gestor-t.module';
 import { GestorAmbienteModule } from './gestor-ambiente/gestor-ambiente.module';
 import { CargueMasivoCompetenciasModule } from './cargue-masivo-competencias/cargue-masivo-competencias.module';
+import { AuthModule } from './auth/auth.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -49,6 +51,8 @@ import { CargueMasivoCompetenciasModule } from './cargue-masivo-competencias/car
     GestorTModule,
     GestorAmbienteModule,
     CargueMasivoCompetenciasModule,
+    AuthModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
