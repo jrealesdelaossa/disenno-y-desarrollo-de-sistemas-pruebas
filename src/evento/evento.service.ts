@@ -276,9 +276,21 @@ export class EventoService {
 
     tiempoResultado.forEach((resultado, index) => {
       if (!resultado) {
-        throw new BadRequestException(
+        /*
+        return {
+          statusCode: HttpStatus.BAD_REQUEST,
+          message: `La ficha ${payload.eventos[index].ficha.codigo} no tiene tiempo disponible para el resultado ${payload.eventos[index].resultado.resultado}`,
+          error: 'Bad Request',
+          evento: payload.eventos[index],
+        };
           `La ficha ${payload.eventos[index].ficha.codigo} no tiene tiempo disponible para el resultado ${payload.eventos[index].resultado.resultado}`,
-        );
+        */
+        throw new BadRequestException({
+          statusCode: HttpStatus.BAD_REQUEST,
+          message: `La ficha ${payload.eventos[index].ficha.codigo} no tiene tiempo disponible para el resultado ${payload.eventos[index].resultado.resultado}`,
+          error: 'Bad Request',
+          evento: payload.eventos[index],
+        });
       }
     });
 
@@ -318,9 +330,17 @@ export class EventoService {
     tiempoCompetencia.forEach((competencia, index) => {
       console.log(`Competencia ${index} - ${competencia}`);
       if (!competencia) {
+        /*
         throw new BadRequestException(
           `La ficha ${payload.eventos[index].ficha.codigo} no tiene tiempo disponible para la competencia ${payload.eventos[index].competencia.codigo}`,
         );
+        */
+        throw new BadRequestException({
+          statusCode: HttpStatus.BAD_REQUEST,
+          message: `La ficha ${payload.eventos[index].ficha.codigo} no tiene tiempo disponible para la competencia ${payload.eventos[index].competencia.codigo}`,
+          error: 'Bad Request',
+          evento: payload.eventos[index],
+        });
       }
     });
     // validación de tiempo para las fichas
@@ -355,9 +375,17 @@ export class EventoService {
     tiempoFicha.forEach((ficha, index) => {
       console.log(`Ficha ${index} - ${ficha}`);
       if (!ficha) {
+        /*
         throw new BadRequestException(
           `La ficha ${payload.eventos[index].ficha.codigo} no tiene tiempo disponible`,
         );
+        */
+        throw new BadRequestException({
+          statusCode: HttpStatus.BAD_REQUEST,
+          message: `La ficha ${payload.eventos[index].ficha.codigo} no tiene tiempo disponible`,
+          error: 'Bad Request',
+          evento: payload.eventos[index],
+        });
       }
     });
 
