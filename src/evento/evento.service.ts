@@ -276,19 +276,10 @@ export class EventoService {
 
     tiempoResultado.forEach((resultado, index) => {
       if (!resultado) {
-        /*
-        return {
-          statusCode: HttpStatus.BAD_REQUEST,
+        throw new ConflictException({
+          statusCode: HttpStatus.CONFLICT,
           message: `La ficha ${payload.eventos[index].ficha.codigo} no tiene tiempo disponible para el resultado ${payload.eventos[index].resultado.resultado}`,
-          error: 'Bad Request',
-          evento: payload.eventos[index],
-        };
-          `La ficha ${payload.eventos[index].ficha.codigo} no tiene tiempo disponible para el resultado ${payload.eventos[index].resultado.resultado}`,
-        */
-        throw new BadRequestException({
-          statusCode: HttpStatus.BAD_REQUEST,
-          message: `La ficha ${payload.eventos[index].ficha.codigo} no tiene tiempo disponible para el resultado ${payload.eventos[index].resultado.resultado}`,
-          error: 'Bad Request',
+          error: 'Conflict',
           evento: payload.eventos[index],
         });
       }
@@ -328,21 +319,16 @@ export class EventoService {
     });
 
     tiempoCompetencia.forEach((competencia, index) => {
-      console.log(`Competencia ${index} - ${competencia}`);
       if (!competencia) {
-        /*
-        throw new BadRequestException(
-          `La ficha ${payload.eventos[index].ficha.codigo} no tiene tiempo disponible para la competencia ${payload.eventos[index].competencia.codigo}`,
-        );
-        */
-        throw new BadRequestException({
-          statusCode: HttpStatus.BAD_REQUEST,
+        throw new ConflictException({
+          statusCode: HttpStatus.CONFLICT,
           message: `La ficha ${payload.eventos[index].ficha.codigo} no tiene tiempo disponible para la competencia ${payload.eventos[index].competencia.codigo}`,
-          error: 'Bad Request',
+          error: 'Conflict',
           evento: payload.eventos[index],
         });
       }
     });
+
     // validación de tiempo para las fichas
     const tiempoFicha = idFichas.map((ficha) => {
       // se suman las horas de envio para la misma ficha
@@ -360,8 +346,6 @@ export class EventoService {
         );
 
         if (idFichaEnvio === idFichaGestor) {
-          // payload.eventos[index].horas == gestor.tiempo;
-
           const duracion = gestor.duracion;
           const acumulado = gestor.acumulado;
           const validacionFicha = acumulado + sumaHorasEnvio <= duracion;
@@ -373,23 +357,15 @@ export class EventoService {
     });
 
     tiempoFicha.forEach((ficha, index) => {
-      console.log(`Ficha ${index} - ${ficha}`);
       if (!ficha) {
-        /*
-        throw new BadRequestException(
-          `La ficha ${payload.eventos[index].ficha.codigo} no tiene tiempo disponible`,
-        );
-        */
-        throw new BadRequestException({
-          statusCode: HttpStatus.BAD_REQUEST,
+        throw new ConflictException({
+          statusCode: HttpStatus.CONFLICT,
           message: `La ficha ${payload.eventos[index].ficha.codigo} no tiene tiempo disponible`,
-          error: 'Bad Request',
+          error: 'Conflict',
           evento: payload.eventos[index],
         });
       }
     });
-
-    //console.log(tiempoResultado);
 
     return true;
   }
