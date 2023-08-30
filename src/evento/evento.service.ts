@@ -53,7 +53,9 @@ export class EventoService {
       .exec();
 
     if (eventosEncontrados.length > 0) {
-      const respuesta = [];
+      //const respuesta = [];
+      let eventoMensaje: object;
+      let mensaje: string;
 
       // eventos retornados por la consulta
       eventosEncontrados.forEach((eventoEncontrado) => {
@@ -85,17 +87,26 @@ export class EventoService {
               }
 
               console.log(`Dias reportados : ${dias}`);
+              eventoMensaje = arrEventos;
+              mensaje = `Ya existe un evento en el ambiente ${eventos.ambiente.ambiente} con horario ${eventos.horario} para el día ${dias} del mes ${eventoEncontrado.mes} de ${eventoEncontrado.year}`;
 
+              /*
               respuesta.push({
                 evento: arrEventos,
                 mensaje: `Ya existe un evento en el ambiente ${eventos.ambiente.ambiente} con horario ${eventos.horario} para el día ${dias} del mes ${eventoEncontrado.mes} de ${eventoEncontrado.year}`,
               });
+              */
             }
           });
         });
       });
 
-      throw new ConflictException(respuesta);
+      throw new ConflictException({
+        statusCode: HttpStatus.CONFLICT,
+        error: 'Conflict',
+        message: mensaje,
+        evento: eventoMensaje,
+      });
     }
 
     /**
