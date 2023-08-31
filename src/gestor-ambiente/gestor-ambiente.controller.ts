@@ -1,14 +1,8 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-} from '@nestjs/common';
+import { Controller, Get, Post, Param, Delete } from '@nestjs/common';
 import { GestorAmbienteService } from './gestor-ambiente.service';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('gestor-ambiente')
 @Controller('gestor-ambiente')
 export class GestorAmbienteController {
   constructor(private readonly gestorAmbienteService: GestorAmbienteService) {}
@@ -23,13 +17,8 @@ export class GestorAmbienteController {
     return this.gestorAmbienteService.findAll();
   }
 
-  @Get('/:id')
-  findOne(@Param('id') id: string) {
-    return this.gestorAmbienteService.findOne(+id);
-  }
-
-  @Delete('/:id')
-  remove(@Param('id') id: string) {
-    return this.gestorAmbienteService.remove(+id);
+  @Delete('/eliminar-todos')
+  async eliminarTodos() {
+    return await this.gestorAmbienteService.eliminarTodos();
   }
 }

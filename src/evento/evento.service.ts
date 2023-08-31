@@ -268,6 +268,8 @@ export class EventoService {
             gestor.competencias[indiceCompetencia].resultados[indiceResultado]
               .acumulado;
 
+          return acumulado + payload.eventos[index].horas <= duracion;
+          /*
           const validacionResultado =
             acumulado + payload.eventos[index].horas <= duracion;
 
@@ -276,14 +278,19 @@ export class EventoService {
           } else {
             return true;
           }
+          */
         }
       });
 
       return validaciones.toString() === 'false' ? false : true;
     });
 
+    console.log('@@@@@@1');
+    console.log(tiempoResultado);
+
     const resultadosConflictivos: object[] = [];
     tiempoResultado.forEach((resultado, index) => {
+      console.log('@@@@@@2 ' + index + ' ' + resultado);
       if (!resultado) {
         resultadosConflictivos.push({
           evento: payload.eventos[index],
@@ -300,7 +307,9 @@ export class EventoService {
       }
     });
 
-    throw new ConflictException(resultadosConflictivos);
+    if (resultadosConflictivos.length > 0) {
+      throw new ConflictException(resultadosConflictivos);
+    }
 
     // validación de tiempo para las competencias
     const tiempoCompetencia = idFichas.map((ficha, index) => {
@@ -353,7 +362,9 @@ export class EventoService {
       }
     });
 
-    throw new ConflictException(competenciasConflictivas);
+    if (competenciasConflictivas.length > 0) {
+      throw new ConflictException(competenciasConflictivas);
+    }
 
     // validación de tiempo para las fichas
     const tiempoFicha = idFichas.map((ficha) => {
@@ -400,7 +411,9 @@ export class EventoService {
       }
     });
 
-    throw new ConflictException(fichasConflictivas);
+    if (fichasConflictivas.length > 0) {
+      throw new ConflictException(fichasConflictivas);
+    }
 
     return true;
   }

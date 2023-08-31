@@ -92,11 +92,27 @@ export class GestorAmbienteService {
     }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} gestorAmbiente`;
-  }
+  /**
+   * Elimina todos los registros de la coleccion gestorAmbiente
+   * @returns
+   */
+  async eliminarTodos() {
+    try {
+      const docs = await this.gestorAmbienteModel.find();
+      if (docs.length == 0) {
+        throw new NotFoundException('No hay registros para eliminar');
+      }
 
-  remove(id: number) {
-    return `This action removes a #${id} gestorAmbiente`;
+      docs.forEach(async (doc) => {
+        console.log(doc.id);
+
+        await this.gestorAmbienteModel.findByIdAndDelete(doc.id);
+      });
+    } catch (error) {
+      console.log(error);
+      return new InternalServerErrorException(
+        'Ocurrio un error, Revise los logs del sistema.',
+      );
+    }
   }
 }
