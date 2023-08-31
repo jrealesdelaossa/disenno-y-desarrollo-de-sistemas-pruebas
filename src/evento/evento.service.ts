@@ -95,7 +95,7 @@ export class EventoService {
               */
 
               respuesta.push({
-                evento: arrEventos,
+                evento: arrEventos[0],
                 mensaje: `Ya existe un evento en el ambiente ${eventos.ambiente.ambiente} con horario ${eventos.horario} para el día ${dias} del mes ${eventoEncontrado.mes} de ${eventoEncontrado.year}`,
               });
             }
