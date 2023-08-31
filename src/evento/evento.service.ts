@@ -53,9 +53,11 @@ export class EventoService {
       .exec();
 
     if (eventosEncontrados.length > 0) {
-      //const respuesta = [];
+      const respuesta = [];
+      /*
       let eventoMensaje: object;
       let mensaje: string;
+      */
 
       // eventos retornados por la consulta
       eventosEncontrados.forEach((eventoEncontrado) => {
@@ -87,26 +89,21 @@ export class EventoService {
               }
 
               console.log(`Dias reportados : ${dias}`);
+              /*
               eventoMensaje = arrEventos;
               mensaje = `Ya existe un evento en el ambiente ${eventos.ambiente.ambiente} con horario ${eventos.horario} para el día ${dias} del mes ${eventoEncontrado.mes} de ${eventoEncontrado.year}`;
+              */
 
-              /*
               respuesta.push({
                 evento: arrEventos,
                 mensaje: `Ya existe un evento en el ambiente ${eventos.ambiente.ambiente} con horario ${eventos.horario} para el día ${dias} del mes ${eventoEncontrado.mes} de ${eventoEncontrado.year}`,
               });
-              */
             }
           });
         });
       });
 
-      throw new ConflictException({
-        statusCode: HttpStatus.CONFLICT,
-        error: 'Conflict',
-        message: mensaje,
-        evento: eventoMensaje,
-      });
+      throw new ConflictException(respuesta);
     }
 
     /**
@@ -285,16 +282,25 @@ export class EventoService {
       return validaciones.toString() === 'false' ? false : true;
     });
 
+    const resultadosConflictivos: object[] = [];
     tiempoResultado.forEach((resultado, index) => {
       if (!resultado) {
+        resultadosConflictivos.push({
+          evento: payload.eventos[index],
+          mensaje: `La ficha ${payload.eventos[index].ficha.codigo} no tiene tiempo disponible para el resultado ${payload.eventos[index].resultado.resultado}`,
+        });
+        /*
         throw new ConflictException({
           statusCode: HttpStatus.CONFLICT,
           message: `La ficha ${payload.eventos[index].ficha.codigo} no tiene tiempo disponible para el resultado ${payload.eventos[index].resultado.resultado}`,
           error: 'Conflict',
           evento: payload.eventos[index],
         });
+        */
       }
     });
+
+    throw new ConflictException(resultadosConflictivos);
 
     // validación de tiempo para las competencias
     const tiempoCompetencia = idFichas.map((ficha, index) => {
@@ -329,16 +335,25 @@ export class EventoService {
       return validaciones;
     });
 
+    const competenciasConflictivas: object[] = [];
     tiempoCompetencia.forEach((competencia, index) => {
       if (!competencia) {
+        competenciasConflictivas.push({
+          evento: payload.eventos[index],
+          mensaje: `La ficha ${payload.eventos[index].ficha.codigo} no tiene tiempo disponible para la competencia ${payload.eventos[index].competencia.codigo}`,
+        });
+        /*
         throw new ConflictException({
           statusCode: HttpStatus.CONFLICT,
           message: `La ficha ${payload.eventos[index].ficha.codigo} no tiene tiempo disponible para la competencia ${payload.eventos[index].competencia.codigo}`,
           error: 'Conflict',
           evento: payload.eventos[index],
         });
+        */
       }
     });
+
+    throw new ConflictException(competenciasConflictivas);
 
     // validación de tiempo para las fichas
     const tiempoFicha = idFichas.map((ficha) => {
@@ -367,16 +382,25 @@ export class EventoService {
       return validaciones;
     });
 
+    const fichasConflictivas: object[] = [];
     tiempoFicha.forEach((ficha, index) => {
       if (!ficha) {
+        fichasConflictivas.push({
+          evento: payload.eventos[index],
+          mensaje: `La ficha ${payload.eventos[index].ficha.codigo} no tiene tiempo disponible`,
+        });
+        /*
         throw new ConflictException({
           statusCode: HttpStatus.CONFLICT,
           message: `La ficha ${payload.eventos[index].ficha.codigo} no tiene tiempo disponible`,
           error: 'Conflict',
           evento: payload.eventos[index],
         });
+        */
       }
     });
+
+    throw new ConflictException(fichasConflictivas);
 
     return true;
   }
