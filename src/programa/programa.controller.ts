@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Post,
   Put,
 } from '@nestjs/common';
@@ -26,6 +27,14 @@ export class ProgramaController {
   @Get('/:id')
   async obtenerPrograma(@Param('id') id: string) {
     return await this.Programa.obtenerProgramaId(id);
+  }
+
+  @Get('/intensidad/:id/:intesidad')
+  async obtenerProgramaPorIntensidad(
+    @Param('id') id: string,
+    @Param('intesidad') intensidad: number,
+  ) {
+    return await this.Programa.obtenerProgramaPorIntensidad(id, intensidad);
   }
 
   @ApiBody({

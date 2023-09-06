@@ -31,6 +31,18 @@ export class ProgramaService {
       }
     });
   }
+  async obtenerProgramaPorIntensidad(id: string, intensidad: number) {
+    return await this.ProgramaModel.findOne({
+      _id: id,
+      intensidad_horaria: intensidad,
+    }).then((data) => {
+      return data
+        ? data
+        : new NotFoundException(
+            `No se encontro el programa objectId: ${id} y la intensidad ${intensidad}`,
+          );
+    });
+  }
 
   /* Todos los metodos de crear */
   async crearPrograma(
