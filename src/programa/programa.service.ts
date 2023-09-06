@@ -38,6 +38,7 @@ export class ProgramaService {
   ): Promise<NotFoundException | Programa> {
     let existe: any = await this.ProgramaModel.exists({
       codigo: ProgramaDto.codigo,
+      intensidad_horaria: ProgramaDto.intensidad_horaria,
     });
     existe === null ? (existe = false) : (existe = true);
     if (existe) {
