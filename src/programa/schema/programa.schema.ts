@@ -19,6 +19,9 @@ export class Programa {
 
   @Prop({ required: true })
   duracion: number;
+
+  @Prop({ required: true })
+  intensidad_horaria: number;
 }
 
 export const ProgramaSchema = SchemaFactory.createForClass(Programa);

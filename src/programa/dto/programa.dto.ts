@@ -49,6 +49,14 @@ export class ProgramaDto {
   @Matches(/^(?!\s*$).+/, { message: 'La duración no puede ser estar vacío' })
   @IsNotEmpty()
   readonly duracion: number;
+
+  @ApiProperty({
+    type: Number,
+    description: 'La intensidad horaria en horas',
+    default: 6,
+  })
+  @IsNotEmpty()
+  readonly intensidad_horaria: number;
 }
 
 export class ActualizarProgramaDto {
@@ -110,4 +118,12 @@ export class ActualizarProgramaDto {
   @Matches(/^(?!\s*$).+/, { message: 'La version no puede ser estar vacío' })
   @IsNotEmpty()
   readonly duracion: number;
+
+  @ApiProperty({
+    type: Number,
+    description: 'La intensidad horaria en horas',
+    default: 6,
+  })
+  @IsNotEmpty()
+  readonly intensidad_horaria: number;
 }
