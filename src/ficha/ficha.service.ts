@@ -13,6 +13,8 @@ import { ProgramaService } from 'src/programa/programa.service';
 import { any } from 'joi';
 import { log } from 'console';
 import { GestorTService } from 'src/gestor-t/gestor-t.service';
+import { TipoAmbienteService } from 'src/tipo-ambiente/tipo-ambiente.service';
+import { TipoAmbiente } from 'src/tipo-ambiente/schemas/tipo-ambiente.schema';
 
 @Injectable()
 export class FichaService {
@@ -26,9 +28,56 @@ export class FichaService {
   async obtenerTodo() {
     return await this.fichaModel
       .find()
-      .populate('ambiente')
+      .populate({
+        path: 'sede',
+          populate:{
+            path: 'centro',
+            populate:{
+              path: 'regional'
+            }
+          }
+        })
+      .populate({
+        path: 'ambiente',      
+        populate: [{
+          path: 'bloque',
+          populate:{
+            path: 'sede',
+            populate: {
+              path: 'centro',
+              populate: {
+                path: 'regional'
+              }
+            }
+          }
+        },{
+          path: 'tipo'
+        },{
+          path: 'sede',
+          populate:{
+            path: 'centro',
+            populate:{
+              path: 'regional'
+            }
+          }
+        }]
+      })
+      /*.populate('ambiente')*/
       .populate('programa')
-      .populate('instructor');
+      .populate({
+        path: 'instructor',
+        populate: [{
+          path: 'programas'
+        }, {
+          path: 'sede',
+          populate:{
+            path: 'centro',
+            populate:{
+              path: 'regional'
+            }
+          }
+        }]
+      });
   }
 
   async obtenerFicha(id: string) {

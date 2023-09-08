@@ -1,7 +1,6 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { ITipoAmbiente } from './interfaces/tipo-ambiente.interface';
 import { TipoAmbiente } from './schemas/tipo-ambiente.schema';
 import {
   CreatedTipoAmbienteDTO,
@@ -11,11 +10,10 @@ import {
 @Injectable()
 export class TipoAmbienteService {
   constructor(
-    @InjectModel('tipo-ambiente')
-    private readonly tipoAmbienteModel: Model<ITipoAmbiente>,
+    @InjectModel(TipoAmbiente.name) private readonly tipoAmbienteModel: Model<TipoAmbiente>,
   ) {}
 
-  async getAllTipos(): Promise<ITipoAmbiente[]> {
+  async getAllTipos(): Promise<TipoAmbiente[]> {
     return await this.tipoAmbienteModel.find().then((dato) => {
       if (!dato)
         throw new HttpException(
@@ -26,7 +24,7 @@ export class TipoAmbienteService {
     });
   }
 
-  async getByIdTipos(idTipo: string): Promise<ITipoAmbiente> {
+  async getByIdTipos(idTipo: string): Promise<TipoAmbiente> {
     const found = await this.tipoAmbienteModel.findById(idTipo).then((dato) => {
       if (!dato)
         throw new HttpException(
@@ -40,7 +38,7 @@ export class TipoAmbienteService {
 
   async createdTipoAmb(
     tipoAmbiente: CreatedTipoAmbienteDTO,
-  ): Promise<ITipoAmbiente> {
+  ): Promise<TipoAmbiente> {
     const found = await this.tipoAmbienteModel.findOne({
       codigo: tipoAmbiente.codigo,
     });
@@ -52,9 +50,9 @@ export class TipoAmbienteService {
 
   async updateTipoAmb(
     updateTipoAmb: UpdateTipoAmbienteDTO,
-  ): Promise<ITipoAmbiente> {
+  ): Promise<TipoAmbiente> {
     const found = await this.getByIdTipos(updateTipoAmb.id);
-    return found.updateOne(updateTipoAmb);
+    return null;//found.updateOne(updateTipoAmb);
     /* if (found) {
             const updateTipo = await this.tipoAmbienteModel.findByIdAndUpdate(updateTipoAmb.id, updateTipoAmb);
             return updateTipo;
@@ -63,6 +61,6 @@ export class TipoAmbienteService {
 
   async deleteTipoAmb(idTipoAmb: string) {
     const found = await this.getByIdTipos(idTipoAmb);
-    return found.deleteOne();
+    return null;//found.deleteOne();
   }
 }
