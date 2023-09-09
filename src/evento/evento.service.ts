@@ -55,9 +55,9 @@ export class EventoService {
     if (eventosEncontrados.length > 0) {
       const respuesta = [];
       /*
-      let eventoMensaje: object;
-      let mensaje: string;
-      */
+        let eventoMensaje: object;
+        let mensaje: string;
+        */
 
       // eventos retornados por la consulta
       eventosEncontrados.forEach((eventoEncontrado) => {
@@ -88,7 +88,6 @@ export class EventoService {
                 }
               }
 
-              console.log(`Dias reportados : ${dias}`);
               /*
               eventoMensaje = arrEventos;
               mensaje = `Ya existe un evento en el ambiente ${eventos.ambiente.ambiente} con horario ${eventos.horario} para el día ${dias} del mes ${eventoEncontrado.mes} de ${eventoEncontrado.year}`;
@@ -111,6 +110,7 @@ export class EventoService {
      * y retorna un error en la respuesta en caso de encontrar
      * alguno.
      */
+    console.log('Llego al servicio');
     await this.validarTiempos(evento);
 
     //Se crea el objeto para enviarlo al gestor de tiempo para actualizar los tiempos de la ficha
@@ -130,6 +130,11 @@ export class EventoService {
         };
       }),
     };
+
+    console.log('llego a la llamada');
+
+    const responseGestor = await this.gestorTService.actualizarTiempos(evento);
+    throw new ConflictException(responseGestor);
 
     //Llamado a gestor de tiempo para actualizar los tiempos de la ficha
     const respGestor = await this.gestorTService.reporteTiempos(gestorFicha);
@@ -271,7 +276,7 @@ export class EventoService {
           return acumulado + payload.eventos[index].horas <= duracion;
           /*
           const validacionResultado =
-            acumulado + payload.eventos[index].horas <= duracion;
+          acumulado + payload.eventos[index].horas <= duracion;
 
           if (!validacionResultado) {
             return false;
@@ -284,13 +289,10 @@ export class EventoService {
 
       return validaciones.toString() === 'false' ? false : true;
     });
-
-    console.log('@@@@@@1');
-    console.log(tiempoResultado);
+    console.log('test');
 
     const resultadosConflictivos: object[] = [];
     tiempoResultado.forEach((resultado, index) => {
-      console.log('@@@@@@2 ' + index + ' ' + resultado);
       if (!resultado) {
         resultadosConflictivos.push({
           evento: payload.eventos[index],

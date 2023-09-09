@@ -10,7 +10,8 @@ import {
 @Injectable()
 export class TipoAmbienteService {
   constructor(
-    @InjectModel(TipoAmbiente.name) private readonly tipoAmbienteModel: Model<TipoAmbiente>,
+    @InjectModel(TipoAmbiente.name)
+    private readonly tipoAmbienteModel: Model<TipoAmbiente>,
   ) {}
 
   async getAllTipos(): Promise<TipoAmbiente[]> {
@@ -52,7 +53,7 @@ export class TipoAmbienteService {
     updateTipoAmb: UpdateTipoAmbienteDTO,
   ): Promise<TipoAmbiente> {
     const found = await this.getByIdTipos(updateTipoAmb.id);
-    return null;//found.updateOne(updateTipoAmb);
+    return null; //found.updateOne(updateTipoAmb);
     /* if (found) {
             const updateTipo = await this.tipoAmbienteModel.findByIdAndUpdate(updateTipoAmb.id, updateTipoAmb);
             return updateTipo;
@@ -61,6 +62,6 @@ export class TipoAmbienteService {
 
   async deleteTipoAmb(idTipoAmb: string) {
     const found = await this.getByIdTipos(idTipoAmb);
-    return null;//found.deleteOne();
+    return null; //found.deleteOne();
   }
 }

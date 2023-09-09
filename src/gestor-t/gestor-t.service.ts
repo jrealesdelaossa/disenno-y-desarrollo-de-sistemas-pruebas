@@ -47,6 +47,122 @@ export class GestorTService {
     });
   }
 
+  async actualizarTiempos(registroEventos): Promise<any> {
+    console.log(registroEventos);
+    const response = await registroEventos.eventos.map(async (evento) => {
+      /* Actualización manual del tiempo en resultado
+      const registro = await this.gestorTModel.findOne({
+        ficha: evento.ficha.ficha,
+      });
+
+      // indice de la competencia
+      const indexCompetencia = registro.competencias.findIndex(
+        (comp) => comp.codigo === evento.competencia.c'Winn2'odigo,
+      );
+
+      // indice del resultado
+      const indexResultado = registro.competencias[
+        indexCompetencia
+      ].resultados.findIndex((res) => res.orden === evento.resultado.orden);
+
+      const tiempo =
+        registro.competencias[indexCompetencia].resultados[indexResultado]
+          .acumulado;
+
+      registro.competencias[indexCompetencia].resultados[
+        indexResultado
+      ].acumulado = tiempo + evento.horas;
+
+      console.log(`registro: ${registro.id}`);
+
+      const updateResultado = await this.gestorTModel
+        .findByIdAndUpdate(registro.id, registro)
+        .then(() => {
+          console.log(`registro: ${registro.id}`);
+        });
+
+      console.log('Winn');
+      */
+
+      const registro = await this.gestorTModel.findOneAndUpdate(
+        {
+          ficha: evento.ficha.ficha,
+        },
+        {
+          $inc: {
+            acumulado: evento.horas,
+            'competencias.$[comp].acumulado': evento.horas,
+          },
+        },
+        {
+          arrayFilters: [
+            {
+              'comp.codigo': evento.competencia.codigo,
+            },
+          ],
+        },
+      );
+
+      const updateresultado = await this.gestorTModel.findOneAndUpdate(
+        {
+          ficha: evento.ficha.ficha,
+        },
+        {
+          $inc: {
+            'competencias.$[comp].resultados.$[resu].acumulado': evento.horas,
+          },
+        },
+        {
+          arrayFilters: [
+            {
+              'resu.orden': Number(evento.resultado.orden),
+              'comp.codigo': evento.competencia.codigo,
+            },
+          ],
+        },
+      );
+
+      console.log(updateresultado);
+
+      /* Esto fue lo que mando el Inst. Aly
+      await Exercise.findByIdAndUpdate(
+        { _id: id_actividad },
+        { $set: { 'enviados.$[perf].trabajos.$[est]': object } },
+        {
+          arrayFilters: [
+            { 'perf.curso': { $eq: curso } },
+            { 'est.people_id': { $eq: people_id } },
+          ],
+        },
+      );
+      */
+
+      return {
+        registro,
+        //updateresultado,
+      };
+    });
+
+    return new Promise((resolve) => {
+      resolve(response);
+    });
+  }
+
+  async test(evento) {
+    console.log('Winn');
+
+    return await this.gestorTModel.findOneAndUpdate(
+      {
+        ficha: evento.ficha.ficha,
+      },
+      {
+        $inc: {
+          acumulado: evento.horas,
+        },
+      },
+    );
+  }
+
   async reporteTiempos(
     reporteFichaDto: EventosReporteDto,
   ): Promise<object[] | ConflictException | any> {
@@ -62,7 +178,7 @@ export class GestorTService {
       const gestores = await this.obtenerGestores(fichas);
       if (gestores.length > 0) {
         await new Promise(async (resolve) => {
-          return await reporteFichaDto.eventos.map((evento, index) => {
+          return reporteFichaDto.eventos.map((evento, index) => {
             new Promise(async (resolve) => {
               const gestorFichaIndex = await gestores.findIndex(
                 (gestor: any) => gestor.ficha == evento.ficha.ficha,
@@ -108,6 +224,7 @@ export class GestorTService {
                           acumulado: gestor.acumulado + horasEnv,
                           competencias: competengiaGestor,
                         };
+                        // await this.test(evento);
                         const resBD = await this.gestorTModel
                           .findOneAndUpdate(
                             { ficha: evento.ficha.ficha },

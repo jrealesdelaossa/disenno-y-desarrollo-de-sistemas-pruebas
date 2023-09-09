@@ -15,7 +15,7 @@ export class AmbienteService {
       .find()
       .populate('bloque')
       .populate('sede')
-      .populate('tipo') 
+      .populate('tipo')
       .then((dato) => {
         if (!dato)
           throw new HttpException(

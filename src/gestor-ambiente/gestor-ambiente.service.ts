@@ -19,17 +19,17 @@ export class GestorAmbienteService {
   ) {}
   async crearGestorActual() {
     const ambientes = await this.ambienteService.getAllAmbientes();
-    let calendarioEstatico = Array(31).fill({
+    const calendarioEstatico = Array(31).fill({
       morning: null,
       afternoon: null,
       night: null,
     });
 
-    let gestorAmbiente = {
+    const gestorAmbiente = {
       ambientes: [],
     };
     ambientes.map((ambientesIterados: any) => {
-      let objectAmbiente = {
+      const objectAmbiente = {
         id: ambientesIterados.id,
         nombre: `${ambientesIterados.bloque.nomenclatura}-${ambientesIterados.codigo}`,
         calendario: calendarioEstatico,

@@ -30,53 +30,60 @@ export class FichaService {
       .find()
       .populate({
         path: 'sede',
-          populate:{
-            path: 'centro',
-            populate:{
-              path: 'regional'
-            }
-          }
-        })
+        populate: {
+          path: 'centro',
+          populate: {
+            path: 'regional',
+          },
+        },
+      })
       .populate({
-        path: 'ambiente',      
-        populate: [{
-          path: 'bloque',
-          populate:{
+        path: 'ambiente',
+        populate: [
+          {
+            path: 'bloque',
+            populate: {
+              path: 'sede',
+              populate: {
+                path: 'centro',
+                populate: {
+                  path: 'regional',
+                },
+              },
+            },
+          },
+          {
+            path: 'tipo',
+          },
+          {
             path: 'sede',
             populate: {
               path: 'centro',
               populate: {
-                path: 'regional'
-              }
-            }
-          }
-        },{
-          path: 'tipo'
-        },{
-          path: 'sede',
-          populate:{
-            path: 'centro',
-            populate:{
-              path: 'regional'
-            }
-          }
-        }]
+                path: 'regional',
+              },
+            },
+          },
+        ],
       })
       /*.populate('ambiente')*/
       .populate('programa')
       .populate({
         path: 'instructor',
-        populate: [{
-          path: 'programas'
-        }, {
-          path: 'sede',
-          populate:{
-            path: 'centro',
-            populate:{
-              path: 'regional'
-            }
-          }
-        }]
+        populate: [
+          {
+            path: 'programas',
+          },
+          {
+            path: 'sede',
+            populate: {
+              path: 'centro',
+              populate: {
+                path: 'regional',
+              },
+            },
+          },
+        ],
       });
   }
 
