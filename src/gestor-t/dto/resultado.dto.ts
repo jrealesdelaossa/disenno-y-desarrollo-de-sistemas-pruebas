@@ -41,6 +41,6 @@ export class resultadoDto {
     message: 'El orden del resultado no puede estar vacío',
   })
   @IsNotEmpty()
-  @IsNumber()
-  readonly orden: number;
+  @IsString()
+  readonly orden: string;
 }

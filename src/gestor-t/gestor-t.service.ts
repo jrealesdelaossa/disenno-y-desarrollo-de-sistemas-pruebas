@@ -48,7 +48,7 @@ export class GestorTService {
   }
 
   async actualizarTiempos(registroEventos): Promise<any> {
-    console.log(registroEventos);
+    //console.log(registroEventos);
     const response = await registroEventos.eventos.map(async (evento) => {
       /* Actualización manual del tiempo en resultado
       const registro = await this.gestorTModel.findOne({
@@ -103,43 +103,39 @@ export class GestorTService {
         },
       );
 
+      console.log(evento.resultado.resultado);
+      const comp = await this.gestorTModel.findOne({
+        'competencias.codigo': evento.competencia.codigo,
+      });
+
+      let indexR =  0;
+      comp.competencias.forEach(element => {
+        element.resultados.forEach((res, index) => {
+          if(res.descripcion === evento.resultado.resultado){
+            indexR = index;
+          }          
+        });        
+      });
+
       const updateresultado = await this.gestorTModel.findOneAndUpdate(
         {
           ficha: evento.ficha.ficha,
         },
         {
           $inc: {
-            'competencias.$[comp].resultados.$[resu].acumulado': evento.horas,
-          },
+            [`competencias.$[c].resultados.${indexR}.acumulado`]: evento.horas,
+          }
         },
-        {
+        { 
           arrayFilters: [
-            {
-              'resu.orden': Number(evento.resultado.orden),
-              'comp.codigo': evento.competencia.codigo,
-            },
-          ],
+            {'c.codigo': evento.competencia.codigo},
+          ]
         },
       );
-
-      console.log(updateresultado);
-
-      /* Esto fue lo que mando el Inst. Aly
-      await Exercise.findByIdAndUpdate(
-        { _id: id_actividad },
-        { $set: { 'enviados.$[perf].trabajos.$[est]': object } },
-        {
-          arrayFilters: [
-            { 'perf.curso': { $eq: curso } },
-            { 'est.people_id': { $eq: people_id } },
-          ],
-        },
-      );
-      */
 
       return {
         registro,
-        //updateresultado,
+        updateresultado,
       };
     });
 
