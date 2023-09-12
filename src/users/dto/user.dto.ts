@@ -1,4 +1,4 @@
-import { IsNotEmpty, Length, IsString } from 'class-validator';
+import { IsNotEmpty, Length, IsString, Matches } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class UserDto {
@@ -11,7 +11,10 @@ export class UserDto {
   @IsNotEmpty()
   @IsString()
   @ApiProperty()
-  @Length(5, 20)
+  @Length(6, 50)
+  @Matches(/(?:(?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
+    message: 'La contraseña debe contener Mayusculas, minusculas y numeros',
+  })
   readonly password: string;
 }
 /*

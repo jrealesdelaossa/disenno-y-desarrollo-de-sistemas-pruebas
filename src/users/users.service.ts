@@ -15,4 +15,8 @@ export class UsersService {
   async createUser(user: UserDto) {
     return await this.userModel.create(user);
   }
+
+  async findOneAuth(email: string) {
+    return await this.userModel.findOne({ email: email });
+  }
 }

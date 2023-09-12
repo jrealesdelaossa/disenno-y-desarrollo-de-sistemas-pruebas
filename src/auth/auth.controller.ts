@@ -1,5 +1,15 @@
-import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
+import { UserDto } from 'src/users/dto/user.dto';
+import { JwtAuthGuard } from 'src/guard/jwt-auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -7,7 +17,16 @@ export class AuthController {
 
   @HttpCode(HttpStatus.OK)
   @Post('login')
-  signIn(@Body() signInDto: Record<string, any>) {
-    return this.authService.signIn(signInDto.username, signInDto.password);
+  signIn(@Body() sigInDto: UserDto) {
+    return this.authService.signIn(sigInDto);
+  }
+
+  @Get('/logueado')
+  @UseGuards(JwtAuthGuard)
+  logueado() {
+    return {
+      message: 'Bienvenido',
+      status: 'Logueado',
+    };
   }
 }

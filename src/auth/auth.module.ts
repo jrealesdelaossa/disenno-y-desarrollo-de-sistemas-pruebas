@@ -1,20 +1,37 @@
 import { Module } from '@nestjs/common';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
-import { UsersModule } from 'src/users/users.module';
 import { JwtModule } from '@nestjs/jwt';
-import { jwtConstants } from './constants';
+import { PassportModule } from '@nestjs/passport';
+import { JwtStrategy } from './strategies/jwt.strategy';
+import { User, UserSchema } from 'src/users/schema/user.schema';
+import { MongooseModule } from '@nestjs/mongoose';
 
 @Module({
+  controllers: [AuthController],
+  providers: [AuthService, JwtStrategy],
   imports: [
-    UsersModule,
-    JwtModule.register({
+    MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
+    PassportModule.register({ defaultStrategy: 'jwt' }),
+    /* JwtModule.register({
       global: true,
       secret: jwtConstants.secret,
       signOptions: { expiresIn: '60s' },
+    }), */
+    JwtModule.registerAsync({
+      imports: [],
+      inject: [],
+      useFactory: () => {
+        return {
+          secret:
+            'DO NOT USE THIS VALUE. INSTEAD, CREATE A COMPLEX SECRET AND KEEP IT SAFE OUTSIDE OF THE SOURCE CODE.',
+          signOptions: {
+            expiresIn: '1h',
+          },
+        };
+      },
     }),
   ],
-  controllers: [AuthController],
-  providers: [AuthService],
+  exports: [PassportModule, JwtModule, JwtStrategy],
 })
 export class AuthModule {}

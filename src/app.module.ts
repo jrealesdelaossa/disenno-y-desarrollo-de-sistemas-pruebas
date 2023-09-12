@@ -25,12 +25,14 @@ import { GestorAmbienteModule } from './gestor-ambiente/gestor-ambiente.module';
 import { CargueMasivoCompetenciasModule } from './cargue-masivo-competencias/cargue-masivo-competencias.module';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       load: [EnvCofiguration],
       validationSchema: JoiValidationSchema,
+      isGlobal: true,
     }),
     MongooseModule.forRoot(process.env.MONGODB),
     CentroModule,
@@ -53,6 +55,7 @@ import { UsersModule } from './users/users.module';
     CargueMasivoCompetenciasModule,
     AuthModule,
     UsersModule,
+    JwtModule,
   ],
   controllers: [AppController],
   providers: [AppService],
