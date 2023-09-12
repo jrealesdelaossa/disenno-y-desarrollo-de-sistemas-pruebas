@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -15,8 +15,6 @@ import { JornadaModule } from './jornada/jornada.module';
 import { TipoDeVinculacionModule } from './tipo-de-vinculacion/tipo-de-vinculacion.module';
 import { InstructorModule } from './instructor/instructor.module';
 import { FichaModule } from './ficha/ficha.module';
-import { EnvCofiguration } from './config/env.config';
-import { JoiValidationSchema } from './config/joi.validation';
 import { ModalidadModule } from './modalidad/modalidad.module';
 import { CompetenciaModule } from './competencia/competencia.module';
 import { EventoModule } from './evento/evento.module';
@@ -25,14 +23,21 @@ import { GestorAmbienteModule } from './gestor-ambiente/gestor-ambiente.module';
 import { CargueMasivoCompetenciasModule } from './cargue-masivo-competencias/cargue-masivo-competencias.module';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
+import configuration from './config/configuration';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
-      load: [EnvCofiguration],
-      validationSchema: JoiValidationSchema,
+      load: [configuration],
+      isGlobal: true,
     }),
-    MongooseModule.forRoot(process.env.MONGODB),
+    MongooseModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        uri: configService.get<string>('MONGODB'),
+      }),
+      inject: [ConfigService],
+    }),
     CentroModule,
     SedesModule,
     RegionalModule,
