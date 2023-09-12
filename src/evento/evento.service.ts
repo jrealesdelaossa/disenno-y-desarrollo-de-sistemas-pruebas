@@ -114,6 +114,7 @@ export class EventoService {
     await this.validarTiempos(evento);
 
     //Se crea el objeto para enviarlo al gestor de tiempo para actualizar los tiempos de la ficha
+    /*
     const gestorFicha = {
       eventos: evento.eventos.map((evento) => {
         return {
@@ -130,14 +131,14 @@ export class EventoService {
         };
       }),
     };
+    */
 
     console.log('llego a la llamada');
 
-    const responseGestor = await this.gestorTService.actualizarTiempos(evento);
-    throw new ConflictException(responseGestor);
+    const respGestor = await this.gestorTService.actualizarTiempos(evento);
 
     //Llamado a gestor de tiempo para actualizar los tiempos de la ficha
-    const respGestor = await this.gestorTService.reporteTiempos(gestorFicha);
+    //const respGestor = await this.gestorTService.reporteTiempos(gestorFicha);
     //LLamado a gestor ambiente para actualizar la disponibilidad de los ambientes
     await this.gestorAmbienteService.actualizarAmbiente(evento.eventos);
 
