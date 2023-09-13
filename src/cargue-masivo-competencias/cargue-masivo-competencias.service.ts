@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import * as fs from 'fs';
-import * as csvParser from 'csv-parser';
 import { createReadStream } from 'fs';
 import * as readline from 'readline';
 import { competenciaDto } from '../competencia/dto/competencia.dto';

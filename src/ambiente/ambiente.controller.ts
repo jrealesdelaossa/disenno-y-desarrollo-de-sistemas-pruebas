@@ -39,9 +39,8 @@ export class AmbienteController {
 
   @Put('editar')
   async updateAmbiente(@Body() updateAmbiente: UpdateAmbienteDTO) {
-    const updAmbiente = await this.ambienteService.updateAmbiente(
-      updateAmbiente,
-    );
+    const updAmbiente =
+      await this.ambienteService.updateAmbiente(updateAmbiente);
     return updAmbiente;
   }
 

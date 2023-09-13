@@ -54,10 +54,6 @@ export class EventoService {
 
     if (eventosEncontrados.length > 0) {
       const respuesta = [];
-      /*
-        let eventoMensaje: object;
-        let mensaje: string;
-        */
 
       // eventos retornados por la consulta
       eventosEncontrados.forEach((eventoEncontrado) => {
@@ -88,11 +84,6 @@ export class EventoService {
                 }
               }
 
-              /*
-              eventoMensaje = arrEventos;
-              mensaje = `Ya existe un evento en el ambiente ${eventos.ambiente.ambiente} con horario ${eventos.horario} para el día ${dias} del mes ${eventoEncontrado.mes} de ${eventoEncontrado.year}`;
-              */
-
               respuesta.push({
                 evento: arrEventos[0],
                 mensaje: `Ya existe un evento en el ambiente ${eventos.ambiente.ambiente} con horario ${eventos.horario} para el día ${dias} del mes ${eventoEncontrado.mes} de ${eventoEncontrado.year}`,
@@ -110,36 +101,12 @@ export class EventoService {
      * y retorna un error en la respuesta en caso de encontrar
      * alguno.
      */
-    console.log('Llego al servicio');
     await this.validarTiempos(evento);
 
-    //Se crea el objeto para enviarlo al gestor de tiempo para actualizar los tiempos de la ficha
-    /*
-    const gestorFicha = {
-      eventos: evento.eventos.map((evento) => {
-        return {
-          ficha: {
-            ficha: evento.ficha.ficha,
-          },
-          horas: evento.horas,
-          competencia: {
-            codigo: evento.competencia.codigo,
-          },
-          resultado: {
-            orden: evento.resultado.orden,
-          },
-        };
-      }),
-    };
-    */
-
-    console.log('llego a la llamada');
-
+    /**
+     * LLamada a los servicios que actualizan los gestores
+     */
     const respGestor = await this.gestorTService.actualizarTiempos(evento);
-
-    //Llamado a gestor de tiempo para actualizar los tiempos de la ficha
-    //const respGestor = await this.gestorTService.reporteTiempos(gestorFicha);
-    //LLamado a gestor ambiente para actualizar la disponibilidad de los ambientes
     await this.gestorAmbienteService.actualizarAmbiente(evento.eventos);
 
     const registroEventoExistente = await this.eventoModel.find({
@@ -238,9 +205,8 @@ export class EventoService {
       };
     });
 
-    const gestores = await this.gestorTService.obtenerGestoresPorFicha(
-      idFichas,
-    );
+    const gestores =
+      await this.gestorTService.obtenerGestoresPorFicha(idFichas);
 
     // validación de tiempo para los resultados
     const tiempoResultado = idFichas.map((ficha, index) => {
@@ -275,22 +241,11 @@ export class EventoService {
               .acumulado;
 
           return acumulado + payload.eventos[index].horas <= duracion;
-          /*
-          const validacionResultado =
-          acumulado + payload.eventos[index].horas <= duracion;
-
-          if (!validacionResultado) {
-            return false;
-          } else {
-            return true;
-          }
-          */
         }
       });
 
       return validaciones.toString() === 'false' ? false : true;
     });
-    console.log('test');
 
     const resultadosConflictivos: object[] = [];
     tiempoResultado.forEach((resultado, index) => {
@@ -299,14 +254,6 @@ export class EventoService {
           evento: payload.eventos[index],
           mensaje: `La ficha ${payload.eventos[index].ficha.codigo} no tiene tiempo disponible para el resultado ${payload.eventos[index].resultado.resultado}`,
         });
-        /*
-        throw new ConflictException({
-          statusCode: HttpStatus.CONFLICT,
-          message: `La ficha ${payload.eventos[index].ficha.codigo} no tiene tiempo disponible para el resultado ${payload.eventos[index].resultado.resultado}`,
-          error: 'Conflict',
-          evento: payload.eventos[index],
-        });
-        */
       }
     });
 
@@ -354,14 +301,6 @@ export class EventoService {
           evento: payload.eventos[index],
           mensaje: `La ficha ${payload.eventos[index].ficha.codigo} no tiene tiempo disponible para la competencia ${payload.eventos[index].competencia.codigo}`,
         });
-        /*
-        throw new ConflictException({
-          statusCode: HttpStatus.CONFLICT,
-          message: `La ficha ${payload.eventos[index].ficha.codigo} no tiene tiempo disponible para la competencia ${payload.eventos[index].competencia.codigo}`,
-          error: 'Conflict',
-          evento: payload.eventos[index],
-        });
-        */
       }
     });
 
@@ -403,14 +342,6 @@ export class EventoService {
           evento: payload.eventos[index],
           mensaje: `La ficha ${payload.eventos[index].ficha.codigo} no tiene tiempo disponible`,
         });
-        /*
-        throw new ConflictException({
-          statusCode: HttpStatus.CONFLICT,
-          message: `La ficha ${payload.eventos[index].ficha.codigo} no tiene tiempo disponible`,
-          error: 'Conflict',
-          evento: payload.eventos[index],
-        });
-        */
       }
     });
 

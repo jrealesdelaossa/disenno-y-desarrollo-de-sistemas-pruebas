@@ -4,14 +4,12 @@ import {
   Delete,
   Get,
   Param,
-  ParseIntPipe,
   Post,
   Put,
 } from '@nestjs/common';
 import { ProgramaService } from './programa.service';
 import { ActualizarProgramaDto, ProgramaDto } from './dto/programa.dto';
 import { ApiBody, ApiParam, ApiTags } from '@nestjs/swagger';
-import { string } from 'joi';
 
 @ApiTags('Programas')
 @Controller('programas')

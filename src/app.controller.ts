@@ -1,6 +1,6 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 import { Controller, Get, Param } from '@nestjs/common';
 import { AppService } from './app.service';
-import { log } from 'console';
 //import moment from 'moment';
 // import fc from 'festivos-colombia';
 const fc = require('festivos-colombia');
@@ -13,11 +13,6 @@ export class AppController {
   getHello(): string {
     return this.appService.getHello();
   }
-
-  /**
-   * Crear el EndPoint de la fecha en el appController
-   * Mes en Numero y en letra, anio en Numero
-   */
 
   @Get('date')
   getDatosFecha() {

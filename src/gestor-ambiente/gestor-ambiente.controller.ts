@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Delete } from '@nestjs/common';
 import { GestorAmbienteService } from './gestor-ambiente.service';
 import { ApiTags } from '@nestjs/swagger';
 

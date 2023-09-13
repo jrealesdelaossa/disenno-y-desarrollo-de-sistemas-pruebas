@@ -1,20 +1,11 @@
-import {
-  Injectable,
-  NotFoundException,
-  HttpStatus,
-  Inject,
-} from '@nestjs/common';
+import { Injectable, NotFoundException, Inject } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Ficha } from './schema/ficha.schema';
 import { ActualizarFichaDto, FichaDto } from './dto/ficha.dto';
 import { CompetenciaService } from 'src/competencia/competencia.service';
 import { ProgramaService } from 'src/programa/programa.service';
-import { any } from 'joi';
-import { log } from 'console';
 import { GestorTService } from 'src/gestor-t/gestor-t.service';
-import { TipoAmbienteService } from 'src/tipo-ambiente/tipo-ambiente.service';
-import { TipoAmbiente } from 'src/tipo-ambiente/schemas/tipo-ambiente.schema';
 
 @Injectable()
 export class FichaService {

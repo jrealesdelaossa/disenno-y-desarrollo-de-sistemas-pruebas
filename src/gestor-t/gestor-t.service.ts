@@ -7,8 +7,6 @@ import { GestorTDto } from './dto/gestor-t.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Gestor } from './schema/gestor-t.schema';
 import { Model } from 'mongoose';
-import { EventosReporteDto } from './dto/eventos.reporte.dto';
-import { resolve } from 'path';
 import { RestarTiempoFichaDto } from './dto/restarTiempoFicha.dto';
 
 @Injectable()
@@ -47,270 +45,75 @@ export class GestorTService {
     });
   }
 
+  /**
+   * Actualiza los tiempos de los resultados, las competencias y las fichas en el gestor de tiempo
+   * @param registroEventos Recibe un objeto con los eventos a registrar en el gestor de tiempo
+   * @returns Retorna un array con los resultados de la actualización de los gestores de tiempo
+   */
   async actualizarTiempos(registroEventos): Promise<any> {
-    //console.log(registroEventos);
-    const response = await registroEventos.eventos.map(async (evento) => {
-      /* Actualización manual del tiempo en resultado
-      const registro = await this.gestorTModel.findOne({
-        ficha: evento.ficha.ficha,
-      });
-
-      // indice de la competencia
-      const indexCompetencia = registro.competencias.findIndex(
-        (comp) => comp.codigo === evento.competencia.c'Winn2'odigo,
-      );
-
-      // indice del resultado
-      const indexResultado = registro.competencias[
-        indexCompetencia
-      ].resultados.findIndex((res) => res.orden === evento.resultado.orden);
-
-      const tiempo =
-        registro.competencias[indexCompetencia].resultados[indexResultado]
-          .acumulado;
-
-      registro.competencias[indexCompetencia].resultados[
-        indexResultado
-      ].acumulado = tiempo + evento.horas;
-
-      console.log(`registro: ${registro.id}`);
-
-      const updateResultado = await this.gestorTModel
-        .findByIdAndUpdate(registro.id, registro)
-        .then(() => {
-          console.log(`registro: ${registro.id}`);
+    const response = await Promise.all(
+      registroEventos.eventos.map(async (evento) => {
+        const comp = await this.gestorTModel.findOne({
+          'competencias.codigo': evento.competencia.codigo,
         });
 
-      console.log('Winn');
-      */
-
-      const registro = await this.gestorTModel.findOneAndUpdate(
-        {
-          ficha: evento.ficha.ficha,
-        },
-        {
-          $inc: {
-            acumulado: evento.horas,
-            'competencias.$[comp].acumulado': evento.horas,
-          },
-        },
-        {
-          arrayFilters: [
-            {
-              'comp.codigo': evento.competencia.codigo,
-            },
-          ],
-        },
-      );
-
-      console.log(evento.resultado.resultado);
-      const comp = await this.gestorTModel.findOne({
-        'competencias.codigo': evento.competencia.codigo,
-      });
-
-      let indexR =  0;
-      comp.competencias.forEach(element => {
-        element.resultados.forEach((res, index) => {
-          if(res.descripcion === evento.resultado.resultado){
-            indexR = index;
-          }          
-        });        
-      });
-
-      const updateresultado = await this.gestorTModel.findOneAndUpdate(
-        {
-          ficha: evento.ficha.ficha,
-        },
-        {
-          $inc: {
-            [`competencias.$[c].resultados.${indexR}.acumulado`]: evento.horas,
-          }
-        },
-        { 
-          arrayFilters: [
-            {'c.codigo': evento.competencia.codigo},
-          ]
-        },
-      );
-
-      return {
-        registro,
-        updateresultado,
-      };
-    });
-
-    return new Promise((resolve) => {
-      resolve(response);
-    });
-  }
-
-  async test(evento) {
-    console.log('Winn');
-
-    return await this.gestorTModel.findOneAndUpdate(
-      {
-        ficha: evento.ficha.ficha,
-      },
-      {
-        $inc: {
-          acumulado: evento.horas,
-        },
-      },
-    );
-  }
-
-  async reporteTiempos(
-    reporteFichaDto: EventosReporteDto,
-  ): Promise<object[] | ConflictException | any> {
-    // eslint-disable-next-line prefer-const
-    let msg: any[] = [];
-    if (reporteFichaDto.eventos.length > 0) {
-      const fichas = reporteFichaDto.eventos.map((evento) => {
-        return {
-          ficha: evento.ficha.ficha,
-        };
-      });
-
-      const gestores = await this.obtenerGestores(fichas);
-      if (gestores.length > 0) {
-        await new Promise(async (resolve) => {
-          return reporteFichaDto.eventos.map((evento, index) => {
-            new Promise(async (resolve) => {
-              const gestorFichaIndex = await gestores.findIndex(
-                (gestor: any) => gestor.ficha == evento.ficha.ficha,
-              );
-              if (gestorFichaIndex != -1) {
-                const gestor = gestores[gestorFichaIndex];
-
-                const competengiaGestor: any = gestor.competencias;
-                //Buscamos el indice de la competencia que coincide con el código
-                const compIndex = await competengiaGestor.findIndex(
-                  (competencia) =>
-                    competencia.codigo == evento.competencia.codigo,
-                );
-                //Si es diferente de -1 es porque existe esa competencia
-                if (compIndex != -1) {
-                  const duracionComp = competengiaGestor[compIndex].duracion;
-                  const acumuladoCom = competengiaGestor[compIndex].acumulado;
-                  const horasEnv = evento.horas;
-                  //Si las horas enviadas + el acumulado no se pasa la duración de la competencia
-                  if (acumuladoCom + horasEnv <= duracionComp) {
-                    const resuIndex = await competengiaGestor[
-                      compIndex
-                    ].resultados.findIndex(
-                      (resultado) => resultado.orden == evento.resultado.orden,
-                    );
-                    if (resuIndex != -1) {
-                      const duracionResu =
-                        competengiaGestor[compIndex].resultados[resuIndex]
-                          .duracion;
-                      const acumuladoResu =
-                        competengiaGestor[compIndex].resultados[resuIndex]
-                          .acumulado;
-                      //Si las horas enviadas + el acumulado no se pasa la duración del resultado de aprendizaje
-                      if (acumuladoResu + horasEnv <= duracionResu) {
-                        //Le sumo las horas enviadas al acumulado del resultado de aprendizaje
-                        competengiaGestor[compIndex].resultados[
-                          resuIndex
-                        ].acumulado += horasEnv;
-                        //Le sumo las horas enviadas al acumulado de la competencia
-                        competengiaGestor[compIndex].acumulado += horasEnv;
-                        //Armo el objeto a guardar
-                        const datosGuardar = {
-                          acumulado: gestor.acumulado + horasEnv,
-                          competencias: competengiaGestor,
-                        };
-                        // await this.test(evento);
-                        const resBD = await this.gestorTModel
-                          .findOneAndUpdate(
-                            { ficha: evento.ficha.ficha },
-                            datosGuardar,
-                          )
-                          .then((gestor) => {
-                            return gestor
-                              ? {
-                                  actualizado: true,
-                                  indexEvento: index,
-                                  codigoCompetencia: evento.competencia.codigo,
-                                  ordenResultado: evento.resultado.orden,
-                                  horasAgregadas: horasEnv,
-                                  motivo: `Gestor de tiempo de la ficha: ${evento.ficha.ficha} actualizado`,
-                                }
-                              : {
-                                  actualizado: false,
-                                  indexEvento: index,
-                                  codigoCompetencia: evento.competencia.codigo,
-                                  ordenResultado: evento.resultado.orden,
-                                  horasAgregadas: horasEnv,
-                                  motivo: `No se pudo actualizar el gestor de tiempo de la ficha: ${evento.ficha.ficha}`,
-                                  error: gestor,
-                                };
-                          });
-                        resolve(resBD);
-                        return resBD;
-                      } else {
-                        resolve({
-                          actualizado: false,
-                          indexEvento: index,
-                          codigoCompetencia: evento.competencia.codigo,
-                          ordenResultado: evento.resultado.orden,
-                          motivo: `El resultado de aprendizaje con orden: ${evento.resultado.orden} de la competencia con código: ${evento.competencia.codigo} supera su duración`,
-                        });
-                      }
-                    } else {
-                      resolve({
-                        actualizado: false,
-                        indexEvento: index,
-                        codigoCompetencia: evento.competencia.codigo,
-                        ordenResultado: evento.resultado.orden,
-                        motivo: `No existe un resultado de aprendizaje con orden: ${evento.resultado.orden}`,
-                      });
-                    }
-                  } else {
-                    resolve({
-                      actualizado: false,
-                      indexEvento: index,
-                      codigoCompetencia: evento.competencia.codigo,
-                      motivo: `Las horas a agregar de la competencia con código: ${evento.competencia.codigo} superan la duración de la competencia`,
-                    });
-                  }
-                } else {
-                  resolve({
-                    actualizado: false,
-                    indexEvento: index,
-                    codigoCompetencia: evento.competencia.codigo,
-                    motivo: `No existe una competencia con código: ${evento.competencia.codigo}`,
-                  });
-                }
-              } else {
-                resolve({
-                  actualizado: false,
-                  indexEvento: index,
-                  ficha: evento.ficha.ficha,
-                  motivo: `No existe un gestor de tiempo para la ficha: ${evento.ficha.ficha}`,
-                });
-              }
-            })
-              .then((data) => {
-                msg.push(data);
-              })
-              .finally(() => {
-                resolve('fin');
-              });
+        let indexR = 0;
+        comp.competencias.forEach((element) => {
+          element.resultados.forEach((res, index) => {
+            if (res.descripcion === evento.resultado.resultado) {
+              indexR = index;
+            }
           });
-        }).finally(() => {
-          resolve('true');
         });
-        return msg;
-      } else {
-        return [
-          'No se encontraron gestores de tiempo para las fichas enviadas',
-        ];
-      }
-    }
 
-    return ['Debe enviar un arreglo de eventos que no este vacío'];
+        return await this.gestorTModel
+          .findOneAndUpdate(
+            {
+              ficha: evento.ficha.ficha,
+            },
+            {
+              $inc: {
+                acumulado: evento.horas,
+                'competencias.$[c].acumulado': evento.horas,
+                [`competencias.$[c].resultados.${indexR}.acumulado`]:
+                  evento.horas,
+              },
+            },
+            {
+              arrayFilters: [
+                {
+                  'c.codigo': evento.competencia.codigo,
+                },
+              ],
+            },
+          )
+          .then(() => {
+            return {
+              actualizado: true,
+              indexEvento: evento.index,
+              competencia: evento.competencia.competencia,
+              ordenResultado: evento.resultado.orden,
+              horasAgregadas: evento.horas,
+              motivo: `Gestor de tiempo de la ficha: ${evento.ficha.codigo} actualizado`,
+            };
+          })
+          .catch((err) => {
+            return {
+              actualizado: false,
+              indexEvento: evento.index,
+              competencia: evento.competencia.competencia,
+              ordenResultado: evento.resultado.orden,
+              horasAgregadas: evento.horas,
+              motivo: `Gestor de tiempo de la ficha: ${evento.ficha.codigo} actualizado`,
+              error: err,
+            };
+          });
+      }),
+    );
+
+    return response;
   }
+
   async existeGestor(id_ficha: string): Promise<boolean> {
     return new Promise((resolve) => {
       resolve(
@@ -321,13 +124,19 @@ export class GestorTService {
     });
   }
 
+  /**
+   * Retrieves all the gestors associated with the given ficha.
+   * @param ficha An array of ficha objects to search for.
+   * @returns A Promise that resolves to an array of gestor objects.
+   */
   async obtenerGestoresPorFicha(ficha: any[]): Promise<any> {
     return await this.gestorTModel.find({ $or: ficha }).exec();
   }
+
   /**
-   *
-   * @param restarTiempoFichaDto Información para encontrar el gestor de la ficha, competencia y resultado de aprendizaje para restarle las horas.
-   * @returns {boolean} Si se restaron las horas al resultado de aprendizaje enviado, retorna true, en otro caso, retorna false.
+   * Resta el tiempo indicado en horas a un resultado de aprendizaje de una competencia de un gestor de tiempo de una ficha.
+   * @param restarTiempoFichaDto Objeto DTO con la información necesaria para restar el tiempo a la ficha.
+   * @returns Retorna un booleano indicando si la operación fue exitosa o no.
    */
   async restarTiempoFicha(
     restarTiempoFichaDto: RestarTiempoFichaDto,

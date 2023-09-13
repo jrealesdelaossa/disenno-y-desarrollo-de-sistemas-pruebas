@@ -1,17 +1,6 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Put,
-  Delete,
-  Body,
-  Param,
-} from '@nestjs/common';
+import { Controller, Get, Post, Body, Param } from '@nestjs/common';
 import { TipoAmbienteService } from './tipo-ambiente.service';
-import {
-  CreatedTipoAmbienteDTO,
-  UpdateTipoAmbienteDTO,
-} from './dto/tipo-ambiente.dto';
+import { CreatedTipoAmbienteDTO } from './dto/tipo-ambiente.dto';
 import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Tipo Ambiente')
@@ -32,23 +21,8 @@ export class TipoAmbienteController {
 
   @Post('crear')
   async crearTipoAmb(@Body() crearTipoAmb: CreatedTipoAmbienteDTO) {
-    const newTipoAmb = await this.tipoAmbientService.createdTipoAmb(
-      crearTipoAmb,
-    );
+    const newTipoAmb =
+      await this.tipoAmbientService.createdTipoAmb(crearTipoAmb);
     return newTipoAmb;
-  }
-
-  @Put('actualizar')
-  async actualizarTipoAmb(@Body() updateTipeAmb: UpdateTipoAmbienteDTO) {
-    const updateTipo = await this.tipoAmbientService.updateTipoAmb(
-      updateTipeAmb,
-    );
-    return updateTipo;
-  }
-
-  @Delete('eliminar/:id')
-  async deleteTipoAmb(@Param('id') idTipoAmb: string) {
-    const deleted = await this.tipoAmbientService.deleteTipoAmb(idTipoAmb);
-    return deleted;
   }
 }

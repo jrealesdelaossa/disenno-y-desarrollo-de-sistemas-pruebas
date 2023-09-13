@@ -1,7 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import mongoose, { HydratedDocument } from 'mongoose';
-import { Ambiente } from 'src/ambiente/schemas/ambiente.schema';
-import { CalendarioDto } from '../dto/calendario.dto';
+import { HydratedDocument } from 'mongoose';
 import { CreateGestorAmbienteDto } from '../dto/gestor-ambiente.dto';
 
 export type GestorAmbienteDocument = HydratedDocument<GestorAmbiente>;

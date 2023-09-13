@@ -16,7 +16,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     return super.canActivate(context);
   }
 
-  handleRequest(err, user, info) {
+  handleRequest(err, user) {
     // Puedes personalizar la respuesta en caso de error de autenticación
     if (err || !user) {
       throw err || new UnauthorizedException();
