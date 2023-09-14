@@ -23,8 +23,8 @@ export class eventoDto {
 
   @ApiProperty({
     type: String,
-    default: '231321231651651513',
-    description: 'Instuctor relacionado',
+    default: '64ff808815f852cb3ee45e4b',
+    description: 'Instructor relacionado al registro de eventos',
   })
   @IsNotEmpty()
   @IsMongoId()

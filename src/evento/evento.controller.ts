@@ -61,6 +61,9 @@ export class EventoController {
     return this.eventoService.eliminarEvento(payload);
   }
 
+  @ApiBody({
+    type: eliminarEventoEspecificoDto,
+  })
   @Delete('/eliminar/especifico')
   async eliminarEventoEspecifico(
     @Body() eventoEspecificoDto: eliminarEventoEspecificoDto,
