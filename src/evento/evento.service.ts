@@ -10,7 +10,10 @@ import { Model } from 'mongoose';
 import { Evento } from './schema/evento.schema';
 import { eventoDto } from './dto/evento.dto';
 import { GestorTService } from 'src/gestor-t/gestor-t.service';
-import { eliminarEventoDto } from './dto/eliminarEvento.dto';
+import {
+  eliminarEventoDto,
+  eliminarEventoEspecificoDto,
+} from './dto/eliminarEvento.dto';
 import { GestorAmbienteService } from 'src/gestor-ambiente/gestor-ambiente.service';
 
 @Injectable()
@@ -205,8 +208,9 @@ export class EventoService {
       };
     });
 
-    const gestores =
-      await this.gestorTService.obtenerGestoresPorFicha(idFichas);
+    const gestores = await this.gestorTService.obtenerGestoresPorFicha(
+      idFichas,
+    );
 
     // validación de tiempo para los resultados
     const tiempoResultado = idFichas.map((ficha, index) => {
@@ -406,5 +410,28 @@ export class EventoService {
       .exec();
 
     return eventoActualizado;
+  }
+
+  async eliminarEventoEspecifico(
+    eventoEspecificoDto: eliminarEventoEspecificoDto,
+  ) {
+    const gestorTiempo = {
+      ficha: {
+        ficha: eventoEspecificoDto.evento.ficha.ficha,
+      },
+      horas: eventoEspecificoDto.evento.horas,
+      competencia: {
+        codigo: eventoEspecificoDto.evento.competencia.codigo,
+      },
+      resultado: {
+        orden: eventoEspecificoDto.evento.resultado.orden,
+      },
+    };
+    const gestorActualizado = await this.gestorTService.restarTiempoFicha(
+      gestorTiempo,
+    );
+    console.log(gestorActualizado);
+
+    return true;
   }
 }

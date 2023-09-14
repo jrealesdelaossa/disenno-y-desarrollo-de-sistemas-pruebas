@@ -2,7 +2,7 @@ import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { EventoService } from './evento.service';
 import { eventoDto } from './dto/evento.dto';
-import { eliminarEventoDto } from './dto/eliminarEvento.dto';
+import { eliminarEventoDto, eliminarEventoEspecificoDto } from './dto/eliminarEvento.dto';
 
 @ApiTags('Evento')
 @Controller('evento')
@@ -58,5 +58,10 @@ export class EventoController {
   @Delete('/eliminar')
   async eliminarEvento(@Body() payload: eliminarEventoDto) {
     return this.eventoService.eliminarEvento(payload);
+  }
+  
+  @Delete('/eliminar/especifico')
+  async eliminarEventoEspecifico(@Body() eventoEspecificoDto: eliminarEventoEspecificoDto){
+    return await this.eventoService.eliminarEventoEspecifico(eventoEspecificoDto);
   }
 }

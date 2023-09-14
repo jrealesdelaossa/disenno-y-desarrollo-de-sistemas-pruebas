@@ -4,9 +4,11 @@ import {
   IsMongoId,
   IsNotEmpty,
   IsNumber,
+  IsObject,
   IsString,
 } from 'class-validator';
 import { number } from 'joi';
+import { eventosDto } from './eventos.dto';
 
 export class eliminarEventoDto {
   @ApiProperty({
@@ -71,4 +73,31 @@ export class eliminarEventoDto {
   @IsNotEmpty()
   @IsNumber()
   readonly horas: number;
+}
+
+export class eliminarEventoEspecificoDto {
+  @ApiProperty({
+    type: String,
+    default: '231321231651651513',
+    description: 'Instuctor relacionado',
+  })
+  @IsNotEmpty()
+  @IsMongoId()
+  readonly instructor: string;
+
+  @ApiProperty({
+    type: Object,
+  })
+  @IsNotEmpty()
+  @IsObject()
+  readonly evento: eventosDto;
+
+  @ApiProperty({
+    type: Number,
+    default: '0',
+    description: 'Posición del evento a eliminar',
+  })
+  @IsNotEmpty()
+  @IsNumber()
+  readonly eventIndex: number;
 }
