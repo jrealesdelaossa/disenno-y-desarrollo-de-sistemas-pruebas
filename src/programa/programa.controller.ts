@@ -40,7 +40,6 @@ export class ProgramaController {
   })
   @Post('/crear')
   async crearProgramas(@Body() Programa: ProgramaDto) {
-    console.log(Programa);
     return await this.Programa.crearPrograma(Programa);
   }
 

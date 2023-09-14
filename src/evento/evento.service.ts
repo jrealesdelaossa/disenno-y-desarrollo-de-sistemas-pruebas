@@ -208,9 +208,8 @@ export class EventoService {
       };
     });
 
-    const gestores = await this.gestorTService.obtenerGestoresPorFicha(
-      idFichas,
-    );
+    const gestores =
+      await this.gestorTService.obtenerGestoresPorFicha(idFichas);
 
     // validación de tiempo para los resultados
     const tiempoResultado = idFichas.map((ficha, index) => {
@@ -427,10 +426,9 @@ export class EventoService {
         orden: eventoEspecificoDto.evento.resultado.orden,
       },
     };
-    const gestorActualizado = await this.gestorTService.restarTiempoFicha(
-      gestorTiempo,
-    );
-    console.log(gestorActualizado);
+
+    await this.gestorTService.restarTiempoFicha(gestorTiempo);
+    await this.gestorAmbienteService.restarHorarioAmbiente(eventoEspecificoDto);
 
     return true;
   }

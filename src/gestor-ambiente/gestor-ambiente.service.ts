@@ -9,6 +9,7 @@ import { GestorAmbiente } from './schema/gestor-ambiente.schema';
 import { Model } from 'mongoose';
 import { AmbienteService } from 'src/ambiente/ambiente.service';
 import { eventosDto } from 'src/evento/dto/eventos.dto';
+import { eliminarEventoEspecificoDto } from 'src/evento/dto/eliminarEvento.dto';
 
 @Injectable()
 export class GestorAmbienteService {
@@ -81,11 +82,50 @@ export class GestorAmbienteService {
     });
   }
 
+  async restarHorarioAmbiente(evento: eliminarEventoEspecificoDto) {
+    let idGestor = null;
+    const ambienteEspecifico = await this.gestorAmbienteModel
+      .find()
+      .then((ambientes: any) => {
+        idGestor = ambientes[0].id;
+        return ambientes[0].ambientes;
+      });
+    ambienteEspecifico.map((ambiente) => {
+      if (ambiente.nombre == evento.evento.ambiente.ambiente) {
+        switch (evento.evento.horario) {
+          case '6-12':
+            for (let i = 0; i < evento.evento.diastrabajados.length; i++) {
+              ambiente.calendario[evento.evento.diastrabajados[i] - 1].morning =
+                null;
+            }
+            break;
+          case '12-18':
+            for (let i = 0; i < evento.evento.diastrabajados.length; i++) {
+              ambiente.calendario[
+                evento.evento.diastrabajados[i] - 1
+              ].afternoon = null;
+            }
+            break;
+          case '6-12':
+            for (let i = 0; i < evento.evento.diastrabajados.length; i++) {
+              ambiente.calendario[evento.evento.diastrabajados[i] - 1].night =
+                null;
+            }
+            break;
+
+          default:
+            break;
+        }
+      }
+    });
+    return await this.gestorAmbienteModel.findByIdAndUpdate(idGestor, {
+      $set: { ambientes: ambienteEspecifico },
+    });
+  }
   async findAll() {
     try {
       return this.gestorAmbienteModel.find().then((resp) => resp[0]);
     } catch (error) {
-      console.log(error);
       return new InternalServerErrorException(
         'Ocurrio un error, Revise los logs del sistema.',
       );
@@ -104,12 +144,9 @@ export class GestorAmbienteService {
       }
 
       docs.forEach(async (doc) => {
-        console.log(doc.id);
-
         await this.gestorAmbienteModel.findByIdAndDelete(doc.id);
       });
     } catch (error) {
-      console.log(error);
       return new InternalServerErrorException(
         'Ocurrio un error, Revise los logs del sistema.',
       );

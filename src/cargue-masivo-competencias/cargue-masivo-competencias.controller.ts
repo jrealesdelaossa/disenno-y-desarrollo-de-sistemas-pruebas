@@ -18,7 +18,6 @@ export class CargueMasivoCompetenciasController {
       storage: diskStorage({
         destination: './uploads',
         filename: (req, file, cb) => {
-          console.log(file);
           const uniqueSuffix =
             Date.now() + '-' + Math.round(Math.random() * 1e9);
           cb(null, file.fieldname + '-' + uniqueSuffix + '.csv');
@@ -30,7 +29,6 @@ export class CargueMasivoCompetenciasController {
     @UploadedFile() file: Express.Multer.File,
     @Body('programa') programa: string,
   ): Promise<string> {
-    console.log(programa);
     const result = await this.cargue.processCsv(file, programa);
     return result;
   }

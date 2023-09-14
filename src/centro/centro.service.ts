@@ -58,7 +58,6 @@ export class CentroService {
   async actualizarCentro(
     centro_dto: ActualizarCentroDto,
   ): Promise<NotFoundException | Centro> {
-    console.log(centro_dto.id);
     return await this.centroModel
       .findByIdAndUpdate(centro_dto.id, centro_dto)
       .then((data) => (data ? data : new NotFoundException(centro_dto)));

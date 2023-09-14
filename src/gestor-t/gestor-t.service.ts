@@ -142,7 +142,6 @@ export class GestorTService {
     restarTiempoFichaDto: RestarTiempoFichaDto,
   ): Promise<boolean> {
     const gestor = await this.obtenerGestor(restarTiempoFichaDto.ficha.ficha);
-    console.log(gestor);
 
     if (gestor.length == 1) {
       const competenciasGestor = gestor[0].competencias;

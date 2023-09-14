@@ -123,7 +123,6 @@ export class FichaService {
   async actualizarFicha(
     ficha: ActualizarFichaDto,
   ): Promise<NotFoundException | Ficha> {
-    console.log(ficha.id);
     return await this.fichaModel
       .findByIdAndUpdate(ficha.id, ficha)
       .then((ficha) => {

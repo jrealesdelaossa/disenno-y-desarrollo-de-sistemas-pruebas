@@ -33,15 +33,11 @@ export class BloqueController {
 
   @Post('/crear')
   async crearBloque(@Body() bloqueDto: CrearBloqueDto) {
-    console.log(bloqueDto);
-
     return await this.bloqueService.crearBloque(bloqueDto);
   }
 
   @Put('/actualizar')
   async actualizarBloque(@Body() bloqueDto: ActualizarBloqueDto) {
-    console.log(bloqueDto.id);
-
     return await this.bloqueService.actualizarBloque(bloqueDto);
   }
 

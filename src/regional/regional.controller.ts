@@ -26,7 +26,6 @@ export class RegionalController {
   @Post('/crear')
   async crearRegional(@Body() regional: RegionalDto) {
     const data = await this.regional.crearRegional(regional);
-    // console.log(data);
     return `Regional creada con exito
     ${data}`;
   }

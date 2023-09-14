@@ -32,8 +32,6 @@ export class JornadaController {
 
   @Put('/actualizar')
   async actualizarJornada(@Body() jornada: ActualizarJornadaDto) {
-    console.log(jornada.id);
-
     return await this.jornadaService.actualizarJornada(jornada);
   }
 
