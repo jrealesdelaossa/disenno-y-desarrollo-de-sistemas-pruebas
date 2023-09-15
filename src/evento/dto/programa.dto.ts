@@ -1,26 +1,20 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsMongoId, IsNotEmpty, IsString, Matches } from 'class-validator';
+import { IsMongoId, IsNotEmpty, IsString } from 'class-validator';
 
 export class programaDto {
   @ApiProperty({
     type: String,
-    default: 'Programa de formación',
+    default: 'Análisis y Desarrollo de Sistemas',
     description: 'Nombre del programa',
   })
   @IsNotEmpty()
   @IsString()
-  @Matches(/^(?!\s*$).+/, {
-    message: 'El nombre del programa no puede estar vacío',
-  })
   readonly nombre: string;
 
   @ApiProperty({
     type: String,
-    default: '236236',
-    description: 'id del programa',
-  })
-  @Matches(/^(?!\s*$).+/, {
-    message: 'El id del programa no puede estar vacío',
+    default: '64ff7eef15f852cb3ee45e33',
+    description: 'Mongo Id del programa',
   })
   @IsNotEmpty()
   @IsMongoId()

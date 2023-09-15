@@ -6,6 +6,7 @@ import { Evento, EventoSchema } from './schema/evento.schema';
 import { InstructorModule } from 'src/instructor/instructor.module';
 import { GestorTModule } from 'src/gestor-t/gestor-t.module';
 import { GestorAmbienteModule } from 'src/gestor-ambiente/gestor-ambiente.module';
+import * as moment from 'moment';
 
 @Module({
   imports: [
@@ -15,7 +16,13 @@ import { GestorAmbienteModule } from 'src/gestor-ambiente/gestor-ambiente.module
     GestorAmbienteModule,
   ],
 
-  providers: [EventoService],
+  providers: [
+    EventoService,
+    {
+      provide: 'MomentWrapper',
+      useValue: moment,
+    },
+  ],
   controllers: [EventoController],
 })
 export class EventoModule {}

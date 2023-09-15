@@ -31,7 +31,7 @@ export class eventosDto {
 
   @ApiProperty({
     type: String,
-    default: 'Nivel de formación',
+    default: 'Tecnologo',
     description: 'Nivel de formación',
   })
   @IsString()
@@ -39,7 +39,7 @@ export class eventosDto {
 
   @ApiProperty({
     type: String,
-    default: 'Municipio',
+    default: 'Turbo',
     description: 'Municipio',
   })
   @IsString()
@@ -63,7 +63,7 @@ export class eventosDto {
 
   @ApiProperty({
     type: String,
-    default: '07:00 - 18:00',
+    default: '12-18',
     description: 'Horario de formación',
   })
   @IsString()
@@ -71,7 +71,7 @@ export class eventosDto {
 
   @ApiProperty({
     type: Number,
-    default: '24',
+    default: 32,
     description: 'Horas de formación',
   })
   @IsNumber()
@@ -79,7 +79,7 @@ export class eventosDto {
 
   @ApiProperty({
     type: Number,
-    default: '1',
+    default: 1,
     description: 'Días trabajados',
   })
   @IsArray()

@@ -15,6 +15,7 @@ import {
   eliminarEventoEspecificoDto,
 } from './dto/eliminarEvento.dto';
 import { GestorAmbienteService } from 'src/gestor-ambiente/gestor-ambiente.service';
+import * as moment from 'moment';
 
 @Injectable()
 export class EventoService {
@@ -430,6 +431,18 @@ export class EventoService {
     await this.gestorTService.restarTiempoFicha(gestorTiempo);
     await this.gestorAmbienteService.restarHorarioAmbiente(eventoEspecificoDto);
 
-    return true;
+    const monthSearch = moment().month() + 1;
+    const eventos = await this.eventoModel
+      .findOne({ mes: monthSearch, instructor: eventoEspecificoDto.instructor })
+      .exec();
+
+    const eventoEliminado = eventos.eventos.splice(
+      eventoEspecificoDto.eventIndex,
+      1,
+    )[0];
+
+    await eventos.save();
+
+    return eventoEliminado;
   }
 }

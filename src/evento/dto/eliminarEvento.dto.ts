@@ -78,15 +78,16 @@ export class eliminarEventoDto {
 export class eliminarEventoEspecificoDto {
   @ApiProperty({
     type: String,
-    default: '231321231651651513',
-    description: 'Instuctor relacionado',
+    default: '64ff808815f852cb3ee45e4b',
+    description:
+      'Mongo Id del instructor relacionado al evento que se va a eliminar',
   })
   @IsNotEmpty()
   @IsMongoId()
   readonly instructor: string;
 
   @ApiProperty({
-    type: Object,
+    type: eventosDto,
   })
   @IsNotEmpty()
   @IsObject()
@@ -95,7 +96,7 @@ export class eliminarEventoEspecificoDto {
   @ApiProperty({
     type: Number,
     default: '0',
-    description: 'Posición del evento a eliminar',
+    description: 'Indice de la posición en el arreglo del evento a eliminar',
   })
   @IsNotEmpty()
   @IsNumber()

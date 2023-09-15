@@ -1,14 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsMongoId, IsNotEmpty, IsString, Matches } from 'class-validator';
+import { IsMongoId, IsNotEmpty, IsString } from 'class-validator';
 
 export class ambienteDto {
   @ApiProperty({
     type: String,
-    default: '165546545674118916116',
-    description: 'id del ambiente',
-  })
-  @Matches(/^(?!\s*$).+/, {
-    message: 'El id del ambiente no puede estar vacío',
+    default: '64b8758c87f48f29f890a0e7',
+    description: 'Mongo Id del ambiente',
   })
   @IsNotEmpty()
   @IsMongoId()
@@ -17,12 +14,9 @@ export class ambienteDto {
   @ApiProperty({
     type: String,
     default: 'C-201',
-    description: 'Ambiente',
+    description: 'Nomenclatura del ambiente',
   })
   @IsNotEmpty()
   @IsString()
-  @Matches(/^(?!\s*$).+/, {
-    message: 'El nombre del ambiente no puede estar vacío',
-  })
   readonly ambiente: string;
 }
