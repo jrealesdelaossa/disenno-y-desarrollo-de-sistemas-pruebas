@@ -19,4 +19,10 @@ export class UsersService {
   async findOneAuth(email: string) {
     return await this.userModel.findOne({ email: email });
   }
+  async crearUser(user: UserDto) {
+    return await this.userModel.create(user);
+  }
+  async roles() {
+    return ['Instructor', 'Administrator', 'Coordinador'];
+  }
 }

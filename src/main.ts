@@ -10,6 +10,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(
     new ValidationPipe({
+      transform: true, // Validar los arreglos vacios
       //Para que valide bien los espacios vacíos o nulos
       //skipMissingProperties: false,
       // elimina los campos que no esten definidos en el dto

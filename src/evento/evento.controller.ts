@@ -64,10 +64,12 @@ export class EventoController {
   @ApiBody({
     type: eliminarEventoEspecificoDto,
   })
-  @Delete('/eliminar/especifico')
+  @Post('/eliminar/especifico')
   async eliminarEventoEspecifico(
     @Body() eventoEspecificoDto: eliminarEventoEspecificoDto,
   ) {
+    console.log(eventoEspecificoDto);
+
     return await this.eventoService.eliminarEventoEspecifico(
       eventoEspecificoDto,
     );
