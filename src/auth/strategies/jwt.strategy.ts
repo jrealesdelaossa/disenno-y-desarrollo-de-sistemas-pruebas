@@ -7,6 +7,7 @@ import { Model } from 'mongoose';
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -24,15 +25,42 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   async validate(
     payload: JwtPayload,
   ): Promise<User | { access_token: string }> {
-    const { username } = payload;
-    const userBd = await this.userModel.findOne({ name: username });
+    const { correo } = payload;
+    const userBd = await this.userModel.findOne({ correo: correo });
     if (!userBd) {
-      throw new UnauthorizedException('No Existe este');
+      throw new UnauthorizedException('El usuario no esta registrado');
     }
 
-    const payloadZ = { sub: userBd.id, username: userBd.name };
+    const payloadZ = {
+      sub: userBd.id,
+      correo: userBd.correo,
+      rol: userBd.roles,
+    };
     return {
-      name: username,
+      correo: userBd.correo,
+      access_token: await this.jwtService.signAsync(payloadZ),
+    };
+  }
+
+  async loginJwt(
+    payload: JwtPayload,
+  ): Promise<User | { access_token: string }> {
+    const { correo, password } = payload;
+
+    const userBd = await this.userModel.findOne({ correo: correo });
+    if (!userBd) {
+      throw new UnauthorizedException('El usuario no esta registrado');
+    } else if (!bcrypt.compareSync(password, userBd.password)) {
+      throw new UnauthorizedException('La contraseña es incorrecta');
+    }
+    const payloadZ = {
+      sub: userBd.id,
+      correo: userBd.correo,
+      rol: userBd.roles,
+    };
+
+    return {
+      correo: userBd.correo,
       access_token: await this.jwtService.signAsync(payloadZ),
     };
   }
