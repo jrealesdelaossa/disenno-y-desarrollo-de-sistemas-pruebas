@@ -24,7 +24,7 @@ export class EventoService {
     @Inject(GestorTService) private gestorTService: GestorTService,
     @Inject(GestorAmbienteService)
     private gestorAmbienteService: GestorAmbienteService,
-  ) { }
+  ) {}
 
   async obtenerEventos(): Promise<Evento[]> {
     return this.eventoModel.find().exec();
@@ -446,13 +446,22 @@ export class EventoService {
     return eventoEliminado;
   }
 
-  async reporteDeEvento() {
-    const eventos = await this.eventoModel.find()
+  async reporteDeEvento(month: number = undefined) {
+    let monthSearch: number = 0;
+    if (Number.isNaN(month) || month === undefined || month === null) {
+      monthSearch = moment().month() + 1;
+    } else {
+      monthSearch = month;
+    }
+    const eventos = await this.eventoModel
+      .find({
+        mes: monthSearch,
+      })
       .populate({
         path: 'instructor',
         populate: {
           path: 'programas',
-        }
+        },
       });
 
     const response = eventos.map((evento) => {
@@ -460,8 +469,8 @@ export class EventoService {
       const documento = evento.instructor.documento;
       const nombre = evento.instructor.nombre;
 
-      return evento.eventos.map(e => {
-        const horas = e.horario.split("-");
+      return evento.eventos.map((e) => {
+        const horas = e.horario.split('-');
         const sesiones = e.diastrabajados.length;
         return {
           mes: mes,
@@ -482,9 +491,9 @@ export class EventoService {
           totalSesiones: sesiones,
           horaSesion: e.horas / sesiones,
           totalHoras: e.horas,
-          dias: e.diastrabajados
-        }
-      })
+          dias: e.diastrabajados,
+        };
+      });
     });
 
     return response;

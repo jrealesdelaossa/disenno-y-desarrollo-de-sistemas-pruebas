@@ -1,5 +1,5 @@
 import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
-import { ApiBody, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiParam, ApiTags } from '@nestjs/swagger';
 import { EventoService } from './evento.service';
 import { eventoDto } from './dto/evento.dto';
 import {
@@ -75,8 +75,13 @@ export class EventoController {
     );
   }
 
-  @Get('/reporte')
-  async obtenerReporteDeEventos() {
-    return this.eventoService.reporteDeEvento();
+  @ApiParam({
+    name: 'month',
+    type: Number,
+    description: 'Número del mes a obtener reportes (opcional)',
+  })
+  @Get('/reporte/:month?')
+  async obtenerReporteDeEventos(@Param('month') month?: number) {
+    return this.eventoService.reporteDeEvento(month);
   }
 }
