@@ -74,4 +74,9 @@ export class EventoController {
       eventoEspecificoDto,
     );
   }
+
+  @Get('/reporte')
+  async obtenerReporteDeEventos() {
+    return this.eventoService.reporteDeEvento();
+  }
 }

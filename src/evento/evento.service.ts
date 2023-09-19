@@ -24,7 +24,7 @@ export class EventoService {
     @Inject(GestorTService) private gestorTService: GestorTService,
     @Inject(GestorAmbienteService)
     private gestorAmbienteService: GestorAmbienteService,
-  ) {}
+  ) { }
 
   async obtenerEventos(): Promise<Evento[]> {
     return this.eventoModel.find().exec();
@@ -444,5 +444,49 @@ export class EventoService {
     await eventos.save();
 
     return eventoEliminado;
+  }
+
+  async reporteDeEvento() {
+    const eventos = await this.eventoModel.find()
+      .populate({
+        path: 'instructor',
+        populate: {
+          path: 'programas',
+        }
+      });
+
+    const response = eventos.map((evento) => {
+      const mes = evento.mes;
+      const documento = evento.instructor.documento;
+      const nombre = evento.instructor.nombre;
+
+      return evento.eventos.map(e => {
+        const horas = e.horario.split("-");
+        const sesiones = e.diastrabajados.length;
+        return {
+          mes: mes,
+          documentoInstructor: documento,
+          nombreInstructor: nombre,
+          numeroFicha: e.ficha.codigo,
+          horaInicio: horas[0],
+          horaFin: horas[1],
+          fechaInicio: e.diastrabajados[0],
+          fechaFin: e.diastrabajados[sesiones - 1],
+          dia: e.dia,
+          competencia: e.competencia.competencia,
+          resultado: e.resultado.resultado,
+          tipo: e.nivel,
+          programa: e.programa.nombre,
+          municipio: e.municipio,
+          ambiente: e.ambiente.ambiente,
+          totalSesiones: sesiones,
+          horaSesion: e.horas / sesiones,
+          totalHoras: e.horas,
+          dias: e.diastrabajados
+        }
+      })
+    });
+
+    return response;
   }
 }
