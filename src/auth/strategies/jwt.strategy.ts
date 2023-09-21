@@ -37,17 +37,15 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       rol: userBd.roles,
     };
     return {
-      correo: userBd.correo,
+      ...userBd,
       access_token: await this.jwtService.signAsync(payloadZ),
     };
   }
 
-  async loginJwt(
-    payload: JwtPayload,
-  ): Promise<User | { access_token: string }> {
+  async loginJwt(payload: JwtPayload): Promise<any> {
     const { correo, password } = payload;
 
-    const userBd = await this.userModel.findOne({ correo: correo });
+    let userBd: any = await this.userModel.findOne({ correo: correo });
     if (!userBd) {
       throw new UnauthorizedException('El usuario no esta registrado');
     } else if (!bcrypt.compareSync(password, userBd.password)) {
@@ -58,9 +56,18 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       correo: userBd.correo,
       rol: userBd.roles,
     };
+    userBd.password = null;
 
     return {
+      id: userBd._id,
+      documento: userBd.documento,
+      nombre: userBd.nombre,
+      apellido: userBd.apellido,
       correo: userBd.correo,
+      contrato: userBd.contrato,
+      programas: userBd.programas,
+      sede: userBd.sede,
+      roles: userBd.roles,
       access_token: await this.jwtService.signAsync(payloadZ),
     };
   }

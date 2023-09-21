@@ -57,9 +57,9 @@ export class UserDto {
   @IsNotEmpty()
   @IsString()
   @ApiProperty()
-  @Length(6, 400)
-  @Matches(/^(?!\s*$).+/, {
-    message: 'La contraseña no debe estar vacia',
+  @Length(6, 50)
+  @Matches(/(?:(?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
+    message: 'La contraseña debe contener Mayusculas, minusculas y numeros',
   })
   readonly password: string;
 
