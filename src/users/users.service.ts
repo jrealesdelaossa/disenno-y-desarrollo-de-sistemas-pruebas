@@ -1,8 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { User } from './schema/user.schema';
 import { UserDto } from './dto/user.dto';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
@@ -20,9 +21,28 @@ export class UsersService {
     return await this.userModel.findOne({ email: email });
   }
   async crearUser(user: UserDto) {
-    return await this.userModel.create(user);
+    const existeCorreo = await this.validarCorreo(user.correo);
+    if (existeCorreo) {
+      return new BadRequestException(
+        `El usuario con el correo ${user.correo} ya existe`,
+      );
+    }
+    const userBd = {
+      ...user,
+      password: bcrypt.hashSync(user.password, 10),
+    };
+    return userBd;
+    //return await this.userModel.create(user);
   }
   async roles() {
     return ['Instructor', 'Administrator', 'Coordinador'];
+  }
+
+  async validarCorreo(email: string): Promise<boolean> {
+    const user = await this.userModel.findOne({ correo: email });
+    if (user) {
+      return true;
+    }
+    return false;
   }
 }
