@@ -31,8 +31,8 @@ export class UsersService {
       ...user,
       password: bcrypt.hashSync(user.password, 10),
     };
-    return userBd;
-    //return await this.userModel.create(user);
+
+    return await this.userModel.create(userBd);
   }
   async roles() {
     return ['Instructor', 'Administrator', 'Coordinador'];
