@@ -62,4 +62,18 @@ export class CentroService {
       .findByIdAndUpdate(centro_dto.id, centro_dto)
       .then((data) => (data ? data : new NotFoundException(centro_dto)));
   }
+
+  async centroPorId(id: string) {
+    try {
+      return await this.centroModel
+        .findOne({
+          _id: id,
+        })
+        .populate({
+          path: 'regional',
+        });
+    } catch (error) {
+      return new NotFoundException(`Error al hacer la búsqueda: ${error}`);
+    }
+  }
 }

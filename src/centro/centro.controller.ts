@@ -21,6 +21,15 @@ export class CentroController {
     return await this.centro.obtenerTodo();
   }
 
+  @ApiParam({
+    description: 'ObjectId del centro',
+    name: 'id',
+  })
+  @Get('/:id')
+  async obtenerCentroPorId(@Param('id') id: string) {
+    return await this.centro.centroPorId(id);
+  }
+
   @ApiBody({
     type: CentroDto,
   })
