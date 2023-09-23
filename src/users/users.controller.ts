@@ -28,14 +28,6 @@ export class UsersController {
   @ApiBody({
     type: UserDto,
   })
-  @Post('create')
-  async create(@Body() user: UserDto) {
-    return this.usersService.createUser(user);
-  }
-
-  @ApiBody({
-    type: UserDto,
-  })
   @Post('/crear')
   async crear(@Body(new ValidationPipe({ transform: true })) user: UserDto) {
     return this.usersService.crearUser(user);

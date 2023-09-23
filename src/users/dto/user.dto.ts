@@ -51,15 +51,15 @@ export class UserDto {
   readonly programas: string[];
 
   @ApiProperty()
-  @Matches(/^(?!\s*$).+/, { message: 'La Sede no puede estar vacía' })
-  readonly sede: string;
+  @Matches(/^(?!\s*$).+/, { message: 'El centro no puede estar vacía' })
+  readonly centro: string;
 
   @IsNotEmpty()
   @IsString()
   @ApiProperty()
-  @Length(6, 400)
-  @Matches(/^(?!\s*$).+/, {
-    message: 'La contraseña no debe estar vacia',
+  @Length(6, 50)
+  @Matches(/(?:(?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
+    message: 'La contraseña debe contener Mayusculas, minusculas y numeros',
   })
   readonly password: string;
 

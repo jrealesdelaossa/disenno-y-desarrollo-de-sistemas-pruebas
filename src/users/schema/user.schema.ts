@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { HydratedDocument } from 'mongoose';
+import { Centro } from 'src/centro/schema/centro.schema';
 import { ContratoDto } from 'src/instructor/dto/contrato.dto';
-import { Sede } from 'src/sedes/schema/sede.schema';
 
 export type UserDocument = HydratedDocument<User>;
 
@@ -35,8 +35,8 @@ export class User {
   })
   programas: string[];
 
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Sede' })
-  sede: Sede;
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Centro' })
+  centro: Centro;
 
   @Prop({ default: ['userBasic'] })
   roles: string[];
