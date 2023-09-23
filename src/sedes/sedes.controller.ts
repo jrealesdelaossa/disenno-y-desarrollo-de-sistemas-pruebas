@@ -9,12 +9,12 @@ import {
 } from '@nestjs/common';
 import { SedesService } from './sedes.service';
 import { ActualizarSedeDto, SedeDto } from './dto/sedes.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiParam, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Sedes')
 @Controller('sedes')
 export class SedesController {
-  constructor(private readonly sede: SedesService) {}
+  constructor(private readonly sede: SedesService) { }
 
   @Get()
   async obtenerTodo() {
@@ -33,5 +33,14 @@ export class SedesController {
   @Put('actualizar')
   async actualizarSedes(@Body() sede: ActualizarSedeDto) {
     return await this.sede.actualizarSede(sede);
+  }
+
+  @ApiParam({
+    name: 'centro',
+    description: 'Identificador del Centro para obtener las Sedes'
+  })
+  @Get('centro/:centro')
+  async obtenerSedesPorCentro(@Param('centro') centro: string) {
+    return await this.sede.sedesPorCentro(centro);
   }
 }

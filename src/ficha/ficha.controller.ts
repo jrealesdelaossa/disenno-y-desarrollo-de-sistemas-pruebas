@@ -54,4 +54,14 @@ export class FichaController {
   async eliminarFicha(@Param('id') id: string) {
     return await this.fichaService.eliminarFicha(id);
   }
+
+
+  @ApiParam({
+    name: 'programa',
+    description: 'ObjectId del programa asociado a la Ficha'
+  })
+  @Get('programa/:programa/sede/:sede')
+  async fichaPorProgramaSede(@Param('programa') programa: string, @Param('sede') sede: string) {
+    return this.fichaService.fichaPorProgramaYSede(programa, sede)
+  }
 }

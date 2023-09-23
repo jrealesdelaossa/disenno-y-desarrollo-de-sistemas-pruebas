@@ -46,4 +46,10 @@ export class SedesService {
       },
     );
   }
+
+  async sedesPorCentro(idCentro: string) {
+    return await this.SedesModel.find({
+      centro: idCentro
+    })
+  }
 }

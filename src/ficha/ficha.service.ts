@@ -150,4 +150,26 @@ export class FichaService {
       .populate('programa')
       .populate('instructor');
   }
+
+  /**
+   * Buscar Fichas por programa y por sede
+   * @param idPrograma: string ObjectId del Programa asociado a la Ficha
+   * @param idSede: string ObjectId de la Sede asociado a la Ficha
+   */
+  async fichaPorProgramaYSede(idPrograma: string, idSede: string) {
+    return await this.fichaModel.find({
+      programa: idPrograma,
+      sede: idSede
+    }).populate({
+      path: 'sede'
+    }).populate({
+      path: 'ambiente'
+    }).populate({
+      path: 'programa'
+    }).populate({
+      path: 'instructor'
+    })
+  }
+
+
 }

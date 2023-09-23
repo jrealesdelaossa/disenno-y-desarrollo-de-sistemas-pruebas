@@ -1,6 +1,12 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { IsMongoId, IsNotEmpty, Matches } from 'class-validator';
 
 export class SedeDto {
+  @ApiProperty({
+    type: String,
+    description: 'Nombre de la Sede',
+    default: 'Turismo',
+  })
   @IsNotEmpty()
   @Matches(/^(?!\s*$).+/, { message: 'El Nombre no puede ser estar vacío' })
   readonly nombre: string;
