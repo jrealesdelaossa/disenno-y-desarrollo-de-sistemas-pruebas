@@ -57,8 +57,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       rol: userBd.roles,
     };
     userBd.password = null;
-
-    return {
+    const userReturn = {
       id: userBd._id,
       documento: userBd.documento,
       nombre: userBd.nombre,
@@ -66,9 +65,10 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       correo: userBd.correo,
       contrato: userBd.contrato,
       programas: userBd.programas,
-      sede: userBd.sede,
+      centro: userBd.centro,
       roles: userBd.roles,
       access_token: await this.jwtService.signAsync(payloadZ),
     };
+    return userReturn;
   }
 }

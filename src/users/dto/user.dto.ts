@@ -51,8 +51,8 @@ export class UserDto {
   readonly programas: string[];
 
   @ApiProperty()
-  @Matches(/^(?!\s*$).+/, { message: 'La Sede no puede estar vacía' })
-  readonly sede: string;
+  @Matches(/^(?!\s*$).+/, { message: 'El centro no puede estar vacía' })
+  readonly centro: string;
 
   @IsNotEmpty()
   @IsString()
