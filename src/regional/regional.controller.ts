@@ -20,6 +20,15 @@ export class RegionalController {
     return await this.regional.obtenerRegionales();
   }
 
+  @ApiParam({
+    name: 'id',
+    description: 'id de la regional',
+  })
+  @Get('/:id')
+  async obtenerRegionalId(@Param('id') id: string) {
+    return await this.regional.obtenerRegionalId(id);
+  }
+
   @ApiBody({
     type: RegionalDto,
   })

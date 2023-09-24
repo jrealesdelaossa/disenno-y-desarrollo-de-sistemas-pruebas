@@ -21,6 +21,17 @@ export class RegionalService {
       }
     });
   }
+  // obtener una regional
+  async obtenerRegionalId(id: string): Promise<NotFoundException | Regional> {
+    return await this.regionalModel.findById(id).then((data) => {
+      if (data) {
+        return data;
+      } else {
+        return new NotFoundException('No se encontraro la regional');
+      }
+    });
+  }
+
   async checkById(id: string): Promise<boolean | string> {
     return await this.regionalModel.findById(id).then((data) => {
       return data ? true : false;
