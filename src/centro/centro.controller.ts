@@ -22,8 +22,8 @@ export class CentroController {
   }
 
   @ApiParam({
-    description: 'ObjectId del centro',
     name: 'id',
+    description: 'ObjectId del centro',
   })
   @Get('/:id')
   async obtenerCentroPorId(@Param('id') id: string) {

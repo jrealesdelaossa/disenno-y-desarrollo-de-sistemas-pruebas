@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { HydratedDocument } from 'mongoose';
-import { Centro } from 'src/centro/interfaces/centro.interfaces';
+import { Centro } from 'src/centro/schema/centro.schema';
 
 export type SedeDocument = HydratedDocument<Sede>;
 

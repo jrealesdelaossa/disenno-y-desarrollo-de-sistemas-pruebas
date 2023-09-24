@@ -29,17 +29,24 @@ export class CentroService {
 
   async crearCentro(
     centro_dto: CentroDto,
-  ): Promise<NotFoundException | Centro> {
-    const exitsRegional = await this.regionalService
-      .checkById(centro_dto.regional)
-      .then((data) => {
-        return data ? true : false;
-      });
-    if (exitsRegional) {
-      const centro = new this.centroModel(centro_dto);
-      return await centro.save();
-    } else {
-      return new NotFoundException('La regional no existe');
+  ): Promise<NotFoundException | object> {
+    try {
+      const exitsRegional = await this.regionalService
+        .checkById(centro_dto.regional)
+        .then((data) => {
+          return data ? true : false;
+        });
+
+      if (exitsRegional) {
+        const centro = new this.centroModel(centro_dto);
+        return await centro.save();
+      } else {
+        return new NotFoundException('La regional no existe');
+      }
+    } catch (error) {
+      return {
+        'Error al crear el centro': `${error}`,
+      };
     }
   }
 

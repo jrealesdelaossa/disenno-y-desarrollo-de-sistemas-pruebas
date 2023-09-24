@@ -4,12 +4,15 @@ import { Regional } from '../../regional/schema/regional.schema';
 export type CentroDocument = HydratedDocument<Centro>;
 @Schema()
 export class Centro {
-  @Prop()
+  @Prop({ required: true, unique: true })
   codigo: string;
-  @Prop()
+
+  @Prop({ required: true })
   nombre: string;
+
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Regional' })
   regional: Regional;
+
   @Prop()
   municipio: string;
 }

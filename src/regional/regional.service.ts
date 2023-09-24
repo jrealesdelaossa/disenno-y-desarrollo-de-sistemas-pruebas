@@ -28,10 +28,22 @@ export class RegionalService {
   }
 
   async crearRegional(regional_dto: RegionalDto): Promise<Regional> {
-    // const regional = new this.regionalModel(regional_dto);
-    // return await regional.save();
-    const regional = new this.regionalModel(regional_dto);
-    return await regional.save();
+    try {
+      const exitsRegional = await this.regionalModel.findOne({
+        codigo: regional_dto.codigo,
+      });
+
+      if (exitsRegional) {
+        throw new NotFoundException(
+          `Ya existe una regional con el codigo: ${regional_dto.codigo}`,
+        );
+      }
+
+      const nuevaRegional = new this.regionalModel(regional_dto);
+      return await nuevaRegional.save();
+    } catch (error) {
+      return error;
+    }
   }
 
   // eliminar una regional
