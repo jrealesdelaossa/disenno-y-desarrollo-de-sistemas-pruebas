@@ -15,7 +15,7 @@ export class RegionalService {
       if (data) {
         return data;
       } else {
-        return new NotFoundException(
+        throw new NotFoundException(
           'No se encontraron documentos en regionales',
         );
       }
@@ -27,7 +27,7 @@ export class RegionalService {
       if (data) {
         return data;
       } else {
-        return new NotFoundException('No se encontraro la regional');
+        return new NotFoundException('No se encontró la regional');
       }
     });
   }

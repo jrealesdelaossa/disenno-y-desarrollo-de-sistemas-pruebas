@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -10,6 +11,7 @@ import {
 import { ActualizarRegionalDto, RegionalDto } from './dto/regional.dto';
 import { RegionalService } from './regional.service';
 import { ApiBody, ApiParam, ApiTags } from '@nestjs/swagger';
+import { ValidateObjectidPipe } from 'src/common/validate-objectid/validate-objectid.pipe';
 
 @ApiTags('Regional')
 @Controller('regional')
@@ -25,8 +27,12 @@ export class RegionalController {
     description: 'id de la regional',
   })
   @Get('/:id')
-  async obtenerRegionalId(@Param('id') id: string) {
-    return await this.regional.obtenerRegionalId(id);
+  async obtenerRegionalId(@Param('id', ValidateObjectidPipe) id: string) {
+    try {
+      return await this.regional.obtenerRegionalId(id);
+    } catch (error) {
+      throw new BadRequestException(`Error al buscar la Regional: ${id}`);
+    }
   }
 
   @ApiBody({
