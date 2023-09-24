@@ -3,17 +3,11 @@ import {
   Length,
   IsOptional,
   IsString,
-  Matches,
   IsMongoId,
 } from 'class-validator';
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class RegionalDto {
-  @ApiPropertyOptional()
-  @IsNotEmpty()
-  @IsOptional()
-  readonly id: string;
-
   @ApiProperty()
   @IsNotEmpty()
   @IsString()
@@ -37,28 +31,22 @@ export class RegionalDto {
 }
 
 export class ActualizarRegionalDto {
-  @IsNotEmpty()
-  @Matches(/^(?!\s*$).+/, { message: 'El id no puede estar vacío' })
   @IsMongoId()
   readonly id: string;
 
   @IsNotEmpty()
-  @Matches(/^(?!\s*$).+/, { message: 'El codigo no puede estar vacío' })
   @IsOptional()
   readonly codigo: string;
 
   @IsNotEmpty()
-  @Matches(/^(?!\s*$).+/, { message: 'El nombre no puede estar vacío' })
   @IsOptional()
   readonly nombre: string;
 
   @IsNotEmpty()
-  @Matches(/^(?!\s*$).+/, { message: 'El departamento no puede estar vacía' })
   @IsOptional()
   readonly departamento: string;
 
   @IsNotEmpty()
-  @Matches(/^(?!\s*$).+/, { message: 'El municipio no puede estar vacío' })
   @IsOptional()
   readonly municipio: string;
 }
