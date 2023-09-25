@@ -12,5 +12,6 @@ import { CentroModule } from 'src/centro/centro.module';
   ],
   controllers: [SedesController],
   providers: [SedesService],
+  exports: [SedesService],
 })
 export class SedesModule {}

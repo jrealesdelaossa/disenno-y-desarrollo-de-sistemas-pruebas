@@ -10,6 +10,7 @@ import { Model } from 'mongoose';
 import { AmbienteService } from 'src/ambiente/ambiente.service';
 import { eventosDto } from 'src/evento/dto/eventos.dto';
 import { eliminarEventoEspecificoDto } from 'src/evento/dto/eliminarEvento.dto';
+import { SedesService } from 'src/sedes/sedes.service';
 
 @Injectable()
 export class GestorAmbienteService {
@@ -17,27 +18,56 @@ export class GestorAmbienteService {
     @InjectModel(GestorAmbiente.name)
     private gestorAmbienteModel: Model<GestorAmbiente>,
     @Inject(AmbienteService) private ambienteService: AmbienteService,
+    @Inject(SedesService) private sedesService: SedesService,
   ) {}
-  async crearGestorActual() {
-    const ambientes = await this.ambienteService.getAllAmbientes();
+
+  async crearGestorActual(centro: string) {
     const calendarioEstatico = Array(31).fill({
       morning: null,
       afternoon: null,
       night: null,
     });
-
-    const gestorAmbiente = {
-      ambientes: [],
-    };
-    ambientes.map((ambientesIterados: any) => {
-      const objectAmbiente = {
-        id: ambientesIterados.id,
-        nombre: `${ambientesIterados.bloque.nomenclatura}-${ambientesIterados.codigo}`,
-        calendario: calendarioEstatico,
-      };
-      gestorAmbiente.ambientes.push(objectAmbiente);
+    var insertAmbientes = [];
+    let sedes: any = await this.sedesService.sedesPorCentro(centro);
+    sedes = sedes.map((sede: any) => {
+      return sede.id;
     });
-    return await this.gestorAmbienteModel.create(gestorAmbiente);
+
+    // El uso de promise all es por que los Maps asincronicos anidados se comportan de manera indetermindas
+    await Promise.all(
+      sedes.map(async (sede: any) => {
+        let AmbienteSedeEspecifico = {
+          centro: centro,
+          sede: sede,
+          ambientes: [],
+        };
+        const ambientesDeLaSede =
+          await this.ambienteService.ambientesPorSede(sede);
+
+        /*       ambientesDeLaSede.map((ambiente: any) => {
+          let ambienteParaDisponibilidad = {
+            id: ambiente.id,
+            nombre: `${ambiente.bloque.nomenclatura}-${ambiente.codigo}`,
+            calendario: calendarioEstatico,
+          };
+          AmbienteSedeEspecifico.ambientes.push(ambienteParaDisponibilidad);
+        }); */
+
+        // Usar Promise.all con map para hacer las operaciones asincrónicas
+        await Promise.all(
+          ambientesDeLaSede.map(async (ambiente: any) => {
+            const ambienteParaDisponibilidad = {
+              id: ambiente.id,
+              nombre: `${ambiente.bloque.nomenclatura}-${ambiente.codigo}`,
+              calendario: calendarioEstatico,
+            };
+            AmbienteSedeEspecifico.ambientes.push(ambienteParaDisponibilidad);
+          }),
+        );
+        insertAmbientes.push(AmbienteSedeEspecifico);
+      }),
+    );
+    return await this.gestorAmbienteModel.insertMany(insertAmbientes);
   }
 
   async actualizarAmbiente(evento: eventosDto[]) {
@@ -124,7 +154,7 @@ export class GestorAmbienteService {
   }
   async findAll() {
     try {
-      return this.gestorAmbienteModel.find().then((resp) => resp[0]);
+      return this.gestorAmbienteModel.find();
     } catch (error) {
       return new InternalServerErrorException(
         'Ocurrio un error, Revise los logs del sistema.',
@@ -132,24 +162,31 @@ export class GestorAmbienteService {
     }
   }
 
-  /**
-   * Elimina todos los registros de la coleccion gestorAmbiente
-   * @returns
-   */
-  async eliminarTodos() {
-    try {
-      const docs = await this.gestorAmbienteModel.find();
-      if (docs.length == 0) {
-        throw new NotFoundException('No hay registros para eliminar');
-      }
-
-      docs.forEach(async (doc) => {
-        await this.gestorAmbienteModel.findByIdAndDelete(doc.id);
+  async findByCentro(centro: string) {
+    return await this.gestorAmbienteModel
+      .find({ centro: centro })
+      .then((data) => {
+        if (data) {
+          return data;
+        }
+        return new NotFoundException(
+          `No se encontraron ambientes para el centro : ${centro}`,
+        );
       });
-    } catch (error) {
-      return new InternalServerErrorException(
-        'Ocurrio un error, Revise los logs del sistema.',
+  }
+
+  async findBySede(sede: string) {
+    return await this.gestorAmbienteModel.find({ sede: sede }).then((data) => {
+      if (data) {
+        return data;
+      }
+      return new NotFoundException(
+        `No se encontraron sedes con el id: ${sede}`,
       );
-    }
+    });
+  }
+  async reiniciarDisponibilidadCentro(centro: string) {
+    await this.gestorAmbienteModel.deleteMany({ centro: centro });
+    return await this.crearGestorActual(centro);
   }
 }

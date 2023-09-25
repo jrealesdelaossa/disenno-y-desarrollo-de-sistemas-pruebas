@@ -7,12 +7,17 @@ import {
   GestorAmbiente,
   GestorAmbienteSchema,
 } from './schema/gestor-ambiente.schema';
+import { SedesModule } from 'src/sedes/sedes.module';
+import { SedesService } from 'src/sedes/sedes.service';
+import { Sede, SedeSchema } from 'src/sedes/schema/sede.schema';
 
 @Module({
   imports: [
     AmbienteModule,
+    SedesModule,
     MongooseModule.forFeature([
       { name: GestorAmbiente.name, schema: GestorAmbienteSchema },
+      { name: Sede.name, schema: SedeSchema },
     ]),
   ],
   controllers: [GestorAmbienteController],

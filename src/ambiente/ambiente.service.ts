@@ -57,9 +57,9 @@ export class AmbienteService {
     return found.deleteOne();
   }
 
-  async ambientesPorSede(id: string): Promise<IAmbiente[] | []> {
+  async ambientesPorSede(sede: string): Promise<IAmbiente[] | []> {
     return await this.ambienteModel
-      .find({ sede: id })
+      .find({ sede: sede })
       .populate('bloque')
       .populate('sede');
   }
