@@ -39,6 +39,8 @@ export class UsersController {
     return this.usersService.roles();
   }
 
+  @ApiParam({ name: 'programa', type: String, description: 'Id del programa' })
+  @ApiParam({ name: 'centro', type: String, description: 'Id del centro' })
   @Get('programa/centro/:programa/:centro')
   async instructorByProgramaByCentro(
     @Param('programa', ValidateObjectidPipe) programa: string,
