@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { User } from './schema/user.schema';
@@ -40,5 +44,19 @@ export class UsersService {
       return true;
     }
     return false;
+  }
+
+  async instructorByProgramaByCentro(programa: string, centro: string) {
+    const instructores = await this.userModel.find({
+      centro: centro,
+      programas: { $in: programa },
+      roles: { $in: 'Instructor' },
+    });
+    if (instructores.length > 0) {
+      return instructores;
+    }
+    return new NotFoundException(
+      `No se encontraron instructores con centro: ${centro}, y programas: ${programa}`,
+    );
   }
 }

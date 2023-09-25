@@ -9,6 +9,7 @@ import {
 import { UsersService } from './users.service';
 import { UserDto } from './dto/user.dto';
 import { ApiBody, ApiParam, ApiTags } from '@nestjs/swagger';
+import { ValidateObjectidPipe } from 'src/common/validate-objectid/validate-objectid.pipe';
 
 @ApiTags('Usuarios')
 @Controller('user')
@@ -36,5 +37,16 @@ export class UsersController {
   @Get('roles')
   async roles() {
     return this.usersService.roles();
+  }
+
+  @Get('programa/centro/:programa/:centro')
+  async instructorByProgramaByCentro(
+    @Param('programa', ValidateObjectidPipe) programa: string,
+    @Param('centro', ValidateObjectidPipe) centro: string,
+  ) {
+    return await this.usersService.instructorByProgramaByCentro(
+      programa,
+      centro,
+    );
   }
 }
