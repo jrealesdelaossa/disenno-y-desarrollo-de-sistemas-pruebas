@@ -114,43 +114,40 @@ export class GestorAmbienteService {
   }
 
   async restarHorarioAmbiente(evento: eliminarEventoEspecificoDto) {
-    let idGestor = null;
-    const ambienteEspecifico = await this.gestorAmbienteModel
-      .find()
-      .then((ambientes: any) => {
-        idGestor = ambientes[0].id;
-        return ambientes[0].ambientes;
-      });
-    ambienteEspecifico.map((ambiente) => {
-      if (ambiente.nombre == evento.evento.ambiente.ambiente) {
+    const ambientesSedes: any = await this.gestorAmbienteModel.findOne({
+      'ambientes.id': evento.evento.ambiente.id,
+    });
+
+    let ambienteActualizado = ambientesSedes.ambientes.map((ambientes: any) => {
+      if (ambientes.id == evento.evento.ambiente.id) {
         switch (evento.evento.horario) {
           case '6-12':
             for (let i = 0; i < evento.evento.diastrabajados.length; i++) {
-              ambiente.calendario[evento.evento.diastrabajados[i] - 1].morning =
-                null;
+              ambientes.calendario[
+                evento.evento.diastrabajados[i] - 1
+              ].morning = null;
             }
             break;
           case '12-18':
             for (let i = 0; i < evento.evento.diastrabajados.length; i++) {
-              ambiente.calendario[
+              ambientes.calendario[
                 evento.evento.diastrabajados[i] - 1
               ].afternoon = null;
             }
             break;
-          case '6-12':
+          case '18-22':
             for (let i = 0; i < evento.evento.diastrabajados.length; i++) {
-              ambiente.calendario[evento.evento.diastrabajados[i] - 1].night =
+              ambientes.calendario[evento.evento.diastrabajados[i] - 1].night =
                 null;
             }
             break;
-
-          default:
-            break;
         }
       }
+      return ambientes;
     });
-    return await this.gestorAmbienteModel.findByIdAndUpdate(idGestor, {
-      $set: { ambientes: ambienteEspecifico },
+
+    return await this.gestorAmbienteModel.findByIdAndUpdate(ambientesSedes.id, {
+      $set: { ambientes: ambienteActualizado },
     });
   }
   async findAll() {

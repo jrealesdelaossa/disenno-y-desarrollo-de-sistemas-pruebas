@@ -59,4 +59,8 @@ export class UsersService {
       `No se encontraron instructores con centro: ${centro}, y programas: ${programa}`,
     );
   }
+
+  async getInstructor() {
+    return await this.userModel.find({ roles: { $in: 'Instructor' } });
+  }
 }

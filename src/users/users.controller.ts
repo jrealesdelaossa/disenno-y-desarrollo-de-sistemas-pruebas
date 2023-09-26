@@ -23,7 +23,12 @@ export class UsersController {
   })
   @Get('find-one/:name')
   async findOne(@Param('name') name: string) {
-    return this.usersService.findOne(name);
+    return await this.usersService.findOne(name);
+  }
+
+  @Get('/instructor')
+  async getInstructo() {
+    return await this.usersService.getInstructor();
   }
 
   @ApiBody({
@@ -31,12 +36,12 @@ export class UsersController {
   })
   @Post('/crear')
   async crear(@Body(new ValidationPipe({ transform: true })) user: UserDto) {
-    return this.usersService.crearUser(user);
+    return await this.usersService.crearUser(user);
   }
 
   @Get('roles')
   async roles() {
-    return this.usersService.roles();
+    return await this.usersService.roles();
   }
 
   @ApiParam({ name: 'programa', type: String, description: 'Id del programa' })
