@@ -166,6 +166,7 @@ export class GestorAmbienteService {
   async findByCentro(centro: string) {
     return await this.gestorAmbienteModel
       .find({ centro: centro })
+      .populate('sede')
       .then((data) => {
         if (data) {
           return data;
