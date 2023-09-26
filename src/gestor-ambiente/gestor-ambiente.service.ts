@@ -71,44 +71,45 @@ export class GestorAmbienteService {
   }
 
   async actualizarAmbiente(evento: eventosDto[]) {
-    let idGestor = null;
-    const ambientesCalendario = await this.gestorAmbienteModel
-      .find()
-      .then((resp: any) => {
-        idGestor = resp[0].id;
-        return resp[0].ambientes;
+    evento.map(async (evento) => {
+      const ambientesSedes: any = await this.gestorAmbienteModel.findOne({
+        'ambientes.id': evento.ambiente.id,
       });
-    ambientesCalendario.map((ambiente) => {
-      evento.map((evento) => {
-        if (evento.ambiente.id == ambiente.id) {
-          switch (evento.horario) {
-            case '6-12':
-              for (let i = 0; i < evento.diastrabajados.length; i++) {
-                ambiente.calendario[evento.diastrabajados[i] - 1].morning =
-                  true;
-              }
-              break;
-            case '12-18':
-              for (let i = 0; i < evento.diastrabajados.length; i++) {
-                ambiente.calendario[evento.diastrabajados[i] - 1].afternoon =
-                  true;
-              }
-              break;
-            case '6-12':
-              for (let i = 0; i < evento.diastrabajados.length; i++) {
-                ambiente.calendario[evento.diastrabajados[i] - 1].night = true;
-              }
-              break;
 
-            default:
-              break;
+      let ambienteActualizado = ambientesSedes.ambientes.map(
+        (ambientes: any) => {
+          if (ambientes.id == evento.ambiente.id) {
+            switch (evento.horario) {
+              case '6-12':
+                for (let i = 0; i < evento.diastrabajados.length; i++) {
+                  ambientes.calendario[evento.diastrabajados[i] - 1].morning =
+                    true;
+                }
+                break;
+              case '12-18':
+                for (let i = 0; i < evento.diastrabajados.length; i++) {
+                  ambientes.calendario[evento.diastrabajados[i] - 1].afternoon =
+                    true;
+                }
+                break;
+              case '18-22':
+                for (let i = 0; i < evento.diastrabajados.length; i++) {
+                  ambientes.calendario[evento.diastrabajados[i] - 1].night =
+                    true;
+                }
+                break;
+            }
           }
-        }
-        return evento;
-      });
-    });
-    return await this.gestorAmbienteModel.findByIdAndUpdate(idGestor, {
-      $set: { ambientes: ambientesCalendario },
+          return ambientes;
+        },
+      );
+
+      return await this.gestorAmbienteModel.findByIdAndUpdate(
+        ambientesSedes.id,
+        {
+          $set: { ambientes: ambienteActualizado },
+        },
+      );
     });
   }
 

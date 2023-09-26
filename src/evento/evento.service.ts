@@ -111,7 +111,9 @@ export class EventoService {
      * LLamada a los servicios que actualizan los gestores
      */
     const respGestor = await this.gestorTService.actualizarTiempos(evento);
-    await this.gestorAmbienteService.actualizarAmbiente(evento.eventos);
+
+    //  Actualizar El ambiente
+    await this.gestorAmbienteService.actualizarAmbiente(evento.eventos); // Aqui
 
     const registroEventoExistente = await this.eventoModel.find({
       mes: evento.mes,
@@ -429,7 +431,8 @@ export class EventoService {
     };
 
     await this.gestorTService.restarTiempoFicha(gestorTiempo);
-    await this.gestorAmbienteService.restarHorarioAmbiente(eventoEspecificoDto);
+
+    await this.gestorAmbienteService.restarHorarioAmbiente(eventoEspecificoDto); // Aqui
 
     const monthSearch = moment().month() + 1;
     const eventos = await this.eventoModel
