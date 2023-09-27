@@ -105,6 +105,7 @@ export class EventoService {
      * y retorna un error en la respuesta en caso de encontrar
      * alguno.
      */
+
     await this.validarTiempos(evento);
 
     /**
@@ -113,7 +114,7 @@ export class EventoService {
     const respGestor = await this.gestorTService.actualizarTiempos(evento);
 
     //  Actualizar El ambiente
-    await this.gestorAmbienteService.actualizarAmbiente(evento.eventos); // Aqui
+    await this.gestorAmbienteService.actualizarAmbiente(evento.eventos);
 
     const registroEventoExistente = await this.eventoModel.find({
       mes: evento.mes,

@@ -61,6 +61,18 @@ export class UsersService {
   }
 
   async getInstructor() {
-    return await this.userModel.find({ roles: { $in: 'Instructor' } });
+    return await this.userModel
+      .find({ roles: { $in: 'Instructor' } })
+      .select([
+        'documento',
+        'nombre',
+        'apellido',
+        'correo',
+        'celular',
+        'contrato',
+        'programas',
+        'centro',
+        'roles',
+      ]);
   }
 }

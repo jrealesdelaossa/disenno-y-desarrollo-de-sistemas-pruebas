@@ -71,46 +71,42 @@ export class GestorAmbienteService {
   }
 
   async actualizarAmbiente(evento: eventosDto[]) {
-    evento.map(async (evento) => {
-      const ambientesSedes: any = await this.gestorAmbienteModel.findOne({
-        'ambientes.id': evento.ambiente.id,
-      });
-
-      let ambienteActualizado = ambientesSedes.ambientes.map(
-        (ambientes: any) => {
-          if (ambientes.id == evento.ambiente.id) {
-            switch (evento.horario) {
-              case '6-12':
-                for (let i = 0; i < evento.diastrabajados.length; i++) {
-                  ambientes.calendario[evento.diastrabajados[i] - 1].morning =
-                    true;
-                }
-                break;
-              case '12-18':
-                for (let i = 0; i < evento.diastrabajados.length; i++) {
-                  ambientes.calendario[evento.diastrabajados[i] - 1].afternoon =
-                    true;
-                }
-                break;
-              case '18-22':
-                for (let i = 0; i < evento.diastrabajados.length; i++) {
-                  ambientes.calendario[evento.diastrabajados[i] - 1].night =
-                    true;
-                }
-                break;
-            }
+    let indexAmbiente: number;
+    let horario: string;
+    await Promise.all(
+      evento.map(async (evento) => {
+        const ambientesSedes: any = await this.gestorAmbienteModel.findOne({
+          'ambientes.id': evento.ambiente.id,
+        });
+        ambientesSedes.ambientes.map((ambiente: any, index: number) => {
+          if (ambiente.id == evento.ambiente.id) {
+            indexAmbiente = index;
           }
-          return ambientes;
-        },
-      );
-
-      return await this.gestorAmbienteModel.findByIdAndUpdate(
-        ambientesSedes.id,
-        {
-          $set: { ambientes: ambienteActualizado },
-        },
-      );
-    });
+        });
+        switch (evento.horario) {
+          case '6-12':
+            horario = 'morning';
+            break;
+          case '12-18':
+            horario = 'afternoon';
+            break;
+          case '18-22':
+            horario = 'night';
+            break;
+        }
+        const consultaActualizar = {};
+        evento.diastrabajados.map((dia) => {
+          consultaActualizar[
+            `ambientes.${indexAmbiente}.calendario.${dia - 1}.${horario}`
+          ] = true;
+        });
+        console.log(consultaActualizar);
+        return await this.gestorAmbienteModel.findByIdAndUpdate(
+          ambientesSedes.id,
+          consultaActualizar,
+        );
+      }),
+    );
   }
 
   async restarHorarioAmbiente(evento: eliminarEventoEspecificoDto) {
