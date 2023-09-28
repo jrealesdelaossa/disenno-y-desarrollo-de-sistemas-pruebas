@@ -114,7 +114,10 @@ export class EventoService {
     const respGestor = await this.gestorTService.actualizarTiempos(evento);
 
     //  Actualizar El ambiente
-    await this.gestorAmbienteService.actualizarAmbiente(evento.eventos);
+    await this.gestorAmbienteService.actualizarAmbiente(
+      evento.eventos,
+      evento.instructor,
+    );
 
     const registroEventoExistente = await this.eventoModel.find({
       mes: evento.mes,

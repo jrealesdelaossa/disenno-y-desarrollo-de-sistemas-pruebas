@@ -70,7 +70,7 @@ export class GestorAmbienteService {
     return await this.gestorAmbienteModel.insertMany(insertAmbientes);
   }
 
-  async actualizarAmbiente(evento: eventosDto[]) {
+  async actualizarAmbiente(evento: eventosDto[], instructor: string) {
     let indexAmbiente: number;
     let horario: string;
     await Promise.all(
@@ -94,13 +94,20 @@ export class GestorAmbienteService {
             horario = 'night';
             break;
         }
+        const eventoAmbiente = {
+          instructor: instructor,
+          ficha: evento.ficha.codigo,
+          programa: evento.programa.nombre,
+          nivel: evento.nivel,
+          competencia: evento.competencia,
+          resultado: evento.resultado.resultado,
+        };
         const consultaActualizar = {};
         evento.diastrabajados.map((dia) => {
           consultaActualizar[
             `ambientes.${indexAmbiente}.calendario.${dia - 1}.${horario}`
-          ] = true;
+          ] = eventoAmbiente;
         });
-        console.log(consultaActualizar);
         return await this.gestorAmbienteModel.findByIdAndUpdate(
           ambientesSedes.id,
           consultaActualizar,
