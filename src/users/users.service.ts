@@ -75,4 +75,19 @@ export class UsersService {
         'roles',
       ]);
   }
+  async getInstructorById(id: string) {
+    return await this.userModel
+      .findOne({ roles: { $in: ['Instructor'] }, _id: id })
+      .select([
+        'documento',
+        'nombre',
+        'apellido',
+        'correo',
+        'celular',
+        'contrato',
+        'programas',
+        'centro',
+        'roles',
+      ]);
+  }
 }

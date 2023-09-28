@@ -31,6 +31,16 @@ export class UsersController {
     return await this.usersService.getInstructor();
   }
 
+  @ApiParam({
+    name: 'id',
+    description: 'El id de un instructor',
+    required: true,
+  })
+  @Get('instructor/:id')
+  async getInstructorById(@Param('id', ValidateObjectidPipe) id: string) {
+    return await this.usersService.getInstructorById(id);
+  }
+
   @ApiBody({
     type: UserDto,
   })
