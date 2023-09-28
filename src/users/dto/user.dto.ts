@@ -9,7 +9,7 @@ import {
   ArrayNotEmpty,
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { ContratoDto } from 'src/instructor/dto/contrato.dto';
+import { ContratoDto } from './contrato.dto';
 
 export class UserDto {
   @ApiProperty()

@@ -13,7 +13,6 @@ import { ProgramaModule } from './programa/programa.module';
 import { NivelDeFormacionModule } from './nivel-de-formacion/nivel-de-formacion.module';
 import { JornadaModule } from './jornada/jornada.module';
 import { TipoDeVinculacionModule } from './tipo-de-vinculacion/tipo-de-vinculacion.module';
-import { InstructorModule } from './instructor/instructor.module';
 import { FichaModule } from './ficha/ficha.module';
 import { ModalidadModule } from './modalidad/modalidad.module';
 import { CompetenciaModule } from './competencia/competencia.module';
@@ -49,7 +48,6 @@ import configuration from './config/configuration';
     NivelDeFormacionModule,
     JornadaModule,
     TipoDeVinculacionModule,
-    InstructorModule,
     FichaModule,
     ModalidadModule,
     CompetenciaModule,

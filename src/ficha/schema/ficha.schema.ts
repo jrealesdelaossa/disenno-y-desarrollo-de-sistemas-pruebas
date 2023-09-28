@@ -3,9 +3,9 @@ import mongoose, { HydratedDocument } from 'mongoose';
 // import { Jornada } from 'src/jornada/schema/jornada.schema';
 import { Ambiente } from 'src/ambiente/schemas/ambiente.schema';
 import { Programa } from 'src/programa/schema/programa.schema';
-import { Instructor } from 'src/instructor/schema/instructor.schema';
 import { jornadaDto } from '../dto/jornadaDto';
 import { Sede } from 'src/sedes/schema/sede.schema';
+import { User } from 'src/users/schema/user.schema';
 
 export type FichaDocument = HydratedDocument<Ficha>;
 
@@ -29,8 +29,8 @@ export class Ficha {
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Programa' })
   programa: Programa;
 
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Instructor' })
-  instructor: Instructor;
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
+  instructor: User;
 
   @Prop()
   jornadas: jornadaDto[];

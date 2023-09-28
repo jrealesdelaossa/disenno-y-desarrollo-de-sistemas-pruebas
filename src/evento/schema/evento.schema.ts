@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { HydratedDocument } from 'mongoose';
-import { Instructor } from 'src/instructor/schema/instructor.schema';
 import { eventosDto } from '../dto/eventos.dto';
+import { User } from 'src/users/schema/user.schema';
 
 export type EventoDocument = HydratedDocument<Evento>;
 
@@ -13,8 +13,8 @@ export class Evento {
   @Prop({ required: true })
   year: number;
 
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Instructor' })
-  instructor: Instructor;
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
+  instructor: User;
 
   @Prop({ required: true })
   eventos: eventosDto[];

@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { HydratedDocument } from 'mongoose';
 import { Centro } from 'src/centro/schema/centro.schema';
-import { ContratoDto } from 'src/instructor/dto/contrato.dto';
+import { ContratoDto } from '../dto/contrato.dto';
 
 export type UserDocument = HydratedDocument<User>;
 
