@@ -17,65 +17,7 @@ export class FichaService {
   ) {}
 
   async obtenerTodo() {
-    return await this.fichaModel
-      .find()
-      .populate({
-        path: 'sede',
-        populate: {
-          path: 'centro',
-          populate: {
-            path: 'regional',
-          },
-        },
-      })
-      .populate({
-        path: 'ambiente',
-        populate: [
-          {
-            path: 'bloque',
-            populate: {
-              path: 'sede',
-              populate: {
-                path: 'centro',
-                populate: {
-                  path: 'regional',
-                },
-              },
-            },
-          },
-          {
-            path: 'tipo',
-          },
-          {
-            path: 'sede',
-            populate: {
-              path: 'centro',
-              populate: {
-                path: 'regional',
-              },
-            },
-          },
-        ],
-      })
-      /*.populate('ambiente')*/
-      .populate('programa')
-      .populate({
-        path: 'instructor',
-        populate: [
-          {
-            path: 'programas',
-          },
-          {
-            path: 'sede',
-            populate: {
-              path: 'centro',
-              populate: {
-                path: 'regional',
-              },
-            },
-          },
-        ],
-      });
+    return await this.fichaModel.find().populate('instructor');
   }
 
   async obtenerFicha(id: string) {
@@ -157,19 +99,22 @@ export class FichaService {
    * @param idSede: string ObjectId de la Sede asociado a la Ficha
    */
   async fichaPorProgramaYSede(idPrograma: string, idSede: string) {
-    return await this.fichaModel.find({
-      programa: idPrograma,
-      sede: idSede
-    }).populate({
-      path: 'sede'
-    }).populate({
-      path: 'ambiente'
-    }).populate({
-      path: 'programa'
-    }).populate({
-      path: 'instructor'
-    })
+    return await this.fichaModel
+      .find({
+        programa: idPrograma,
+        sede: idSede,
+      })
+      .populate({
+        path: 'sede',
+      })
+      .populate({
+        path: 'ambiente',
+      })
+      .populate({
+        path: 'programa',
+      })
+      .populate({
+        path: 'instructor',
+      });
   }
-
-
 }
