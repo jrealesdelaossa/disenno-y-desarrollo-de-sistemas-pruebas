@@ -45,7 +45,9 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   async loginJwt(payload: JwtPayload): Promise<any> {
     const { correo, password } = payload;
 
-    let userBd: any = await this.userModel.findOne({ correo: correo });
+    let userBd: any = await this.userModel
+      .findOne({ correo: correo })
+      .select(['correo', 'password']);
     if (!userBd) {
       throw new UnauthorizedException('El usuario no esta registrado');
     } else if (!bcrypt.compareSync(password, userBd.password)) {

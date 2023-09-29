@@ -17,7 +17,28 @@ export class FichaService {
   ) {}
 
   async obtenerTodo() {
-    return await this.fichaModel.find().populate('instructor');
+    return await this.fichaModel
+      .find()
+      .populate('instructor')
+      .populate('ambiente')
+      .populate('programa')
+      .populate({
+        path: 'ambiente',
+        populate: [
+          {
+            path: 'bloque',
+            populate: {
+              path: 'sede',
+              populate: {
+                path: 'centro',
+                populate: {
+                  path: 'regional',
+                },
+              },
+            },
+          },
+        ],
+      });
   }
 
   async obtenerFicha(id: string) {
@@ -26,6 +47,23 @@ export class FichaService {
       .populate('ambiente')
       .populate('programa')
       .populate('instructor')
+      .populate({
+        path: 'ambiente',
+        populate: [
+          {
+            path: 'bloque',
+            populate: {
+              path: 'sede',
+              populate: {
+                path: 'centro',
+                populate: {
+                  path: 'regional',
+                },
+              },
+            },
+          },
+        ],
+      })
       .then((ficha) => {
         return ficha
           ? ficha
