@@ -47,7 +47,17 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
     let userBd: any = await this.userModel
       .findOne({ correo: correo })
-      .select(['correo', 'password']);
+      .select([
+        'correo',
+        'password',
+        'documento',
+        'nombre',
+        'apellido',
+        'contrato',
+        'programas',
+        'centro',
+        'roles',
+      ]);
     if (!userBd) {
       throw new UnauthorizedException('El usuario no esta registrado');
     } else if (!bcrypt.compareSync(password, userBd.password)) {
