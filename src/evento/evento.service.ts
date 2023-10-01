@@ -35,69 +35,57 @@ export class EventoService {
     const mesConsulta = evento.mes;
     const yearConsulta = evento.year;
 
-    const condicionesConsulta = evento.eventos.map((evento) => {
-      const dias = evento.diastrabajados.map((dia) => {
-        return Number(dia);
-      });
-
-      return {
-        mes: mesConsulta,
-        year: yearConsulta,
+    const condicionesConsulta = {
+      mes: mesConsulta,
+      year: yearConsulta,
+      $and: evento.eventos.map((evento) => ({
         'eventos.ambiente.ambiente': evento.ambiente.ambiente,
         'eventos.horario': evento.horario,
-        'eventos.diastrabajados': { $in: dias },
-      };
-    });
+        'eventos.diastrabajados': { $in: evento.diastrabajados },
+      })),
+    };
 
     // * Consulta de eventos existentes
     const eventosEncontrados = await this.eventoModel
-      .find({
-        $or: condicionesConsulta,
-      })
+      .find(condicionesConsulta)
       .exec();
 
     if (eventosEncontrados.length > 0) {
-      const respuesta = [];
-
-      // eventos retornados por la consulta
-      eventosEncontrados.forEach((eventoEncontrado) => {
-        // eventos de cada evento retornado
-        eventoEncontrado.eventos.forEach((eventoEventoEncontrado, index) => {
-          // Recorro los eventos nuevos
-          evento.eventos.forEach((eventos) => {
-            const dias = [];
-
-            if (
-              eventoEventoEncontrado.diastrabajados.some((dia) => {
-                if (eventos.diastrabajados.includes(dia)) {
-                  dias.push(dia);
-                }
-                return eventos.diastrabajados.includes(dia);
-              })
-            ) {
-              const diasCadena = '';
-              dias.forEach((dia) => {
-                diasCadena.concat(dia) + ' ';
-              });
-
-              // eliminar evento no valido
-              const arrEventos = [...eventoEncontrado.eventos];
-              for (let i = 0; eventoEncontrado.eventos.length > i; i++) {
-                if (i !== index) {
-                  arrEventos.splice(i, 1);
-                }
+      const mensajeConflict = [];
+      eventosEncontrados.map((eventoInstructor) => {
+        eventoInstructor.eventos.map((eventoReportado) => {
+          evento.eventos.map((eventosAReportar) => {
+            let diaConnflicto = [];
+            let repiteDia: boolean;
+            eventoReportado.diastrabajados.map((diaEspecifico) => {
+              if (eventosAReportar.diastrabajados.includes(diaEspecifico)) {
+                repiteDia = true;
+                diaConnflicto.push(diaEspecifico);
               }
-
-              respuesta.push({
-                evento: arrEventos[0],
-                mensaje: `Ya existe un evento en el ambiente ${eventos.ambiente.ambiente} con horario ${eventos.horario} para el día ${dias} del mes ${eventoEncontrado.mes} de ${eventoEncontrado.year}`,
+            });
+            if (
+              eventosAReportar.ambiente.ambiente ==
+                eventoReportado.ambiente.ambiente &&
+              eventosAReportar.horario == eventoReportado.horario &&
+              repiteDia
+            ) {
+              mensajeConflict.push({
+                evento: eventoReportado,
+                mensaje: `Ya existe un evento en el ambiente ${
+                  eventoReportado.ambiente.ambiente
+                } con horario ${
+                  eventoReportado.horario
+                } para los días ${diaConnflicto.join(
+                  ', ',
+                )} del mes ${mesConsulta} de ${yearConsulta}`,
               });
             }
           });
         });
       });
-
-      throw new ConflictException(respuesta);
+      if (mensajeConflict.length > 0) {
+        throw new ConflictException(mensajeConflict);
+      }
     }
 
     /**
