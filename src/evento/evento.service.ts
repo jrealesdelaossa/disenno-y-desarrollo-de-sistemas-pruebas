@@ -441,16 +441,11 @@ export class EventoService {
     return eventoEliminado;
   }
 
-  async reporteDeEvento(month: number = undefined) {
-    let monthSearch: number = 0;
-    if (Number.isNaN(month) || month === undefined || month === null) {
-      monthSearch = moment().month() + 1;
-    } else {
-      monthSearch = month;
-    }
+  async reporteDeEvento(year: number, month: number) {
     const eventos = await this.eventoModel
       .find({
-        mes: monthSearch,
+        mes: month,
+        year: year,
       })
       .populate({
         path: 'instructor',
@@ -468,6 +463,7 @@ export class EventoService {
         const horas = e.horario.split('-');
         const sesiones = e.diastrabajados.length;
         return {
+          year: year,
           mes: mes,
           documentoInstructor: documento,
           nombreInstructor: nombre,
