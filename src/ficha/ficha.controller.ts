@@ -6,10 +6,12 @@ import {
   Param,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
 import { FichaService } from './ficha.service';
 import { FichaDto, ActualizarFichaDto } from './dto/ficha.dto';
 import { ApiBody, ApiParam, ApiTags } from '@nestjs/swagger';
+import { Centro } from 'src/centro/schema/centro.schema';
 
 @ApiTags('Ficha')
 @Controller('ficha')
@@ -32,6 +34,16 @@ export class FichaController {
   async obtenerFichasPorPrograma(@Param('id') id: string) {
     return await this.fichaService.obtenerFichasPorPrograma(id);
   }
+
+  @ApiParam({
+    name: 'programa',
+    description: 'ObjectId del programa asociado a la Ficha'
+  })
+  @Get('programa/:programa/centro/:centro')
+  async obtenerFichasPorCentro(@Param('programa') programas: string, @Param('centro') centro: string) {
+    return await this.fichaService.obtenerFichasPorCentro(programas, centro);
+  }
+
 
   @ApiBody({
     type: FichaDto,
