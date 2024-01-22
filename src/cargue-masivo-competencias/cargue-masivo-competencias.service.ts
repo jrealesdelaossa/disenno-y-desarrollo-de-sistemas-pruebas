@@ -1,12 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import * as fs from 'fs';
-import { createReadStream } from 'fs';
-import * as readline from 'readline';
+import * as excelToJson from 'convert-excel-to-json';
 import { competenciaDto } from '../competencia/dto/competencia.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Competencia } from '../competencia/schema/competencia.schema';
 import { Model } from 'mongoose';
-import * as iconv from 'iconv-lite';
 
 @Injectable()
 export class CargueMasivoCompetenciasService {
@@ -18,44 +16,41 @@ export class CargueMasivoCompetenciasService {
     file: Express.Multer.File,
     programa: string,
   ): Promise<string> {
-    const fileStream = createReadStream(file.path);
-    const converterStream = iconv.decodeStream('utf-8');
+    const excelJson = await excelToJson({
+      sourceFile: file.path,
+    });
+    const hojasExcel = Object.keys(excelJson); //Obtener keys de las hojas del excel
 
     const obj = {
       programa: programa,
       competencias: [],
     };
+    //Recorremos hoja por hoja el excel
+    for await (const hoja of hojasExcel) {
+      //Recorremos las filas de la hoja
+      for await (const competencia of excelJson[hoja]) {
+        const compe = {
+          codigo: competencia['A'], //Código de la competencia en la Columna A del excel
+          nombre: competencia['B'], //Nombre de la competencia en la Columna B del excel
+          duracion: parseInt(competencia['C']),
+          resultados: [],
+        };
 
-    const rl = readline.createInterface({
-      input: fileStream.pipe(converterStream),
-      crlfDelay: Infinity,
-
-      // Reconocer tanto '\r\n' como '\n' como fin de línea
-    });
-
-    for await (const line of rl) {
-      const registro = line.split(';');
-
-      const compe = {
-        codigo: registro[0],
-        nombre: registro[1],
-        duracion: parseInt(registro[2]),
-        resultados: [],
-      };
-
-      for (let x = 3; x < registro.length; x += 3) {
-        if (registro[x] != '') {
-          const pq = {
-            descripcion: registro[x],
-            orden: registro[x + 1],
-            duracion: parseInt(registro[x + 2]),
-          };
-          compe.resultados.push(JSON.parse(JSON.stringify(pq)));
-        } else break;
+        //Key de la competencia(Fila del excel)
+        const columnas = Object.keys(competencia);
+        for (let x = 3; x < columnas.length; x += 3) {
+          if (competencia[columnas[x]] != '') {
+            const pq = {
+              descripcion: competencia[columnas[x]],
+              orden: competencia[columnas[x + 1]],
+              duracion: parseInt(competencia[columnas[x + 2]]),
+            };
+            compe.resultados.push(JSON.parse(JSON.stringify(pq)));
+          } else break;
+        }
+        obj.competencias.push(JSON.parse(JSON.stringify(compe)));
       }
-      obj.competencias.push(JSON.parse(JSON.stringify(compe)));
     }
-
     fs.unlinkSync(file.path);
     this.crearCompetencia(obj);
     return 'ok';
