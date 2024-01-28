@@ -7,13 +7,16 @@ import {
   Post,
   Put,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { FichaService } from './ficha.service';
 import { FichaDto, ActualizarFichaDto } from './dto/ficha.dto';
 import { ApiBody, ApiParam, ApiTags } from '@nestjs/swagger';
 import { Centro } from 'src/centro/schema/centro.schema';
+import { InstructorAuthGuard } from 'src/guard/instructor.guard';
 
 @ApiTags('Ficha')
+@UseGuards(InstructorAuthGuard)
 @Controller('ficha')
 export class FichaController {
   constructor(private readonly fichaService: FichaService) {}
@@ -37,13 +40,15 @@ export class FichaController {
 
   @ApiParam({
     name: 'programa',
-    description: 'ObjectId del programa asociado a la Ficha'
+    description: 'ObjectId del programa asociado a la Ficha',
   })
   @Get('programa/:programa/centro/:centro')
-  async obtenerFichasPorCentro(@Param('programa') programas: string, @Param('centro') centro: string) {
+  async obtenerFichasPorCentro(
+    @Param('programa') programas: string,
+    @Param('centro') centro: string,
+  ) {
     return await this.fichaService.obtenerFichasPorCentro(programas, centro);
   }
-
 
   @ApiBody({
     type: FichaDto,
@@ -67,13 +72,15 @@ export class FichaController {
     return await this.fichaService.eliminarFicha(id);
   }
 
-
   @ApiParam({
     name: 'programa',
-    description: 'ObjectId del programa asociado a la Ficha'
+    description: 'ObjectId del programa asociado a la Ficha',
   })
   @Get('programa/:programa/sede/:sede')
-  async fichaPorProgramaSede(@Param('programa') programa: string, @Param('sede') sede: string) {
-    return this.fichaService.fichaPorProgramaYSede(programa, sede)
+  async fichaPorProgramaSede(
+    @Param('programa') programa: string,
+    @Param('sede') sede: string,
+  ) {
+    return this.fichaService.fichaPorProgramaYSede(programa, sede);
   }
 }

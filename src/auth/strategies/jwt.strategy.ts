@@ -36,10 +36,9 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       correo: userBd.correo,
       rol: userBd.roles,
     };
-    return {
-      ...userBd,
-      access_token: await this.jwtService.signAsync(payloadZ),
-    };
+    let userNew: any = userBd;
+    userNew.access_token = await this.jwtService.signAsync(payloadZ);
+    return userNew;
   }
 
   async loginJwt(payload: JwtPayload): Promise<any> {

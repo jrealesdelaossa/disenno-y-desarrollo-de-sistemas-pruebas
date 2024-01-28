@@ -1,10 +1,12 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param, UseGuards } from '@nestjs/common';
 import { AppService } from './app.service';
+import { JwtAuthGuard } from './guard/jwt-auth.guard';
 //import moment from 'moment';
 // import fc from 'festivos-colombia';
 const fc = require('festivos-colombia');
 
+@UseGuards(JwtAuthGuard)
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}

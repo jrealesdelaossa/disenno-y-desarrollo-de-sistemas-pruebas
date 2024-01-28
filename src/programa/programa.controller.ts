@@ -6,12 +6,15 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { ProgramaService } from './programa.service';
 import { ActualizarProgramaDto, ProgramaDto } from './dto/programa.dto';
 import { ApiBody, ApiParam, ApiTags } from '@nestjs/swagger';
+import { InstructorAuthGuard } from 'src/guard/instructor.guard';
 
 @ApiTags('Programas')
+@UseGuards(InstructorAuthGuard)
 @Controller('programas')
 export class ProgramaController {
   constructor(private readonly Programa: ProgramaService) {}

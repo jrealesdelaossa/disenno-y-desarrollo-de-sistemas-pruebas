@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { NivelDeFormacionService } from './nivel-de-formacion.service';
 import {
@@ -13,8 +14,10 @@ import {
   ActualizarNivelDeFormacionDto,
 } from './dto/nivel-de-formacion.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { AdminAuthGuard } from 'src/guard/admin.guard';
 
 @ApiTags('Nivel de formación')
+@UseGuards(AdminAuthGuard)
 @Controller('nivel-de-formacion')
 export class NivelDeFormacionController {
   constructor(

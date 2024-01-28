@@ -6,11 +6,14 @@ import {
   Post,
   Put,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { BloqueService } from './bloque.service';
 import { CrearBloqueDto, ActualizarBloqueDto } from './dto/bloque.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { InstructorAuthGuard } from 'src/guard/instructor.guard';
 
+@UseGuards(InstructorAuthGuard)
 @ApiTags('Bloque')
 @Controller('bloque')
 export class BloqueController {

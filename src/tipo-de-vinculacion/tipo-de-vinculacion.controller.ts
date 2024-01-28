@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { TipoDeVinculacionService } from './tipo-de-vinculacion.service';
 import {
@@ -13,8 +14,10 @@ import {
   ActualizarTipoDeVinculacionDto,
 } from './dto/tipo-de-vinculacion.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { AdminAuthGuard } from 'src/guard/admin.guard';
 
 @ApiTags('Tipo de vinculación')
+@UseGuards(AdminAuthGuard)
 @Controller('tipo-de-vinculacion')
 export class TipoDeVinculacionController {
   constructor(

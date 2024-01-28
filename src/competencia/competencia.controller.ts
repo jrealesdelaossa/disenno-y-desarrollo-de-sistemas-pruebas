@@ -1,12 +1,22 @@
-import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Put,
+  UseGuards,
+} from '@nestjs/common';
 import { CompetenciaService } from './competencia.service';
 import {
   actualizarCompetenciaDto,
   competenciaDto,
 } from './dto/competencia.dto';
 import { ApiBody, ApiParam, ApiTags } from '@nestjs/swagger';
+import { InstructorAuthGuard } from 'src/guard/instructor.guard';
 
 @ApiTags('Competencia')
+@UseGuards(InstructorAuthGuard)
 @Controller('competencia')
 export class CompetenciaController {
   constructor(private readonly competenciaService: CompetenciaService) {}

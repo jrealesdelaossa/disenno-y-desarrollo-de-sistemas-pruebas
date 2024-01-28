@@ -3,14 +3,17 @@ import {
   Controller,
   Post,
   UploadedFile,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { CargueMasivoCompetenciasService } from './cargue-masivo-competencias.service';
 import { diskStorage } from 'multer';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
+import { AdminAuthGuard } from 'src/guard/admin.guard';
 
 @ApiTags('Carga masiva de competencias')
+@UseGuards(AdminAuthGuard)
 @Controller('carguemasivocompetencias')
 export class CargueMasivoCompetenciasController {
   constructor(private readonly cargue: CargueMasivoCompetenciasService) {}

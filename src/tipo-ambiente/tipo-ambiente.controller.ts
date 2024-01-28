@@ -1,9 +1,11 @@
-import { Controller, Get, Post, Body, Param } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, UseGuards } from '@nestjs/common';
 import { TipoAmbienteService } from './tipo-ambiente.service';
 import { CreatedTipoAmbienteDTO } from './dto/tipo-ambiente.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { AdminAuthGuard } from 'src/guard/admin.guard';
 
 @ApiTags('Tipo Ambiente')
+@UseGuards(AdminAuthGuard)
 @Controller('tipo-ambiente')
 export class TipoAmbienteController {
   constructor(private readonly tipoAmbientService: TipoAmbienteService) {}

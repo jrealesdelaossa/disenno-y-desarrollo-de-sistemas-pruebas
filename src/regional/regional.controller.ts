@@ -7,13 +7,16 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { ActualizarRegionalDto, RegionalDto } from './dto/regional.dto';
 import { RegionalService } from './regional.service';
 import { ApiBody, ApiParam, ApiTags } from '@nestjs/swagger';
 import { ValidateObjectidPipe } from 'src/common/validate-objectid/validate-objectid.pipe';
+import { AdminAuthGuard } from 'src/guard/admin.guard';
 
 @ApiTags('Regional')
+@UseGuards(AdminAuthGuard)
 @Controller('regional')
 export class RegionalController {
   constructor(private readonly regional: RegionalService) {}

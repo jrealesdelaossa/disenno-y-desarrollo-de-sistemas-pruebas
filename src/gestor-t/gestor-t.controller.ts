@@ -1,8 +1,10 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param, UseGuards } from '@nestjs/common';
 import { GestorTService } from './gestor-t.service';
 import { ApiParam, ApiTags } from '@nestjs/swagger';
+import { CoordinadorAuthGuard } from 'src/guard/coordinador.guard';
 
 @ApiTags('Gestor de tiempo')
+@UseGuards(CoordinadorAuthGuard)
 @Controller('gestor-t')
 export class GestorTController {
   constructor(private readonly gestorTService: GestorTService) {}

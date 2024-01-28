@@ -1,9 +1,19 @@
-import { Controller, Get, Post, Delete, Param, Put } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Delete,
+  Param,
+  Put,
+  UseGuards,
+} from '@nestjs/common';
 import { GestorAmbienteService } from './gestor-ambiente.service';
 import { ApiParam, ApiTags } from '@nestjs/swagger';
 import { ValidateObjectidPipe } from 'src/common/validate-objectid/validate-objectid.pipe';
+import { InstructorAuthGuard } from 'src/guard/instructor.guard';
 
 @ApiTags('gestor-ambiente')
+@UseGuards(InstructorAuthGuard)
 @Controller('gestor-ambiente')
 export class GestorAmbienteController {
   constructor(private readonly gestorAmbienteService: GestorAmbienteService) {}

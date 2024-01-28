@@ -6,11 +6,14 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { JornadaService } from './jornada.service';
 import { CrearJornadaDto, ActualizarJornadaDto } from './dto/jornada.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { AdminAuthGuard } from 'src/guard/admin.guard';
 @ApiTags('Jornada')
+@UseGuards(AdminAuthGuard)
 @Controller('jornada')
 export class JornadaController {
   constructor(private readonly jornadaService: JornadaService) {}

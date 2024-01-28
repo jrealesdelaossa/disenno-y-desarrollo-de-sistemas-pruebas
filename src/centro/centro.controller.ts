@@ -6,12 +6,15 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { CentroService } from './centro.service';
 import { CentroDto, ActualizarCentroDto } from './dto/centro.dto';
 import { ApiBody, ApiParam, ApiTags } from '@nestjs/swagger';
+import { InstructorAuthGuard } from 'src/guard/instructor.guard';
 
 @ApiTags('Centro')
+@UseGuards(InstructorAuthGuard)
 @Controller('centro')
 export class CentroController {
   constructor(private readonly centro: CentroService) {}

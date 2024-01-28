@@ -4,14 +4,17 @@ import {
   Get,
   Param,
   Post,
+  UseGuards,
   ValidationPipe,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UserDto } from './dto/user.dto';
 import { ApiBody, ApiParam, ApiTags } from '@nestjs/swagger';
 import { ValidateObjectidPipe } from 'src/common/validate-objectid/validate-objectid.pipe';
+import { AdminAuthGuard } from 'src/guard/admin.guard';
 
 @ApiTags('Usuarios')
+@UseGuards(AdminAuthGuard)
 @Controller('user')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}

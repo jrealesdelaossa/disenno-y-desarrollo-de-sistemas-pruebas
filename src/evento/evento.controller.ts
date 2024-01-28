@@ -6,6 +6,7 @@ import {
   Param,
   ParseIntPipe,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiBody, ApiParam, ApiTags } from '@nestjs/swagger';
 import { EventoService } from './evento.service';
@@ -14,8 +15,10 @@ import {
   eliminarEventoDto,
   eliminarEventoEspecificoDto,
 } from './dto/eliminarEvento.dto';
+import { InstructorAuthGuard } from 'src/guard/instructor.guard';
 
 @ApiTags('Evento')
+@UseGuards(InstructorAuthGuard)
 @Controller('evento')
 export class EventoController {
   constructor(private readonly eventoService: EventoService) {}

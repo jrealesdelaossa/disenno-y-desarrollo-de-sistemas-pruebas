@@ -6,12 +6,15 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { ModalidadService } from './modalidad.service';
 import { ActualizarModalidadDto, ModalidadDto } from './dto/modalidad.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { AdminAuthGuard } from 'src/guard/admin.guard';
 
 @ApiTags('Modalidad')
+@UseGuards(AdminAuthGuard)
 @Controller('modalidad')
 export class ModalidadController {
   constructor(private readonly modalidadService: ModalidadService) {}
