@@ -2,8 +2,6 @@
 /dist
 /node_modules
 
-# FLY deployment
-fly.toml
 # Logs
 logs
 *.log
